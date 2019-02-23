@@ -23,7 +23,7 @@ class App extends Component {
       token : null
 		}
   }
-  
+
   componentDidMount() {
 
     const { token } = this.state
@@ -34,7 +34,7 @@ class App extends Component {
       }
     })
     .then(res => {
-      
+
       const countries = res.countries.data
       const { token } = res
 
