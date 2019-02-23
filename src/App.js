@@ -1,14 +1,26 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import axios from 'axios';
+import React, { Component } from 'react'
+import logo from './logo.svg'
+import './App.css'
+import axios from 'axios'
 
 class App extends Component {
 
-  componentDidMount(){
-    axios.get("/api/countries")
+  componentDidMount() {
+
+    const { token } = this.state
+
+    axios.get("/api/countries", {
+      params : {
+        token
+      }
+    })
     .then(res => {
-      console.log(res.data)
+      
+      const countries = res.countries.data
+      const { token } = res
+
+      this.setState({ countries, token })
+
     })
     .catch(err => {
       console.log(err)
@@ -16,26 +28,8 @@ class App extends Component {
   }
 
   render() {
-
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+    return (null)
   }
 }
 
-export default App;
+export default App

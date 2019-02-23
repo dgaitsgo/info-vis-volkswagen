@@ -74,11 +74,14 @@ app.get('/api/countries', async(req, res) => {
 		})
 })
 
-//app.get('/brands', async(req, res) => {
+//app.get('/api/brands', async(req, res) => {
 //
-//	const { token } = req.query
+//	const {
+//		token,
+//		countryCode
+//	} = req.query
 //
-//	axios.get()
+//	axios.get('')
 //
 //})
 
