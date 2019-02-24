@@ -34,9 +34,9 @@ class App extends Component {
       }
     })
     .then(res => {
-      
-      const countries = res.countries.data
-      const { token } = res
+
+      const countries = res.data.countries.data
+      const { token } = res.data
 
       this.setState({ countries, token })
 
@@ -63,28 +63,35 @@ class App extends Component {
 	}
 
 	render() {
-		console.log(this.state.countryCode)
+
+    const { 
+			countries,
+			selected,
+			hovering
+    } = this.state
+
 		return (
-			<BrowserRouter>
-				<div>
-					<Navigation />
-						<Switch>
-							<Route exact path='/'component= { () =>
-								<Landing
-									onClickCountry={this.onClickCountry}
-									closeModal={this.closeModal}
-									openModal={this.openModal}
-									modalIsOpen={this.state.modalIsOpen}
-								/>} />
-							<Route path='/:countryCode/brands' component={ () =>
-								<Brands
-									countryCode={this.state.countryCode}
-									onClickCompare={this.onClickCompare}
-								/>} />
-							<Route component={ NotFound }/>
-						</Switch>
-				</div>
-			</BrowserRouter>
+			 <BrowserRouter>
+			 	<div>
+			 		<Navigation />
+			 			<Switch>
+			 				<Route exact path='/'component= { () =>
+			 					<Landing
+    //             countries={countries}
+			 						onClickCountry={this.onClickCountry}
+			 						closeModal={this.closeModal}
+			 						openModal={this.openModal}
+			 						modalIsOpen={this.state.modalIsOpen}
+			 					/>} />
+			 				<Route path='/:countryCode/brands' component={ () =>
+			 					<Brands
+			 						countryCode={this.state.countryCode}
+			 						onClickCompare={this.onClickCompare}
+			 					/>} />
+			 				<Route component={ NotFound }/>
+			 			</Switch>
+			 	</div>
+			 </BrowserRouter>
 		)
 	}
 }
