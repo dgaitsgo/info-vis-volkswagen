@@ -55,7 +55,6 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 					</Container>
 			</Section>
 			<Modal
-				size="lg"
 				isOpen={modalIsOpen}
 				onRequestClose={closeModal}
 				contentLabel="Example Modal"

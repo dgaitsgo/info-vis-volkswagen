@@ -50,23 +50,23 @@ class App extends Component {
 					<Route path={`/:countryCode/brands/:brand`} component= { ModelsContainer } />
 					<Route component={ NotFound }/>
 				</Switch>
-						<Hero size="fullheight">
-							<Hero.Head renderAs="header" />
-							<Hero.Body />
-							<Hero.Footer>
-								<Footer>
-									<Container>
-										<Content className='has-text-centered'>
+				<Hero size="fullheight">
+					<Hero.Head renderAs="header" />
+						<Hero.Body />
+						<Hero.Footer>
+							<Footer>
+								<Container>
+									<Content className='has-text-centered'>
 											<p>
 												<strong>this made</strong> by David, Sebastian, <a href="#">Jessica</a>. The source code is licensed
 												<a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content is licensed{' '}
 												<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
 											</p>
-										</Content>
-									</Container>
-								</Footer>
-							</Hero.Footer>
-						</Hero>
+									</Content>
+								</Container>
+							</Footer>
+						</Hero.Footer>
+					</Hero>
 				</div>
 		)
 	}
