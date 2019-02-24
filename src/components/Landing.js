@@ -5,7 +5,12 @@
 import React from 'react'
 import emoji from '../modules/countryFlag'
 import Modal from 'react-modal'
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom' 
+import { Button } from "react-bulma-components/full"
+import { Section } from "react-bulma-components/full"
+import { Heading } from "react-bulma-components/full"
+import { Columns } from "react-bulma-components/full"
+import { Container } from "react-bulma-components/full"
 
 const countries = {"data":[{"countryCode":"SE",
 "name":"Sweden"},
@@ -48,10 +53,12 @@ Modal.setAppElement('#root')
 const Country = ({ name, countryCode, onClick }) => {
 	const flag = emoji( countryCode )
 	return (
-		<div className='country-wrapper' onClick={null}>
+
+		<Columns.Column className='country-wrapper' onClick={ null}>
+
 			<span className='country-flag'> { flag } </span>
 			<span className='country-name'> { name } </span>
-		</div>
+		</Columns.Column>
 	)
 }
 
@@ -60,7 +67,12 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen }) => {
 
 	return (
 		<div className='app'>
-			<header className='app-header'></header>
+
+			<Section>
+				<Container>
+				<Heading size={4} className='has-text-centered'>Choose Your Country:</Heading>
+				<header className='app-header'></header>
+				<Columns>
 			{data.map(({ countryCode, name }, i) => {
 
 				const to = {
@@ -77,15 +89,23 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen }) => {
 					</NavLink>
 				)
 			})}
+				</Columns>
+				</Container>
+			</Section>
+
 			<Modal
+				size="lg"
 				isOpen={modalIsOpen}
 				onRequestClose={closeModal}
 				contentLabel="Example Modal"
 				ariaHideApp={true}
 			>
-				<div className='modal-heaer'> Welcome </div>
-				<div className='modal-body'> This application is this and that </div>
-				<button onClick={closeModal}>close</button>
+			<Section>
+				<Heading size={2} className='modal-heaer has-text-centered'> Welcome To Our Website. </Heading>
+				<p className='modal-body'> Pleace Chose Your Counrty first, then pick your favoriate modal to compare. </p>
+				<br />
+				<Button size="small" onClick={closeModal}>close</Button>
+			</Section>
 			</Modal>
 		</div>
 	)
