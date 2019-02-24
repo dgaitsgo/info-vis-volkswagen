@@ -39,7 +39,7 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 					<Heading size={4} className='has-text-centered'>Choose Your Country:</Heading>
 					<header className='app-header'></header>
 					<Columns>
-						{countries.data.map(({ countryCode, name }, i) => {
+						{countries.map(({ countryCode, name }, i) => {
 
 							const to = {
 								pathname : `/${name}/brands`,
@@ -48,7 +48,7 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 									name
 								}
 							}
-
+							
 							return (
 								<NavLink to={to} key={i}>
 									<Country countryCode={countryCode} name={name} />

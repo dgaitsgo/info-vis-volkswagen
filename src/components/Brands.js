@@ -21,11 +21,11 @@ const Checkbox = (props) => {
 	)
 }
 
-const convertToTree = ( { brands, models }) =>
-	brands.data.map(brand => ( {
+const convertToTree = ({ brands }) =>
+	brands.map(brand => ( {
 			label: brand.name,
 			value: brand.brand_id,
-			children: models.data.map( (model) => ({
+			children: brand.models.map( (model) => ({
 				label: model.name,
 				value: model.id
 			}))
@@ -35,14 +35,13 @@ const convertToTree = ( { brands, models }) =>
 const Brands = (props) => {
 
 	const { brands } = props
-	const { models } = props
 
 	return (
 		<div className='brands-wrapper'>
 			<div className='brands-body'>
 				Country: {props.location.query ? props.location.query.name : null}
 				<DropdownTreeSelect
-					data={convertToTree({brands, models})}
+					data={convertToTree({ brands })}
 					onChange={ props.onChange }
 					onAction={ props.onAction }
 					onNodeToggle={ props.onNodeToggle }

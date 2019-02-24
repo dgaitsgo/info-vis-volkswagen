@@ -33,6 +33,8 @@ Object.keys(apiSchema).forEach(key => {
 
     app.get(`/api/${key}`, (req, res) => {
 
+		console.log(req.params)
+
         const _args = apiSchema[key].map(paramKey => req.query[paramKey])
 
         reqProductData(
@@ -58,9 +60,9 @@ const reqProductData = async (req, res, url, key) => {
 
 	} catch (err) {
 
-		console.error(err)
-
 		const { status, statusText } = err.response
+
+		console.error(status, statusText)
 
 		res.status(status).send({
 			error : true,

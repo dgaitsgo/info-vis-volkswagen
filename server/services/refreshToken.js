@@ -38,9 +38,9 @@ app.use( async (req, res, next) => {
 
 		} catch(err) {
 
-			console.error(err)
-
 			const { status, statusText } = err.response
+
+			console.log(status, statusText)
 
 			return (res.status(status).send({
 				error : true,

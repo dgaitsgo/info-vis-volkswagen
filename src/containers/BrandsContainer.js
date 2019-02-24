@@ -5,6 +5,7 @@ import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
 import Brands from '../components/Brands'
 
+/*
 const brandsData = {"data":
 [
 	{"brand_id":"c65e5000-a5e0-5556-89e9-172a33f8f344","name":"Audi"},
@@ -48,6 +49,7 @@ const models = {"data":
 	{"id":"36164252-b8df-540f-a800-c54be1c535e2","name":"e-tron"}
 ],
 "meta":{"count":30}}
+*/
 
 class BrandsContainer extends Component {
 
@@ -56,6 +58,7 @@ class BrandsContainer extends Component {
 		super(props)
 
         this.state = {
+			brands : null,
 			selectedModels : []
         }
 	}
@@ -75,46 +78,84 @@ class BrandsContainer extends Component {
 
     componentDidMount() {
 
-        // const { token } = this.props
+        axios.get('/api/brands', {
+			params : {
+				countryCode : this.props.location.query.countryCode
+			}
+		}).then(res => {
 
-        // axios.get('/api/countries').then(res => {
+			const brands = res.data.brands.data
 
-        //     const countries = res.data.countries.data
+			console.log(brands)
 
-        //     this.setState({ countries })
-        // })
-        // .catch(err => {
-        //     const to = {
-        //         pathname : '/server-error',
-        //         query : {
-        //             err
-        //         }
-        //     }
-        //     return (
-        //         <Redirect to={to} />
-        //     )
-        // })
+			Promise.all(brands.map(brand =>
+				axios.get('/api/models', {
+					params : {
+						countryCode : this.props.location.query.countryCode,
+						brand_id : brand.brand_id
+					}
+				})
+			))
+			.then( results => {
+
+				const allModels = brands.map(_brand => {
+					
+					let brand = _brand
+
+					brand.models = []
+					return (brand)
+				})
+
+				results.forEach( (res, i) => {
+					brands[i].models = res.data.models.data
+				})
+
+				this.setState({ brands : allModels })
+			})	
+			.catch(err => {
+				const to = {
+					pathname : '/server-error',
+					query : {
+						err
+					}
+				}
+				return (
+					<Redirect to={to} />
+				)
+			})
+		
+        })
+        .catch(err => {
+            const to = {
+                pathname : '/server-error',
+                query : {
+                    err
+                }
+            }
+            return (
+                <Redirect to={to} />
+            )
+        })
     }
 
     render() {
-        // const {
-        //     countries
-        // } = this.state
 
-        // if (!countries) {
-        //     return (
-        //         <Loader message={'Getting markets...'} />
-        //     )
-		// }
-		// console.log(brandsData)
+		const {
+            brands
+        } = this.state
+
+        if (!brands) {
+            return (
+                <Loader message={'Getting models...'} />
+            )
+        }
 
         return (
             <Brands
 				onChange={ this.onChange }
 				onAction={ this.onAction }
 				onNodeToggle= {this.onNodeToggle }
-				brands={brandsData}
-				models={models}
+				brands={brands}
             />
         )
     }
