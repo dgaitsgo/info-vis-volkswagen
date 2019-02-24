@@ -14,6 +14,42 @@ import { Container } from "react-bulma-components/full"
 
 Modal.setAppElement('#root')
 
+const data = {"data":[{"countryCode":"SE",
+"name":"Sweden"},
+{"countryCode":"PT",
+"name":"Portugal"},
+{"countryCode":"IT",
+"name":"Italy"},
+{"countryCode":"NL",
+"name":"Netherlands"},
+{"countryCode":"PL",
+"name":"Poland"},
+{"countryCode":"LU",
+"name":"Luxembourg"},
+{"countryCode":"LV",
+"name":"Latvia"},
+{"countryCode":"LT",
+"name":"Lithuania"},
+{"countryCode":"IE",
+"name":"Ireland"},
+{"countryCode":"GB",
+"name":"United Kingdom"},
+{"countryCode":"FR",
+"name":"France"},
+{"countryCode":"ES",
+"name":"Spain"},
+{"countryCode":"EE",
+"name":"Estonia"},
+{"countryCode":"DK",
+"name":"Denmark"},
+{"countryCode":"DE",
+"name":"Germany"},
+{"countryCode":"CH",
+"name":"Switzerland"},
+{"countryCode":"BE",
+"name":"Belgium"}],
+"meta":{"count":17}}
+
 const Country = ({ name, countryCode, onClick }) => {
 	const flag = emoji( countryCode )
 	return (
@@ -28,9 +64,9 @@ const Country = ({ name, countryCode, onClick }) => {
 
 const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries }) => {
 
-	if (!countries) {
-		return null
-	}
+	// if (!countries) {
+	// 	return null
+	// }
 
 	return (
 		<div className='app'>
@@ -39,7 +75,7 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 					<Heading size={4} className='has-text-centered'>Choose Your Country:</Heading>
 					<header className='app-header'></header>
 					<Columns>
-						{data.map(({ countryCode, name }, i) => {
+						{data.data.map(({ countryCode, name }, i) => {
 
 							const to = {
 								pathname : `/${name}/brands`,
