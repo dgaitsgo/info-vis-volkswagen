@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
 import './App.css'
+import { Heading } from "react-bulma-components/full"
+import { Image } from "react-bulma-components/full"
+import { Icon } from "react-bulma-components/full"
+
+import { Footer } from 'react-bulma-components/full';
+import { Container } from 'react-bulma-components/full';
+import { Content } from 'react-bulma-components/full';
+import { Hero } from 'react-bulma-components/full';
+
 
 import axios from 'axios'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
@@ -13,17 +21,21 @@ import Brands from './components/Brands'
 class App extends Component {
 
 	constructor() {
+
 		super()
 
 		this.state = {
 			modalIsOpen: true,
-			selectedCountry: null,
-      selectedBrand: null,
-      countries : null,
-      token : null
+			selectedCountry: {
+				name: null,
+				code: null
+			},
+			countries : null,
+			token : null,
+			nav: null
 		}
-  }
-  
+	}
+
   componentDidMount() {
 
     const { token } = this.state
@@ -46,8 +58,8 @@ class App extends Component {
     })
   }
 
-	onClickCountry = (code) => {
-		this.setState({ selectedCountry : code })
+	onClickCountry = ({countryCode, name}) => {
+		this.setState({ selectedCountry : {code: countryCode, name} })
 	}
 
 	openModal = () => {
@@ -62,36 +74,44 @@ class App extends Component {
 		this.setState({ selectedBrand: brand})
 	}
 
+
 	render() {
-
-    const { 
-			countries,
-			selected,
-			hovering
-    } = this.state
-
+		console.log(this.props)
 		return (
-			 <BrowserRouter>
-			 	<div>
-			 		<Navigation />
-			 			<Switch>
-			 				<Route exact path='/'component= { () =>
-			 					<Landing
-    //             countries={countries}
-			 						onClickCountry={this.onClickCountry}
-			 						closeModal={this.closeModal}
-			 						openModal={this.openModal}
-			 						modalIsOpen={this.state.modalIsOpen}
-			 					/>} />
-			 				<Route path='/:countryCode/brands' component={ () =>
-			 					<Brands
-			 						countryCode={this.state.countryCode}
-			 						onClickCompare={this.onClickCompare}
-			 					/>} />
-			 				<Route component={ NotFound }/>
-			 			</Switch>
-			 	</div>
-			 </BrowserRouter>
+			<div className="main">
+				<Navigation />
+				<Switch>
+					<Route exact path='/' component= { () =>
+						<Landing
+							onClickCountry={this.onClickCountry}
+							closeModal={this.closeModal}
+							openModal={this.openModal}
+							modalIsOpen={this.state.modalIsOpen}
+						/>} />
+					<Route path={`/:countryCode/brands`} component={ () =>
+						<Brands
+							onClickCompare={this.onClickCompare}
+						/>} />
+					<Route component={ NotFound }/>
+				</Switch>
+						<Hero size="fullheight">
+							<Hero.Head renderAs="header" />
+							<Hero.Body />
+							<Hero.Footer>
+								<Footer>
+									<Container>
+										<Content className='has-text-centered'>
+											<p>
+												<strong>this made</strong> by David, Sebastian, <a href="#">Jessica</a>. The source code is licensed
+												<a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content is licensed{' '}
+												<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+											</p>
+										</Content>
+									</Container>
+								</Footer>
+							</Hero.Footer>
+						</Hero>
+				</div>
 		)
 	}
 }
