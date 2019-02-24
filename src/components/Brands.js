@@ -39,13 +39,13 @@ const Brands = (props) => {
 	return (
 		<div className='brands-wrapper'>
 			<div className='brands-body'>
-				Country: {props.location.query ? props.location.query.name : null}
-				<DropdownTreeSelect
+				{/* Country: {props.location.query ? props.location.query.name : null} */}
+				{/* <DropdownTreeSelect
 					data={convertToTree({ brands })}
 					onChange={ props.onChange }
 					onAction={ props.onAction }
 					onNodeToggle={ props.onNodeToggle }
-					/>
+					/> */}
 			</div>
 			<div className='compare-button' onClick={ () => props.onClickCompare}>
 				Compare Vehicles
