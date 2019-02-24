@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
-
-import axios from 'axios'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
-
 import Navigation from './components/Navigation'
-import Landing from './components/Landing'
+import LandingContainer from './containers/LandingContainer'
 import NotFound from './components/NotFound'
 import Brands from './components/Brands'
 
@@ -16,46 +13,15 @@ class App extends Component {
 		super()
 
 		this.state = {
-			modalIsOpen: true,
 			selectedCountry: null,
       selectedBrand: null,
       countries : null,
       token : null
 		}
   }
-  
-  componentDidMount() {
-
-    const { token } = this.state
-
-    axios.get("/api/countries", {
-      params : {
-        token
-      }
-    })
-    .then(res => {
-
-      const countries = res.data.countries.data
-      const { token } = res.data
-
-      this.setState({ countries, token })
-
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }
 
 	onClickCountry = (code) => {
 		this.setState({ selectedCountry : code })
-	}
-
-	openModal = () => {
-		this.setState({ modalIsOpen: true })
-	}
-
-	closeModal = () => {
-		this.setState({ modalIsOpen: false })
 	}
 
 	onClickCompare = (brand) => {
@@ -72,17 +38,9 @@ class App extends Component {
 
 		return (
 			 <BrowserRouter>
-			 	<div>
 			 		<Navigation />
 			 			<Switch>
-			 				<Route exact path='/'component= { () =>
-			 					<Landing
-    //             countries={countries}
-			 						onClickCountry={this.onClickCountry}
-			 						closeModal={this.closeModal}
-			 						openModal={this.openModal}
-			 						modalIsOpen={this.state.modalIsOpen}
-			 					/>} />
+			 				<Route exact path='/'component= {<LandingContainer />} />
 			 				<Route path='/:countryCode/brands' component={ () =>
 			 					<Brands
 			 						countryCode={this.state.countryCode}
@@ -90,7 +48,6 @@ class App extends Component {
 			 					/>} />
 			 				<Route component={ NotFound }/>
 			 			</Switch>
-			 	</div>
 			 </BrowserRouter>
 		)
 	}
