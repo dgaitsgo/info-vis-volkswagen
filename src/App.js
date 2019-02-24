@@ -10,12 +10,15 @@ import { Content } from 'react-bulma-components/full';
 import { Hero } from 'react-bulma-components/full';
 
 
+
+
 import axios from 'axios'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Navigation from './components/Navigation'
 import LandingContainer from './containers/LandingContainer'
+import BrandsContainer from './containers/BrandsContainer'
 import NotFound from './components/NotFound'
-import Brands from './components/Brands'
+
 
 class App extends Component {
 
@@ -36,16 +39,13 @@ class App extends Component {
 	}
 
 	render() {
-		console.log(this.props)
+		// console.log(this.props)
 		return (
 			<div className="main">
 				<Navigation />
 				<Switch>
 					<Route exact path='/' component= { LandingContainer } />
-					<Route path={`/:countryCode/brands`} component={ () =>
-						<Brands
-							onClickCompare={this.onClickCompare}
-						/>} />
+					<Route path={`/:countryCode/brands`} component={ BrandsContainer} />
 					<Route component={ NotFound }/>
 				</Switch>
 						<Hero size="fullheight">

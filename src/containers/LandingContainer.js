@@ -4,7 +4,45 @@ import { Loader } from 'react-bulma-components/full'
 import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
 
+const countries = {"data":[{"countryCode":"SE",
+"name":"Sweden"},
+{"countryCode":"PT",
+"name":"Portugal"},
+{"countryCode":"IT",
+"name":"Italy"},
+{"countryCode":"NL",
+"name":"Netherlands"},
+{"countryCode":"PL",
+"name":"Poland"},
+{"countryCode":"LU",
+"name":"Luxembourg"},
+{"countryCode":"LV",
+"name":"Latvia"},
+{"countryCode":"LT",
+"name":"Lithuania"},
+{"countryCode":"IE",
+"name":"Ireland"},
+{"countryCode":"GB",
+"name":"United Kingdom"},
+{"countryCode":"FR",
+"name":"France"},
+{"countryCode":"ES",
+"name":"Spain"},
+{"countryCode":"EE",
+"name":"Estonia"},
+{"countryCode":"DK",
+"name":"Denmark"},
+{"countryCode":"DE",
+"name":"Germany"},
+{"countryCode":"CH",
+"name":"Switzerland"},
+{"countryCode":"BE",
+"name":"Belgium"}],
+"meta":{"count":17}}
+
 class LandingContainer extends Component {
+
+
 
     constructor(props) {
 
@@ -24,40 +62,40 @@ class LandingContainer extends Component {
 		this.setState({ modalIsOpen: false })
 	}
 
-    componentDidMount() {
+    // componentDidMount() {
 
-        const { token } = this.props
+    //     const { token } = this.props
 
-        axios.get('/api/countries').then(res => {
+    //     axios.get('/api/countries').then(res => {
 
-            const countries = res.data.countries.data
+    //         const countries = res.data.countries.data
 
-            this.setState({ countries })
-        })
-        .catch(err => {
-            const to = {
-                pathname : '/server-error',
-                query : {
-                    err
-                }
-            }
-            return (
-                <Redirect to={to} />
-            )
-        })
-    }
+    //         this.setState({ countries })
+    //     })
+    //     .catch(err => {
+    //         const to = {
+    //             pathname : '/server-error',
+    //             query : {
+    //                 err
+    //             }
+    //         }
+    //         return (
+    //             <Redirect to={to} />
+    //         )
+    //     })
+    // }
 
     render() {
 
-        const {
-            countries
-        } = this.state
+        // const {
+        //     countries
+        // } = this.state
 
-        if (!countries) {
-            return (
-                <Loader message={'Getting markets...'} />
-            )
-        }
+        // if (!countries) {
+        //     return (
+        //         <Loader message={'Getting markets...'} />
+        //     )
+        // }
 
         return (
             <Landing
@@ -65,7 +103,8 @@ class LandingContainer extends Component {
                 toggleModal={this.toggleModal}
                 openModal={this.openModal}
                 closeModal={this.closeModal}
-                modalIsOpen={this.state.modalIsOpen}
+				modalIsOpen={this.state.modalIsOpen}
+				countries={countries}
             />
         )
     }
