@@ -48,7 +48,7 @@ Modal.setAppElement('#root')
 const Country = ({ name, countryCode, onClick }) => {
 	const flag = emoji( countryCode )
 	return (
-		<div className='country-wrapper' onClick={() => onClick( countryCode )}>
+		<div className='country-wrapper' onClick={null}>
 			<span className='country-flag'> { flag } </span>
 			<span className='country-name'> { name } </span>
 		</div>
@@ -61,11 +61,22 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen }) => {
 	return (
 		<div className='app'>
 			<header className='app-header'></header>
-			{data.map((item, i) =>
-				<NavLink to={`/${item.countryCode.toLowerCase()}/brands`} key={i}>
-					<Country {...item} onClick={onClickCountry}/>
-				</NavLink>
-			)}
+			{data.map(({ countryCode, name }, i) => {
+
+				const to = {
+					pathname : `/${name}/brands`,
+					query : {
+						countryCode,
+						name
+					}
+				}
+
+				return (
+					<NavLink to={to} key={i}>
+						<Country countryCode={countryCode} name={name} />
+					</NavLink>
+				)
+			})}
 			<Modal
 				isOpen={modalIsOpen}
 				onRequestClose={closeModal}
