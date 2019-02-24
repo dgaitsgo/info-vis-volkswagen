@@ -17,6 +17,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Navigation from './components/Navigation'
 import LandingContainer from './containers/LandingContainer'
 import BrandsContainer from './containers/BrandsContainer'
+import ModelsContainer from './containers/ModelsContainer'
 import NotFound from './components/NotFound'
 
 
@@ -45,7 +46,8 @@ class App extends Component {
 				<Navigation />
 				<Switch>
 					<Route exact path='/' component= { LandingContainer } />
-					<Route path={`/:countryCode/brands`} component={ BrandsContainer} />
+					<Route exact path={`/:countryCode/brands`} component={ BrandsContainer} />
+					<Route path={`/:countryCode/brands/:brand`} component= { ModelsContainer } />
 					<Route component={ NotFound }/>
 				</Switch>
 						<Hero size="fullheight">
