@@ -12,9 +12,8 @@ import { Hero } from 'react-bulma-components/full';
 
 import axios from 'axios'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
-
 import Navigation from './components/Navigation'
-import Landing from './components/Landing'
+import LandingContainer from './containers/LandingContainer'
 import NotFound from './components/NotFound'
 import Brands from './components/Brands'
 
@@ -36,58 +35,13 @@ class App extends Component {
 		}
 	}
 
-  componentDidMount() {
-
-    const { token } = this.state
-
-    axios.get("/api/countries", {
-      params : {
-        token
-      }
-    })
-    .then(res => {
-
-      const countries = res.data.countries.data
-      const { token } = res.data
-
-      this.setState({ countries, token })
-
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }
-
-	onClickCountry = ({countryCode, name}) => {
-		this.setState({ selectedCountry : {code: countryCode, name} })
-	}
-
-	openModal = () => {
-		this.setState({ modalIsOpen: true })
-	}
-
-	closeModal = () => {
-		this.setState({ modalIsOpen: false })
-	}
-
-	onClickCompare = (brand) => {
-		this.setState({ selectedBrand: brand})
-	}
-
-
 	render() {
 		console.log(this.props)
 		return (
 			<div className="main">
 				<Navigation />
 				<Switch>
-					<Route exact path='/' component= { () =>
-						<Landing
-							onClickCountry={this.onClickCountry}
-							closeModal={this.closeModal}
-							openModal={this.openModal}
-							modalIsOpen={this.state.modalIsOpen}
-						/>} />
+					<Route exact path='/' component= { <LandingContainer /> } />
 					<Route path={`/:countryCode/brands`} component={ () =>
 						<Brands
 							onClickCompare={this.onClickCompare}

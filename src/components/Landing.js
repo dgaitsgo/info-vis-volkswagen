@@ -50,12 +50,12 @@ const data = {"data":[{"countryCode":"SE",
 "name":"Belgium"}],
 "meta":{"count":17}}
 
-const Country = ({ name, countryCode, onClick }) => {
+const Country = ({ name, countryCode }) => {
+	
 	const flag = emoji( countryCode )
+	
 	return (
-
-		<Columns.Column className='country-wrapper' onClick={ null}>
-
+		<Columns.Column className='country-wrapper'>
 			<span className='country-flag'> { flag } </span>
 			<span className='country-name'> { name } </span>
 		</Columns.Column>
@@ -102,6 +102,7 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 				ariaHideApp={true}
 			>
 			<Section>
+				{/* To impliment : Markdown 'About' */}
 				<Heading size={2} className='modal-heaer has-text-centered'> Welcome To Our Website. </Heading>
 				<p className='modal-body'> Pleace Chose Your Counrty first, then pick your favoriate modal to compare. </p>
 				<br />
