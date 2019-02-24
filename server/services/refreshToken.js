@@ -1,8 +1,9 @@
 const axios = require('axios')
 const addSeconds = require('date-fns/add_seconds')
 const app = require('./app')
-
 const apiURL = 'https://api.productdata.vwgroup.com/v2'
+
+let globalToken = null
 
 const refreshAccessToken = () => {
 
@@ -17,7 +18,7 @@ const refreshAccessToken = () => {
 //middleware to refresh token and get one on initial load
 app.use( async (req, res, next) => {
 
-	const token = typeof(req.query.token) === 'string' ? JSON.parse(req.query.token) : req.query.token
+	const token = globalToken
 	const now = new Date()
 	const nowString = now.toISOString()
 
@@ -36,13 +37,9 @@ app.use( async (req, res, next) => {
 			let nextToken = nextTokenRes.data
 
 			nextToken.expirationDate = addSeconds(nowString, nextToken.expires_in).toISOString()
-			req.query.token = nextToken
-
-			next()
+			globalToken = nextToken
 
 		} catch(err) {
-
-			console.log(err)
 
 			const { status, statusText } = err.response
 
@@ -53,4 +50,8 @@ app.use( async (req, res, next) => {
 			}))
 		}
 	}
+
+	req.query.token = globalToken
+
+	next()
 })

@@ -41,7 +41,6 @@ class LandingContainer extends Component {
                     err
                 }
             }
-
             return (
                 <Redirect to={to} />
             )
