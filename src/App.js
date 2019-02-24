@@ -21,16 +21,20 @@ import Brands from './components/Brands'
 class App extends Component {
 
 	constructor() {
+
 		super()
 
 		this.state = {
 			modalIsOpen: true,
-			selectedCountry: null,
-      selectedBrand: null,
-      countries : null,
-      token : null
+			selectedCountry: {
+				name: null,
+				code: null
+			},
+			countries : null,
+			token : null,
+			nav: null
 		}
-  }
+	}
 
   componentDidMount() {
 
@@ -54,8 +58,8 @@ class App extends Component {
     })
   }
 
-	onClickCountry = (code) => {
-		this.setState({ selectedCountry : code })
+	onClickCountry = ({countryCode, name}) => {
+		this.setState({ selectedCountry : {code: countryCode, name} })
 	}
 
 	openModal = () => {
@@ -70,27 +74,29 @@ class App extends Component {
 		this.setState({ selectedBrand: brand})
 	}
 
+
 	render() {
-		console.log(this.state.countryCode)
+		console.log(this.props)
 		return (
-			<BrowserRouter>
+
+
 			<div className="main">
 					<Navigation />
-						<Switch>
-							<Route exact path='/'component= { () =>
-								<Landing
-									onClickCountry={this.onClickCountry}
-									closeModal={this.closeModal}
-									openModal={this.openModal}
-									modalIsOpen={this.state.modalIsOpen}
-								/>} />
-							<Route path='/:countryCode/brands' component={ () =>
-								<Brands
-									countryCode={this.state.countryCode}
-									onClickCompare={this.onClickCompare}
-								/>} />
-							<Route component={ NotFound }/>
-						</Switch>
+				<Switch>
+					<Route exact path='/' component= { () =>
+						<Landing
+							onClickCountry={this.onClickCountry}
+							closeModal={this.closeModal}
+							openModal={this.openModal}
+							modalIsOpen={this.state.modalIsOpen}
+						/>} />
+					<Route path={`/:countryCode/brands`} component={ () =>
+						<Brands
+							// countryCode={this.state.countryCode}
+							onClickCompare={this.onClickCompare}
+						/>} />
+					<Route component={ NotFound }/>
+				</Switch>
 						<Hero size="fullheight">
 							<Hero.Head renderAs="header" />
 							<Hero.Body />
@@ -99,7 +105,7 @@ class App extends Component {
 									<Container>
 										<Content className='has-text-centered'>
 											<p>
-												<strong>this made</strong> by David, Sebatian, <a href="#">Jessica</a>. The source code is licensed
+												<strong>this made</strong> by David, Sebastian, <a href="#">Jessica</a>. The source code is licensed
 												<a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content is licensed{' '}
 												<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
 											</p>
@@ -109,7 +115,6 @@ class App extends Component {
 							</Hero.Footer>
 						</Hero>
 				</div>
-			</BrowserRouter>
 		)
 	}
 }
