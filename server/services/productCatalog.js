@@ -58,6 +58,7 @@ const reqProductData = async (req, res, url, key) => {
 
 	} catch (err) {
 
+		console.log('fucking err', err)
 		const { status, statusText } = err.response
 
 		res.status(status).send({
