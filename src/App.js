@@ -13,16 +13,20 @@ import Brands from './components/Brands'
 class App extends Component {
 
 	constructor() {
+
 		super()
 
 		this.state = {
 			modalIsOpen: true,
-			selectedCountry: null,
-      selectedBrand: null,
-      countries : null,
-      token : null
+			selectedCountry: {
+				name: null,
+				code: null
+			},
+			countries : null,
+			token : null,
+			nav: null
 		}
-  }
+	}
 
   componentDidMount() {
 
@@ -46,8 +50,8 @@ class App extends Component {
     })
   }
 
-	onClickCountry = (code) => {
-		this.setState({ selectedCountry : code })
+	onClickCountry = ({countryCode, name}) => {
+		this.setState({ selectedCountry : {code: countryCode, name} })
 	}
 
 	openModal = () => {
@@ -62,29 +66,30 @@ class App extends Component {
 		this.setState({ selectedBrand: brand})
 	}
 
+
 	render() {
-		console.log(this.state.countryCode)
+		console.log(this.props)
 		return (
-			<BrowserRouter>
-				<div>
-					<Navigation />
-						<Switch>
-							<Route exact path='/'component= { () =>
-								<Landing
-									onClickCountry={this.onClickCountry}
-									closeModal={this.closeModal}
-									openModal={this.openModal}
-									modalIsOpen={this.state.modalIsOpen}
-								/>} />
-							<Route path='/:countryCode/brands' component={ () =>
-								<Brands
-									countryCode={this.state.countryCode}
-									onClickCompare={this.onClickCompare}
-								/>} />
-							<Route component={ NotFound }/>
-						</Switch>
-				</div>
-			</BrowserRouter>
+			<div>
+				{/* {this.state.selectedCountry.code && <Redirect to={`/${this.state.selectedCountry.name}/brands`}/>} */}
+				<Navigation />
+				<Switch>
+					<Route exact path='/' component= { () =>
+						<Landing
+							onClickCountry={this.onClickCountry}
+							closeModal={this.closeModal}
+							openModal={this.openModal}
+							modalIsOpen={this.state.modalIsOpen}
+						/>} />
+					<Route path={`/:countryCode/brands`} component={ () =>
+						<Brands
+							// countryCode={this.state.countryCode}
+							onClickCompare={this.onClickCompare}
+						/>} />
+					<Route component={ NotFound }/>
+				</Switch>
+			</div>
+
 		)
 	}
 }

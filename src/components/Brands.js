@@ -76,7 +76,11 @@ const convertToTree = data =>
 		}))
 
 
-const Brands = (props, onClickCompare) => {
+const Brands = (props) => {
+
+	const { onClickCompare } = props
+
+	console.log(props)
 
 	const { data } = brandsData
 
@@ -93,7 +97,7 @@ const Brands = (props, onClickCompare) => {
 	return (
 		<div className='brands-wrapper'>
 			<div className='brands-body'>
-				Country: {props.match.params.countryCode}
+				Country: {props.location.query ? props.location.query.name : null}
 				<DropdownTreeSelect
 					data={convertToTree(data)}
 					onChange={ onChange }
