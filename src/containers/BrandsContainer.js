@@ -55,13 +55,16 @@ class BrandsContainer extends Component {
 
 		super(props)
 
-        // this.state = {
-		// 	selectedModels = null
-        // }
+        this.state = {
+			selectedModels : []
+        }
 	}
 
 	onChange = (currentNode, selectedNodes) => {
-		console.log('onChange::', currentNode, selectedNodes)
+		console.log('onChange::currentNode', currentNode)
+		console.log('onChange::selectedNodes', selectedNodes)
+		// this.selectedModels
+		// console.log(this.selectedModels)
 	}
 	onAction = ({ action, node }) => {
 		console.log(`onAction:: [${action}]`, node)
@@ -94,7 +97,6 @@ class BrandsContainer extends Component {
     }
 
     render() {
-
         // const {
         //     countries
         // } = this.state
@@ -104,7 +106,7 @@ class BrandsContainer extends Component {
         //         <Loader message={'Getting markets...'} />
         //     )
 		// }
-		console.log(brandsData)
+		// console.log(brandsData)
 
         return (
             <Brands

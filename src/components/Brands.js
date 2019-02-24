@@ -34,16 +34,7 @@ const convertToTree = ( { brands, models }) =>
 
 const Brands = (props) => {
 
-	const { onClickCompare } = props
-
-	const { onChange } = props
-
-	const { onAction } = props
-
-	const { onNodeToggle } = props
-
 	const { brands } = props
-
 	const { models } = props
 
 	return (
@@ -52,12 +43,12 @@ const Brands = (props) => {
 				Country: {props.location.query ? props.location.query.name : null}
 				<DropdownTreeSelect
 					data={convertToTree({brands, models})}
-					onChange={ onChange }
-					onAction={ onAction }
-					onNodeToggle={ onNodeToggle }
+					onChange={ props.onChange }
+					onAction={ props.onAction }
+					onNodeToggle={ props.onNodeToggle }
 					/>
 			</div>
-			<div className='compare-button' onClick={ () => onClickCompare}>
+			<div className='compare-button' onClick={ () => props.onClickCompare}>
 				Compare Vehicles
 			</div>
 		</div>
