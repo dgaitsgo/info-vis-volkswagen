@@ -3,7 +3,8 @@ import axios from 'axios'
 import { Loader } from 'react-bulma-components/full'
 import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
-import Models from '../components/Models'
+import Model from '../components/Model'
+import { NavLink } from 'react-router-dom'
 
 class ModelsContainer extends Component {
 
@@ -13,27 +14,24 @@ class ModelsContainer extends Component {
 
         this.state = {
 			models : null,
-			selectedModels : []
         }
 	}
 
     componentDidMount() {
 
-        const {
-            brand,
-            countryCode
-        } = this.props.location.query
+		const urlData = this.props.location.pathname.split('/')
+		console.log(urlData)
 
         axios.get('/api/models', {
             params : {
-                countryCode, 
-                brand_id : brand.brand_id
+                countryCode: urlData[1],
+                brand_id : urlData[3]
             }
         })
         .then( res => {
             const models = res.data.models.data
             this.setState({ models })
-        })	
+        })
         .catch(err => {
             const to = {
                 pathname : '/server-error',
@@ -41,7 +39,7 @@ class ModelsContainer extends Component {
                     err
                 }
             }
-          
+
             return (
                 <Redirect to={to} />
             )
@@ -49,6 +47,8 @@ class ModelsContainer extends Component {
     }
 
     render() {
+
+		const urlData = this.props.location.pathname.split('/')
 
 		const {
             models
@@ -58,17 +58,23 @@ class ModelsContainer extends Component {
             return (
                 <Loader message={'Getting models...'} />
             )
-        }
+		}
+
+		console.log(models)
 
         return (
-            <Models
-				onChange={ this.onChange }
-				onAction={ this.onAction }
-				onNodeToggle= {this.onNodeToggle }
-				models={models}
-            />
+			<div>
+				{models.map(({ id, name }, i) => {
+					return (
+							<Model key= { id }
+								id={ id }
+								name={ name }
+							/>
+					)
+				})}
+			</div>
         )
     }
 }
 
-export default ModelsContainer 
+export default ModelsContainer

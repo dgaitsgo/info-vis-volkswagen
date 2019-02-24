@@ -42,13 +42,9 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 						{countries.map(({ countryCode, name }, i) => {
 
 							const to = {
-								pathname : `/${name}/brands`,
-								query : {
-									countryCode,
-									name
-								}
+								pathname : `/${countryCode}/brands`,
 							}
-							
+
 							return (
 								<NavLink to={to} key={i}>
 									<Country countryCode={countryCode} name={name} />

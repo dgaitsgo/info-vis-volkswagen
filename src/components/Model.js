@@ -1,12 +1,13 @@
 import React from 'react'
 
-const Models = ({
-    models,
+const Model = ({
+    id, name
 }) => {
     return (
         <div className='models-wraper'>
+			{ name }
         </div>
     )
 }
 
-export default Models
+export default Model
