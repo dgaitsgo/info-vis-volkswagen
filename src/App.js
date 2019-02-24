@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import { Heading } from "react-bulma-components/full" 
+import { Heading } from "react-bulma-components/full"
 import { Image } from "react-bulma-components/full"
 import { Icon } from "react-bulma-components/full"
 
@@ -78,10 +78,8 @@ class App extends Component {
 	render() {
 		console.log(this.props)
 		return (
-
-
 			<div className="main">
-					<Navigation />
+				<Navigation />
 				<Switch>
 					<Route exact path='/' component= { () =>
 						<Landing
@@ -92,7 +90,6 @@ class App extends Component {
 						/>} />
 					<Route path={`/:countryCode/brands`} component={ () =>
 						<Brands
-							// countryCode={this.state.countryCode}
 							onClickCompare={this.onClickCompare}
 						/>} />
 					<Route component={ NotFound }/>

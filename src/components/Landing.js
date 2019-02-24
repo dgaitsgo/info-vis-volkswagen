@@ -5,7 +5,7 @@
 import React from 'react'
 import emoji from '../modules/countryFlag'
 import Modal from 'react-modal'
-import { NavLink } from 'react-router-dom' 
+import { NavLink } from 'react-router-dom'
 import { Button } from "react-bulma-components/full"
 import { Section } from "react-bulma-components/full"
 import { Heading } from "react-bulma-components/full"
@@ -67,30 +67,29 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen }) => {
 
 	return (
 		<div className='app'>
-
 			<Section>
 				<Container>
-				<Heading size={4} className='has-text-centered'>Choose Your Country:</Heading>
-				<header className='app-header'></header>
-				<Columns>
-			{data.map(({ countryCode, name }, i) => {
+					<Heading size={4} className='has-text-centered'>Choose Your Country:</Heading>
+					<header className='app-header'></header>
+					<Columns>
+						{data.map(({ countryCode, name }, i) => {
 
-				const to = {
-					pathname : `/${name}/brands`,
-					query : {
-						countryCode,
-						name
-					}
-				}
+							const to = {
+								pathname : `/${name}/brands`,
+								query : {
+									countryCode,
+									name
+								}
+							}
 
-				return (
-					<NavLink to={to} key={i}>
-						<Country countryCode={countryCode} name={name} />
-					</NavLink>
-				)
-			})}
-				</Columns>
-				</Container>
+							return (
+								<NavLink to={to} key={i}>
+									<Country countryCode={countryCode} name={name} />
+								</NavLink>
+							)
+						})}
+					</Columns>
+					</Container>
 			</Section>
 
 			<Modal
