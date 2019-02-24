@@ -47,8 +47,8 @@ class App extends Component {
     })
     .then(res => {
 
-      const countries = res.countries.data
-      const { token } = res
+      const countries = res.data.countries.data
+      const { token } = res.data
 
       this.setState({ countries, token })
 
