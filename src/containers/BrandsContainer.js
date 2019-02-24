@@ -78,64 +78,29 @@ class BrandsContainer extends Component {
 
     componentDidMount() {
 
+		const { countryCode } = this.props.location.query
+
         axios.get('/api/brands', {
 			params : {
-				countryCode : this.props.location.query.countryCode
+				countryCode
 			}
 		}).then(res => {
 
 			const brands = res.data.brands.data
 
-			console.log(brands)
-
-			Promise.all(brands.map(brand =>
-				axios.get('/api/models', {
-					params : {
-						countryCode : this.props.location.query.countryCode,
-						brand_id : brand.brand_id
-					}
-				})
-			))
-			.then( results => {
-
-				const allModels = brands.map(_brand => {
-					
-					let brand = _brand
-
-					brand.models = []
-					return (brand)
-				})
-
-				results.forEach( (res, i) => {
-					brands[i].models = res.data.models.data
-				})
-
-				this.setState({ brands : allModels })
-			})	
-			.catch(err => {
-				const to = {
-					pathname : '/server-error',
-					query : {
-						err
-					}
+			this.setState({ brands })
+		})	
+		.catch(err => {
+			const to = {
+				pathname : '/server-error',
+				query : {
+					err
 				}
-				return (
-					<Redirect to={to} />
-				)
-			})
-		
-        })
-        .catch(err => {
-            const to = {
-                pathname : '/server-error',
-                query : {
-                    err
-                }
-            }
-            return (
-                <Redirect to={to} />
-            )
-        })
+			}
+			return (
+				<Redirect to={to} />
+			)
+		})		
     }
 
     render() {
@@ -146,7 +111,7 @@ class BrandsContainer extends Component {
 
         if (!brands) {
             return (
-                <Loader message={'Getting models...'} />
+                <Loader message={'Getting brands...'} />
             )
         }
 
