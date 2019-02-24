@@ -1,13 +1,11 @@
 const axios = require('axios')
 const addSeconds = require('date-fns/add_seconds')
 const app = require('./app')
-const apiURL = 'https://api.productdata.vwgroup.com/v2'
-
+const baseUrl = 'https://identity.vwgroup.io/oidc/v1/token'
 let globalToken = null
 
 const refreshAccessToken = () => {
 
-	const baseUrl = 'https://identity.vwgroup.io/oidc/v1/token'
 	const client_id = process.env.CLIENT_ID
 	const client_secret = process.env.CLIENT_SECRET
 	const requestURL = `${baseUrl}?grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`
@@ -18,11 +16,11 @@ const refreshAccessToken = () => {
 //middleware to refresh token and get one on initial load
 app.use( async (req, res, next) => {
 
-	const token = globalToken
+	globalToken  = globalToken || req.query.token
 	const now = new Date()
 	const nowString = now.toISOString()
 
-	if (!token || nowString > token.expirationDate) {
+	if (!globalToken || nowString > globalToken.expirationDate) {
 
 		try {
 
