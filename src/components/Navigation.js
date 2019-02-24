@@ -19,9 +19,9 @@ const Navigation = (props) => {
 	return (
 		<Navbar
 			color="light"
-			fixed = "fixed"
-			active="true"
-			transparent="false"
+			fixed="top"
+			active={true}
+			transparent={false}
     	>
       <Navbar.Brand>
         <Navbar.Item renderAs="a" href="#">

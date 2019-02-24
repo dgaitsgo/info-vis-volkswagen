@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import Loader from 'react-bulma-components/lib/components/loader'
+import { Loader } from 'react-bulma-components/full'
 import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
 
 class LandingContainer extends Component {
 
     constructor(props) {
+
+		super(props)
 
         this.state = {
             modalIsOpen: true,
@@ -39,7 +41,7 @@ class LandingContainer extends Component {
                     err
                 }
             }
-            
+
             return (
                 <Redirect to={to} />
             )

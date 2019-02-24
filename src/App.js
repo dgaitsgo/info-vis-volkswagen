@@ -41,7 +41,7 @@ class App extends Component {
 			<div className="main">
 				<Navigation />
 				<Switch>
-					<Route exact path='/' component= { <LandingContainer /> } />
+					<Route exact path='/' component= { LandingContainer } />
 					<Route path={`/:countryCode/brands`} component={ () =>
 						<Brands
 							onClickCompare={this.onClickCompare}
