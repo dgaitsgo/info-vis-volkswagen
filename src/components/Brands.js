@@ -102,7 +102,8 @@ const Brands = (props) => {
 					data={convertToTree(data)}
 					onChange={ onChange }
 					onAction={ onAction }
-					onNodeToggle={ onNodeToggle } />
+					onNodeToggle={ onNodeToggle }
+					/>
 			</div>
 			<div className='compare-button' onClick={ () => onClickCompare}>
 				Compare Vehicles
