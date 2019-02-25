@@ -117,6 +117,7 @@ app.get('/api/fullModels', async(req, res) => {
 
 			let modelInDb = db.get('DefaultConfigs').find({ id : model.id }).value()
 			let missing = false
+
 			console.log('model in DB : ', modelInDb)
 
 			if (modelInDb) {
@@ -172,7 +173,7 @@ app.get('/api/fullModels', async(req, res) => {
 				optionIds.forEach( async optionId => {
 
 					const buildRes = await checkBuild(apiURL, configId, token)
-					console.log('config id passes ? ',buildRes.data)
+					console.log('config id passes ? ', buildRes.data)
 					if (!buildRes || !buildRes.data.buildable) {
 						await addOption(apiURL, configId, optionId, token)
 					}

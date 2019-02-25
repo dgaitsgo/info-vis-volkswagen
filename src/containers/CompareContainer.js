@@ -4,6 +4,7 @@ import { Loader } from 'react-bulma-components/full'
 import Description from '../components/Description'
 import Sidebar from '../components/Sidebar'
 import Option from '../components/Option'
+import Redirect from 'react-router-dom/Redirect'
 
 class CompareContainer extends Component {
 
@@ -12,25 +13,28 @@ class CompareContainer extends Component {
 		super(props)
 
         this.state = {
-			selectedModels: JSON.parse(this.props.location.pathname.split('/')[3])
+			focusedModel: null,
+			urlData: null,
+			selectedModels: null,
 		}
 
-		console.log(this.state.selectedModels)
 	}
 
-    // componentDidMount() {
+    componentDidMount() {
 
-		// const countryCode = this.props.location.pathname.split('/')[1]
+		this.urlData = this.props.location.pathname.split('/')
+		this.selectedModels = JSON.parse(this.urlData[3])
+		console.log(this.urlData)
+		console.log(this.selectedModels)
+		console.log(this.selectedModels)
 
-        // axios.get('/api/brands', {
+        // axios.get('/api/options', {
 		// 	params : {
-		// 		countryCode
 		// 	}
 		// }).then(res => {
 
-		// 	const brands = res.data.brands.data
 
-		// 	this.setState({ brands })
+		// 	// this.setState({ brands })
 		// })
 		// .catch(err => {
 		// 	const to = {
@@ -43,7 +47,7 @@ class CompareContainer extends Component {
 		// 		<Redirect to={to} />
 		// 	)
 		// })
-    // }
+    }
 
 	render() {
 		return (

@@ -1,7 +1,6 @@
 import React from 'react'
 
 import PropTypes from 'prop-types';
-import List from 'react-list';
 
 const Model = ({
     id, name, onClick, selected, src
