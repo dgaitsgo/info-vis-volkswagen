@@ -180,13 +180,16 @@ app.get('/api/fullModels', async(req, res) => {
 			}
 		}))
 
+		
 		await Promise.all(missingModels.map( async model => {
-
+		
 			const configId = newEntries[model.id].configId
+			console.log('getting image for', configId)
 			const imagesRes = await getImages(apiURL, configId, token)
+			console.log('got image for', configId)
 			const imageLinks = imagesRes.data
 
-			console.log(imageRes)
+			console.log('images res', imagesRes.data)
 
 			newEntries[model.id].images = imageLinks.data
 		}))
