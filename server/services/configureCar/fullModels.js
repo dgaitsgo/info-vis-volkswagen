@@ -3,6 +3,8 @@ const axios = require('axios')
 const app = require('../app')
 const apiURL = require('../../constants/apiURL')
 const sendJSON = require('../../helpers/sendJSON')
+const db = require('../database')
+const addHours = require('date-fns/add_hours')
 
 /*
 	Target data set: for each model a default config
@@ -11,14 +13,13 @@ const sendJSON = require('../../helpers/sendJSON')
 		model_id : config_id
 	}
 */
-let configsMap = {}
+
 
 //check if we have complete models
 //build configurations for missing models
 //see what options it needs to be complete
 //add the options
 //get the photos
-
 
 const getConfigurations = (url, token) =>
 	axios({
@@ -99,13 +100,39 @@ app.get('/api/fullModels', async(req, res) => {
 	const _token = req.query.token
 	const token = typeof(_token) === 'string' ? JSON.parse(_token) : _token
 	const models = JSON.parse(req.query.models)
-	
+	let cachedModels = {}
+	let newEntries = {}
+	let now = (new Date()).toISOString()
+	let configsMap = {}
+
 	try {
 
 		const configsURL = `${apiURL}/configurations`
-		const missingModels = models.filter( model => !configsMap[model.id]  )
-		
-		console.log(`missing models : ${missingModels}`)
+		const missingModels = models.filter( model => {
+			
+			let modelInDb = db.get('DefaultConfigs').find({ id : model.id }).value()
+
+			console.log('model in DB : ', modelInDb)
+
+			if (modelInDb) {
+				
+				if (now > modelInDb.expirationDate) {
+					db('DefaultConfigs').remove(model.id)
+					newEntries[model.id] = {
+						id : model.id
+					}
+				} else {
+					cachedModels[model.id] = modelInDb
+				}
+			}
+				
+			else
+				newEntries[model.id] = {
+					id : model.id
+				}
+
+			return (!modelInDb)
+		})
 
 		// for all the missing models
 		const configIds = await Promise.all(missingModels.map(async model => {	
@@ -114,15 +141,13 @@ app.get('/api/fullModels', async(req, res) => {
 			const newConfigRes = await makeConfiguration(configsURL, model.id, token)
 			const configId = newConfigRes.data.id
 
-			console.log('our config ID:', configId)
+			/* SET MODEL ID */
+			/* SET EXPIRATION DATE */
+			newEntries[model.id].configId = configId
+			newEntries[model.id].expirationDate = addHours(now, 24)
 			
-			// get ids of the new configurations
-			configsMap[model.id] = configId 
-				
 			return configId
 		}))
-
-		console.log(`config ids : ${configIds}`)
 
 		//for all the new configs
 		await Promise.all(configIds.map( async configId => {
@@ -131,18 +156,13 @@ app.get('/api/fullModels', async(req, res) => {
 			const optionsToSetRes = await resolveOptions(apiURL, configId, token)
 	
 			if (optionsToSetRes.data && optionsToSetRes.data.data) {
-				console.log('options to set', optionsToSetRes.data.data)
-				// console.log('options to set', typeof(optionsToSetRes.data))
+
 				const optionIds = optionsToSetRes.data.data.map(option => option.id)
-
-				console.log(`option ids : ${optionIds}`)
-
 				let continues = true
+				
 				optionIds.forEach( async optionId => {
 
 					const buildRes = await checkBuild(apiURL, configId, token)
-
-					console.log('what is build res', buildRes.data)
 
 					if (!buildRes || !buildRes.data.buildable) {
 						await addOption(apiURL, configId, optionId, token)
@@ -151,17 +171,26 @@ app.get('/api/fullModels', async(req, res) => {
 			}
 		}))
 
-		const allConfigIds = models.map(model => configsMap[model.id])
+		await Promise.all(missingModels.map( async model => {
+			
+			const configId = newEntries[model.id].configId
+			const imagesRes = await getImages(apiURL, configId, token)
+			const imageLinks = imagesRes.data
 
-		console.log(allConfigIds)
+			newEntries[model.id].images = imageLinks.data
+		}))
 
-		const imagesRes = await Promise.all(allConfigIds.map( id => getImages(apiURL, id, token)))
+		Object.keys(newEntries).forEach(key => {
 
-		const imageLinks = imagesRes.map(res => res.data)
-		
-		console.log('image links', imageLinks)
+			db.get('DefaultConfigs')
+				.push(newEntries[key])
+				.assign({ id : newEntries[key].id })
+				.write()
+		})
 
-		sendJSON(res, imageLinks)
+		const modelData = Object.assign({}, newEntries, cachedModels)
+
+		sendJSON(res, modelData)
 		
 	} catch (err) {
 		
