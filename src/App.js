@@ -9,23 +9,23 @@ import { Container } from 'react-bulma-components/full';
 import { Content } from 'react-bulma-components/full';
 import { Hero } from 'react-bulma-components/full';
 
-
-
-
 import axios from 'axios'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Navigation from './components/Navigation'
 import LandingContainer from './containers/LandingContainer'
 import BrandsContainer from './containers/BrandsContainer'
 import ModelsContainer from './containers/ModelsContainer'
+import CompareContainer from './containers/CompareContainer'
 import NotFound from './components/NotFound'
-
+import { withRouter } from 'react-router-dom'
 
 class App extends Component {
 
-	constructor() {
+	constructor(props) {
 
-		super()
+		super(props)
+
+		console.log(props)
 
 		this.state = {
 			modalIsOpen: true,
@@ -40,14 +40,15 @@ class App extends Component {
 	}
 
 	render() {
-		// console.log(this.props)
+
 		return (
 			<div className="main">
 				<Navigation />
 				<Switch>
 					<Route exact path='/' component= { LandingContainer } />
-					<Route exact path={`/:countryCode/brands`} component={ BrandsContainer} />
-					<Route path={`/:countryCode/brands/:brand`} component= { ModelsContainer } />
+					<Route exact path={`/:countryCode`} component={ BrandsContainer} />
+					<Route exact path={`/:countryCode/:brand_id`} component= { ModelsContainer } />
+					<Route exact path={`/:countryCode/:brand_id/:model_string`} component= { CompareContainer } />
 					<Route component={ NotFound }/>
 				</Switch>
 				<Hero size="fullheight">
@@ -72,4 +73,4 @@ class App extends Component {
 	}
 }
 
-export default App
+export default withRouter(App)
