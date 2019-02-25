@@ -49,8 +49,13 @@ class App extends Component {
 					<Route exact path={`/:countryCode/:brand_id/:model_string`} component= { CompareContainer } />
 					<Route component={ NotFound }/>
 				</Switch>
+<<<<<<< HEAD
+				
+				<Hero>
+=======
 
 				<Hero size="fullheight">
+>>>>>>> master
 					<Hero.Head renderAs="header" />
 						<Hero.Body />
 						<Hero.Footer>

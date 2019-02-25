@@ -5,6 +5,11 @@ import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
 import Brands from '../components/Brands'
 import { NavLink } from 'react-router-dom'
+import { Section } from "react-bulma-components/full"
+import { Heading } from "react-bulma-components/full"
+import { Container } from "react-bulma-components/full"
+import { Columns } from "react-bulma-components/full"
+import { Button } from "react-bulma-components/full"
 
 class BrandsContainer extends Component {
 
@@ -59,9 +64,12 @@ class BrandsContainer extends Component {
 		}
 		return (
 			<div className='brands-wrapper'>
-				<div className='brands-headline'>
-					Choose a Brand
-				</div>
+			<Section>
+			<Container>
+				<Heading className='brands-headline has-text-centered' size={4}>
+					Choose A Brand:
+				</Heading>
+				<Columns className="is-centered">
 				{brands.map(({ brand_id, name }, i) => {
 
 					const to = {
@@ -81,6 +89,9 @@ class BrandsContainer extends Component {
 						</NavLink>
 					)
 				})}
+				</Columns>
+				</Container>
+				</Section>
 			</div>
 		)
 	}

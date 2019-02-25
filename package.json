@@ -21,6 +21,7 @@
     "react-breadcrumbs": "^2.1.6",
     "react-bulma-components": "^2.3.0",
     "react-checkboxes": "^1.0.2",
+    "react-country-flag": "^1.0.2",
     "react-dom": "^16.8.3",
     "react-dropdown": "^1.6.4",
     "react-dropdown-tree-select": "^1.16.0",
