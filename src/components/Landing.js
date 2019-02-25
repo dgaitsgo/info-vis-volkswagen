@@ -38,12 +38,14 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 			<Section>
 				<Container>
 					<Heading size={4} className='has-text-centered'>Choose Your Country:</Heading>
-					<header className='app-header'></header>
 					<Columns>
 						{countries.map(({ countryCode, name }, i) => {
 
 							const to = {
-								pathname : `/${countryCode}/brands`,
+								pathname : `/${countryCode}`,
+								query : {
+									previousPath: true
+								}
 							}
 
 							return (
@@ -65,7 +67,7 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 			<Section>
 				{/* To impliment : Markdown 'About' */}
 				<Heading size={2} className='modal-heaer has-text-centered'> Welcome To Our Website. </Heading>
-				<p className='modal-body'> Pleace Chose Your Counrty first, then pick your favoriate modal to compare. </p>
+				<p className='modal-body'> Please choose your country first, then pick your favorite models and compare them. </p>
 				<br />
 				<Button size="small" onClick={closeModal}>close</Button>
 			</Section>
