@@ -86,12 +86,12 @@ class ModelsContainer extends Component {
 				<div className='models-body'>
 					{models.map(({ id, name }, i) => {
 						return (
-								<Model key= { id }
-									id={ id }
-									name={ name }
-									onClick= {this.onClickModel}
-									selected={selectedModels[id]}
-								/>
+							<Model key= { id }
+								id={ id }
+								name={ name }
+								onClick= {this.onClickModel}
+								selected={selectedModels[id]}
+							/>
 						)
 					})}
 				</div>
@@ -100,7 +100,7 @@ class ModelsContainer extends Component {
 							pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`
 						}
 					}>
-					Compare selected Models
+						Compare selected Models
 					</NavLink>
 				</div>
 			</div>

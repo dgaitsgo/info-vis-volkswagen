@@ -10,6 +10,7 @@ import audi from '../res/audi-logo.png'
 import vw_nutz from '../res/VW_Nutzfahrzeuge-logo.png'
 import seat from '../res/Seat-logo.png'
 import vw_pkw from '../res/VW-logo.png'
+import skoda from '../res/Skoda-logo.png'
 
 const Brands = (props) => {
 
@@ -17,7 +18,8 @@ const Brands = (props) => {
 		"Audi": audi,
 		"Volkswagen Nutzfahrzeuge": vw_nutz,
 		"Seat": seat,
-		"Volkswagen PKW": vw_pkw
+		"Volkswagen PKW": vw_pkw,
+		"Skoda": skoda
 	}
 
 	const { brand_id, name } = props
@@ -26,7 +28,6 @@ const Brands = (props) => {
 		<div className='brand-wrapper'>
 			<img src={brandLogos[name]} alt="Image"/>
 			{ name }
-
 		</div>
 	)
 }
