@@ -13,7 +13,8 @@ class ModelsContainer extends Component {
 		super(props)
 
         this.state = {
-			models : null,
+			models: null,
+			selectedModels: {}
         }
 	}
 
@@ -25,7 +26,7 @@ class ModelsContainer extends Component {
         axios.get('/api/models', {
             params : {
                 countryCode: urlData[1],
-                brand_id : urlData[3]
+                brand_id : urlData[2]
             }
         })
         .then( res => {
@@ -46,32 +47,62 @@ class ModelsContainer extends Component {
         })
     }
 
+	onClickModel = id => {
+
+		let { selectedModels } = this.state
+
+		id in selectedModels
+		? delete selectedModels[id]
+		: selectedModels[id] = true
+
+		this.setState({ selectedModels })
+	}
+
     render() {
 
 		const urlData = this.props.location.pathname.split('/')
 
 		const {
-            models
+			models,
+			selectedModels
         } = this.state
 
+		console.log(selectedModels)
         if (!models) {
             return (
                 <Loader message={'Getting models...'} />
             )
 		}
 
-		console.log(models)
+		const compareButtonClassName = selectedModels
+			? 'compare-button active'
+			: 'compare-button'
 
         return (
-			<div>
-				{models.map(({ id, name }, i) => {
-					return (
-							<Model key= { id }
-								id={ id }
-								name={ name }
-							/>
-					)
-				})}
+			<div className='models-wrapper'>
+				<div className='models-header'>
+					Select Models
+				</div>
+				<div className='models-body'>
+					{models.map(({ id, name }, i) => {
+						return (
+								<Model key= { id }
+									id={ id }
+									name={ name }
+									onClick= {this.onClickModel}
+									selected={selectedModels[id]}
+								/>
+						)
+					})}
+				</div>
+				<div className={compareButtonClassName}>
+					<NavLink to={{
+							pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`
+						}
+					}>
+					Compare selected Models
+					</NavLink>
+				</div>
 			</div>
         )
     }

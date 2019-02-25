@@ -11,7 +11,7 @@ class LandingContainer extends Component {
 		super(props)
 
         this.state = {
-            modalIsOpen: true,
+            modalIsOpen: false,
             countries : null
         }
     }
@@ -36,7 +36,7 @@ class LandingContainer extends Component {
              const to = {
                  pathname : '/server-error',
                  query : {
-                     err
+					 err
                  }
              }
              return (
