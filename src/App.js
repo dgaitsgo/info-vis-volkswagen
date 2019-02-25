@@ -53,7 +53,7 @@ class App extends Component {
 					<Route component={ NotFound }/>
 				</Switch>
 				
-				<Hero size="fullheight">
+				<Hero>
 					<Hero.Head renderAs="header" />
 						<Hero.Body />
 						<Hero.Footer>

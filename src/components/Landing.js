@@ -11,18 +11,19 @@ import { Section } from "react-bulma-components/full"
 import { Heading } from "react-bulma-components/full"
 import { Columns } from "react-bulma-components/full"
 import { Container } from "react-bulma-components/full"
+import { Box } from "react-bulma-components/full"
 import '../style/landing.css'
 
 Modal.setAppElement('#root')
 
 const Country = ({ name, countryCode }) => {
-
 	const flag = emoji( countryCode )
-
 	return (
 		<Columns.Column className='country-wrapper'>
-			<span className='country-flag'> { flag } </span>
-			<span className='country-name'> { name } </span>
+			<div className='country has-text-centered'>
+				<p className='country-flag'> { flag } </p>
+				<p className='country-name'> { name } </p>
+			</div>
 		</Columns.Column>
 	)
 }
@@ -47,7 +48,6 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 									previousPath: true
 								}
 							}
-
 							return (
 								<NavLink to={to} key={i}>
 									<Country countryCode={countryCode} name={name} />
@@ -58,7 +58,6 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 					</Container>
 			</Section>
 			<Modal
-				id="test"
 				isOpen={modalIsOpen}
 				onRequestClose={closeModal}
 				contentLabel="Example Modal"

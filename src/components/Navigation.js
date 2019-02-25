@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
-import logo from '../res/vw-logo.png'
+import logo from '../res/nav-vw-logo.png'
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap'
 import { Field, Control } from 'react-bulma-components/full'
 import { Button } from 'react-bulma-components/full'
