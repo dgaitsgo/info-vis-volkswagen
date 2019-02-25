@@ -3,15 +3,12 @@ const app = require('../app')
 const apiURL = require('../../constants/apiURL')
 const sendJSON = require('../../helpers/sendJSON')
 
-app.get('/api/options', async(req, res) => {
+app.get('/api/configurationOptions', async(req, res) => {
 
 	const _token = req.query.token
 	const token = typeof(_token) === 'string' ? JSON.parse(_token) : _token
 	const { configuration_id } = req.query
-
     const url = `${apiURL}/configurations/${configuration_id}/choices`
-    console.log('my config id', configuration_id)
-    console.log(url)
 
 	try {
 
@@ -32,12 +29,10 @@ app.get('/api/options', async(req, res) => {
 
             const { status, statusText, headers } = err.response
     
-            console.error('punk ass', status, statusText, headers)
-    
             res.status(status).send({
                 error : true,
                 message: statusText,
-                userMessage : `Could not get a options.`
+                userMessage : `Could not get configuration options.`
             })
         }
 

@@ -18,10 +18,11 @@ const app = require('./services/app')
 /******************************************************************************
  * Services 
  *****************************************************************************/
+// const database = require('./services/database')
+
 const refreshToken = require('./services/refreshToken')
 const productCatalog = require('./services/productCatalog')
-// const database = require('./services/database')
-const configureCar = require('./services/configureCar/options')
+const configureCar = require('./services/configureCar')
 
 /******************************************************************************
  * Server 

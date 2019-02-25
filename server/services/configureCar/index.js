@@ -1,5 +1,6 @@
 module.exports = {
     configurations : require('./configurations'),
     newConfiguration : require('./newConfiguration'),
-    options : require('./options')
+    configurationOptions : require('./configurationOptions'),
+    fullModels : require('./fullModels')
 }

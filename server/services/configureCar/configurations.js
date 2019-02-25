@@ -27,8 +27,6 @@ app.get('/api/configurations', async(req, res) => {
 
 	} catch (err) {
 
-		console.log(err)
-
 		const { status, statusText, headers } = err.response
 
 		console.error(status, statusText, headers)
