@@ -14,6 +14,7 @@ class CompareContainer extends Component {
         this.state = {
 			selectedModels: JSON.parse(this.props.location.pathname.split('/')[3])
 		}
+
 		console.log(this.state.selectedModels)
 	}
 
