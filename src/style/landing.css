@@ -1,0 +1,15 @@
+.ReactModal__Overlay.ReactModal__Overlay--after-open{
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    right: 50px;
+    bottom: 50px;
+    background-color: rgba(113, 112, 112, 0.75) !important;
+}
+.ReactModal__Content.ReactModal__Content--after-open
+{
+    top: 100px !important;
+    left: 100px !important;
+    right: 100px !important;
+    bottom: 100px !important;
+}
