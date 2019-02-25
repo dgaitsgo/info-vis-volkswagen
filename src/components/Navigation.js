@@ -10,6 +10,7 @@ import { Field, Control } from 'react-bulma-components/full'
 import { Button } from 'react-bulma-components/full'
 import { Navbar } from 'react-bulma-components/full'
 import { withRouter } from 'react-router-dom'
+import '../style/navigation.css'
 
 class Navigation extends Component {
     constructor(props) {
@@ -26,7 +27,6 @@ class Navigation extends Component {
         return (
             <Navbar
                 color="light"
-                fixed="top"
                 active={!open}
                 transparent={false}
             >

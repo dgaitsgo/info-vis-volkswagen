@@ -11,6 +11,7 @@ import { Section } from "react-bulma-components/full"
 import { Heading } from "react-bulma-components/full"
 import { Columns } from "react-bulma-components/full"
 import { Container } from "react-bulma-components/full"
+import '../style/landing.css'
 
 Modal.setAppElement('#root')
 
@@ -55,6 +56,7 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 					</Container>
 			</Section>
 			<Modal
+				id="test"
 				isOpen={modalIsOpen}
 				onRequestClose={closeModal}
 				contentLabel="Example Modal"

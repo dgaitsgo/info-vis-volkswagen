@@ -45,11 +45,13 @@ class App extends Component {
 			<div className="main">
 				<Navigation />
 				<Switch>
+				
 					<Route exact path='/' component= { LandingContainer } />
 					<Route exact path={`/:countryCode/brands`} component={ BrandsContainer} />
 					<Route path={`/:countryCode/brands/:brand`} component= { ModelsContainer } />
 					<Route component={ NotFound }/>
 				</Switch>
+				
 				<Hero size="fullheight">
 					<Hero.Head renderAs="header" />
 						<Hero.Body />
