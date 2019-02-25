@@ -25,8 +25,6 @@ class App extends Component {
 
 		super(props)
 
-		console.log(props)
-
 		this.state = {
 			modalIsOpen: true,
 			selectedCountry: {
@@ -45,14 +43,13 @@ class App extends Component {
 			<div className="main">
 				<Navigation />
 				<Switch>
-				
 					<Route exact path='/' component= { LandingContainer } />
 					<Route exact path={`/:countryCode`} component={ BrandsContainer} />
 					<Route exact path={`/:countryCode/:brand_id`} component= { ModelsContainer } />
 					<Route exact path={`/:countryCode/:brand_id/:model_string`} component= { CompareContainer } />
 					<Route component={ NotFound }/>
 				</Switch>
-				
+
 				<Hero size="fullheight">
 					<Hero.Head renderAs="header" />
 						<Hero.Body />

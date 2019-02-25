@@ -21,7 +21,6 @@ class ModelsContainer extends Component {
     componentDidMount() {
 
 		const urlData = this.props.location.pathname.split('/')
-		console.log(urlData)
 
         axios.get('/api/models', {
             params : {
@@ -67,7 +66,6 @@ class ModelsContainer extends Component {
 			selectedModels
         } = this.state
 
-		console.log(selectedModels)
         if (!models) {
             return (
                 <Loader message={'Getting models...'} />
