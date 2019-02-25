@@ -33,12 +33,28 @@ class Navigation extends Component {
 				<Navbar.Brand>
 					<Navbar.Item renderAs="a" href="/">
 						<img
-						src={logo}
-						alt="logo"
-						width = "112"
-						height = "31"
+							src={logo}
+							alt="logo"
+							width = "112"
+							height = "31"
 						/>
+
 					</Navbar.Item>
+					<Navbar.Item>
+						<Breadcrumb>
+							<ul className='unordered-nav'>
+									{/* {urlData.map( ( name ) => {
+										return (
+											<li> <NavLink to='/'>{ name }</NavLink> </li>
+										)
+								})} */}
+								{/* {urlData[1] && <li> <NavLink to='/'>{ urlData[1] }</NavLink> </li>}
+								{urlData[2] && <li> <NavLink to={`/${ urlData[1] }`}>Brands</NavLink> </li>}
+								{urlData[3] && <li> <NavLink to={`/${ urlData[1] }/${ urlData[2] }`}>Models</NavLink> </li>} */}
+							</ul>
+						</Breadcrumb>
+					</Navbar.Item>
+
 					<Navbar.Burger
 						active={open}
 						onClick={() =>
@@ -47,13 +63,9 @@ class Navigation extends Component {
 							})
 						}
 					/>
+
 				</Navbar.Brand>
-						{/* <Navbar.Item >
-							<Breadcrumb>
-								<NavLink to='/'>{ urlData[1] }</NavLink>
-								{/* <NavLink to='/'> Brands </NavLink> */}
-							{/* </Breadcrumb> */}
-						{/* </Navbar.Item> */}
+
 				<Navbar.Menu active={open}>
 					<Navbar.Container>
 					</Navbar.Container>

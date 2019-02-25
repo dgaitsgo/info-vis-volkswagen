@@ -1,16 +1,61 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Loader } from 'react-bulma-components/full'
-import Landing from '../components/Landing'
-import Redirect from 'react-router-dom/Redirect'
-import Model from '../components/Model'
-import { NavLink } from 'react-router-dom'
+import Description from '../components/Description'
+import Sidebar from '../components/Sidebar'
+import Option from '../components/Option'
 
-const CompareContainer = () => {
+class CompareContainer extends Component {
 
-	return (
-		<div> Compare Page </div>
-	)
+    constructor(props) {
+
+		super(props)
+
+        this.state = {
+			selectedModels: JSON.parse(this.props.location.pathname.split('/')[3])
+		}
+
+		console.log(this.state.selectedModels)
+	}
+
+    // componentDidMount() {
+
+		// const countryCode = this.props.location.pathname.split('/')[1]
+
+        // axios.get('/api/brands', {
+		// 	params : {
+		// 		countryCode
+		// 	}
+		// }).then(res => {
+
+		// 	const brands = res.data.brands.data
+
+		// 	this.setState({ brands })
+		// })
+		// .catch(err => {
+		// 	const to = {
+		// 		pathname : '/server-error',
+		// 		query : {
+		// 			err
+		// 		}
+		// 	}
+		// 	return (
+		// 		<Redirect to={to} />
+		// 	)
+		// })
+    // }
+
+	render() {
+		return (
+			<div className='compare-container-wrapper'>
+				<Sidebar />
+				<Description
+					text="Example Description"
+				/>
+				<Option />
+			</div>
+		)
+	}
 }
 
 export default CompareContainer
