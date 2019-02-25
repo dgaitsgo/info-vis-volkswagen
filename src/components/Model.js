@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import List from 'react-list';
 
 const Model = ({
-    id, name, onClick, selected
+    id, name, onClick, selected, src
 }) => {
 
 	const className = selected
@@ -13,9 +13,7 @@ const Model = ({
 
     return (
         <div className={className} onClick={ () => onClick(id) }>
-
-			<img src="http://mediaservice.audi.com/media//fast/H4sIAAAAAAAAAFvzloG1tIhBPNonK7EsUS8zXy84tSgzMSezKjEpJ9V63QXONcHX33oyMTBUFDAwMFjUFTFYJufn6iXn5-Wk5hfrFaXmpaQWFacWlWUmpwK15yQCBYEKcvPzoCZ5pOYUpBaphFQWpDJAgRDQtCIGPrCNOYl56XqueaW5yJIFJQwcXgGu7vE-nk4lDMwFeel1hQx1DEwlDDxg4cBQRx_PkMjiIgZBhCGeeSWp6alFQo8WLPne2G7BxMDoycBalphTmgq0TAChzq80Nym1qG3NVFnuKQ-6YT5LgdnA6evp6xofEhngCmRn5iamp-oj2c_l5OjsHe_s7-MfBAw2pminNZ_Ff7BxhDyAmcP8__9_mGLeAE_nkNAg13jHoCDHyGKQKCdQCS9Mnh0qD_SHMRGBmpeXmlySX6TnkVic4ZyfAgtORiYGVk8GpnJDEGEEIoxBhAmIMK0o8FDlOf-_nitSRCHqodp8WRtZ31SlEgbuRGPd1IoS3bzU3HyQa8TArpMQVRb945Oovp5n7vlnIgZXS6P27_IHSUghqXmlI_8-i-lS_uGg3D-K_d2sRc0Wt9DVyD2zSZ-bc1u0UHNJvb38xN-L-_6no6uZIJJe5utn43vV9_6vgkscBpNOBGOoafHRP-myIWeP-PbZh_P1H3Nnfu1fg65mgxP328tffttUH13461XE0tlL7hxtRVfzU-bZHA_tU_xO6qts4rkDwsx56rXQ1Ry94rvm88ldfs8Ce5dZpKy4o5XofBZdTYQLo3daVPDkyJkRFRJTLj_qFvxViq6GiW1W5zTPI-qrEj9tElN4c7l1acJ_dDWCbvs8Daa_Wi3s8KDca4KNzfWsQmF0NSvENrl9rDh83PvLjKO3pn713X3xxmywGljyYQn2jHKFpSr2BhiLxQI1Xzjl5-ekJuadVShquDrn1ztgvoiC5YsCBniiZICn_9Agn_gAxyBH3xIG4dKinILEosRcYJIsLsjPK84sSwUA5P1pgzIEAAA?wid=1080" alt="fUcK" />
-			{/* <img src="http://mediaservice.audi.com/media//fast/H4sIAAAAAAAAAFvzloG1tIhBPNonK7EsUS8zXy84tSgzMSezKjEpJ9V63QXONcHX33oyMTBUFDAwMFjXFTFYJufn6iXn5-Wk5hfrFaXmpaQWFacWlWUmpwK15yQCBYEKcvPzoCZ5pOYUpBaphFQWpDJAgRDQtCIGPrCNOYl56XqueaW5yJIFJQwcXgGu7vE-nk4lDMwFeel1hQx1DEwlDDxg4cBQRx_PkMjiIgZBhCGeeSWp6alFQo8WLPne2G7BxMDoycBalphTmgq0TAChzq80Nym1qG3NVFnuKQ-6YT5LgdnA6evp6xofEhngCmRn5iamp-oj2c_l5OjsHe_s7-MfBAw2pminNZ_Ff7BxhDyAmcP8__9_mGLeAE_nkNAg13jHoCDHyGKQKCdQCR9Mnh0qD_SHMRGBmpeXmlySX6TnkVic4ZyfAgtORiYGVk8GpnJDEGEEIoxBhAmIMK0oeB_3a_O_qYwPn96qslny8d_ile__bSth4E401k2tKNHNS83NB7lGDOw6ia61R6wZdz1jr5gv56UbXjwx6w2TEUhCCkmNtOLdf-W-e3RTeM8whlpoPcrdk96CriZ-f-tt9WcClk9Ut31byDC7Z9ep3R7oaoJ_BD1M5vFOcdSUW7170u_I7RtvzkRXo32rrnn7_rod3xY9XO6YbP3F5sc-VXQ165d6ze9eNl89znwzs1D4Fw_B8NJidDVf399iW8lZk9W8yduuWjWsfnJtwhN0NfJMv7YF35dLWFycr1fUHq8nO-fISXQ1U_47v1GMjn8pst6ts6rDtlbGQfUbuhre7Lsnn76MeV3YeHzD3h_iCXfPvcbwl3v_JeWzt3qWP5wf_yjzGM9mto8u3ehq6rn3_zK7ITmjKVU1RsWto8KX7fFidDVdlq-q5-jPKZ1g3b5ZZeVDyzcSc8TBamBJjCXYM8oVlvLYG2AsFgvUvOOUn5-Tmph3VqGo4eqcX--AeScKlncKGOAJlwGeR0KDfOIDHIMcfUsYhEuLcgoSixJzgcm2uCA_rzizLBUAyHLNHVYEAAA?wid=1080" alt='fuck'/> */}
+			<img src={ src } alt={ name } />
 			<div>
 				{ name }
 			</div>
