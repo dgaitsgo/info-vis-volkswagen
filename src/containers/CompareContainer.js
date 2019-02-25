@@ -12,11 +12,12 @@ class CompareContainer extends Component {
 		super(props)
 
         this.state = {
-			selectedCar: null
-        }
+			selectedModels: JSON.parse(this.props.location.pathname.split('/')[3])
+		}
+		console.log(this.state.selectedModels)
 	}
 
-    componentDidMount() {
+    // componentDidMount() {
 
 		// const countryCode = this.props.location.pathname.split('/')[1]
 
@@ -41,7 +42,7 @@ class CompareContainer extends Component {
 		// 		<Redirect to={to} />
 		// 	)
 		// })
-    }
+    // }
 
 	render() {
 		return (
