@@ -35,12 +35,14 @@ class ModelsContainer extends Component {
             const models = res.data.models.data
 			console.log(models)
             this.setState({ models, modelsLoading: false }, () =>{
+				console.log('iam a fucking chicken')
 				axios.get('/api/fullModels', {
-					data: {
-						models
+					params: {
+						models: models.map(({ id }) => ({ id }) )
 					}
 				})
 				.then( res => {
+					console.log('res is', res)
 					this.setState({ modelImages: res.data, imagesLoading: false })
 				})
 				.catch(err => {
