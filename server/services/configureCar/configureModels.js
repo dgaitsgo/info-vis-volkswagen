@@ -135,9 +135,8 @@ app.get('/api/configureModels', async(req, res) => {
 			})))
 		}))
 
-		const moop = getOptions(apiURL, configIds[0])
-
-		console.log('options set', moop.data)
+		console.log('scopety poop', configIds)
+		// console.log('options set', moop.data)
 
 		sendJSON(res, configIds)
 

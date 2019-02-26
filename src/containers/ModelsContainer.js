@@ -22,7 +22,7 @@ class ModelsContainer extends Component {
 			models: null,
 			selectedModels: {},
 			modelImages: null,
-			imagesLoading: true,
+			loadingConfigurations : false,
 			modelsLoading: true
         }
 	}
@@ -38,50 +38,51 @@ class ModelsContainer extends Component {
             }
         })
         .then( res => {
-            const models = res.data.models.data
-		// console.log(models)
-            this.setState({ models, modelsLoading: false }, () =>{
-				axios.get('/api/fullModels', {
-					params: {
-						models: models.map(({ id }) => ({ id }) )
-					}
-				})
-				.then( res => {
-					// console.log('res is', res)
-					this.setState({ modelImages: res.data, imagesLoading: false })
-				})
-				.catch(err => {
-					const to = {
-						pathname : '/server-error',
-						query : {
-							err
-						}
-					}
-					return <Redirect to={to} />
-				})
-			})
-		})
-        .catch(err => {
-            const to = {
-                pathname : '/server-error',
-                query : {
-                    err
-                }
-            }
 
-            return (
-                <Redirect to={to} />
-            )
-        })
+			const models = res.data.models.data
+
+			this.setState({ models, modelsLoading: false })
+		
+		}).catch(err => {
+			const to = {
+				pathname : '/server-error',
+				query : {
+					err
+				}
+			}
+		})
     }
 
-	onClickModel = id => {
+	setConfigurations = () => {
+
+		const { selectedModels } = this.state
+		const _selectedModels = Object.keys(selectedModels).map(key => ({ id : key }))
+
+		// console.log()
+		this.setState({ loadingConfigurations : true }, () => {
+
+			axios.get('/api/configureModels', {
+				params : {
+					models : _selectedModels
+				}
+			}).then( res => {
+
+				console.log('new configurations', res.data)
+
+				this.setState({ loadingConfigurations : false, configurationIds : res.data, redirectTo : true })
+			})
+
+		})
+		
+	}
+
+	onClickModel = ({ name, id }) => {
 
 		let { selectedModels } = this.state
 
 		id in selectedModels
 			? delete selectedModels[id]
-			: selectedModels[id] = true
+			: selectedModels[id] = name
 
 		this.setState({ selectedModels })
 	}
@@ -94,12 +95,22 @@ class ModelsContainer extends Component {
 			models,
 			selectedModels,
 			fullModels,
-			imagesLoading,
 			modelsLoading,
+			loadingConfigurations,
+			configurationIds
         } = this.state
 
         if (modelsLoading)
-            return <Loader message={'Getting models...'} />
+            return <Loader message={'Getting models...'} />		
+		
+		if (configurationIds) {
+			return <Redirect to={{
+				pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`,
+				params : {
+					configurationIds
+				}
+			}} />
+		}
 
 		const compareButtonClassName = selectedModels
 			? 'compare-button has-text-centered active'
@@ -114,12 +125,12 @@ class ModelsContainer extends Component {
 				</Heading>
 				<div className='models-body'>
 					<Columns className="is-centered">
+					{loadingConfigurations && <Loader />}
 					{models.map(({ id, name }, i) => {
 						return (
 							<Model key= { id }
 								id={ id }
 								name={ name }
-								src={ imagesLoading ? null : fullModels[id].images[0].url }
 								onClick= {this.onClickModel}
 								selected={selectedModels[id]}
 							/>
@@ -129,13 +140,13 @@ class ModelsContainer extends Component {
 				</div>
 				<br />
 				<div className={compareButtonClassName}>
-					<Button>
-						<NavLink to={{
+					<Button onClick={this.setConfigurations} >
+						{/* <NavLink to={{
 								pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`
 							}
-						}>
+						}> */}
 						Done
-					</NavLink>
+					{/* </NavLink> */}
 					</Button>
 				</div>
 				</Container>

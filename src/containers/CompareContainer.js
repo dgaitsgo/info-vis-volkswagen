@@ -13,50 +13,70 @@ class CompareContainer extends Component {
 		super(props)
 
         this.state = {
-			focusedModel: null,
-			urlData: null,
-			selectedModels: null,
+			fullModels : null
 		}
-
 	}
 
     componentDidMount() {
 
-		this.urlData = this.props.location.pathname.split('/')
-		this.selectedModels = JSON.parse(this.urlData[3])
-		console.log(this.urlData)
-		console.log(this.selectedModels)
-		console.log(this.selectedModels)
+		const urlData = this.props.location.pathname.split('/')
+		const models = JSON.parse(urlData[3])
+		const configurationIds = this.props.location.params.configurationIds
+		
+		Promise.all(configurationIds.map(configId =>
+			axios.get('/api/choices', {
+				params : {
+					configurationId : configId
+				}
+		 })
+		)).then(results => {
+			 
+			let fullModels = []
 
-        // axios.get('/api/options', {
-		// 	params : {
-		// 	}
-		// }).then(res => {
+			results.forEach( (res, i) => {
+				fullModels.push({
+					//get : model.id, model.name
+					model : models[i],
+					configId : configurationIds[i],
+					options : res.data
+				})
+			})
 
+			console.log(fullModels)
 
-		// 	// this.setState({ brands })
-		// })
-		// .catch(err => {
-		// 	const to = {
-		// 		pathname : '/server-error',
-		// 		query : {
-		// 			err
-		// 		}
-		// 	}
-		// 	return (
-		// 		<Redirect to={to} />
-		// 	)
-		// })
+			this.setState({ fullModels })
+
+		 })
+		 .catch(err => {
+		 	const to = {
+		 		pathname : '/server-error',
+		 		query : {
+		 			err
+		 		}
+		 	}
+		 	return (
+		 		<Redirect to={to} />
+		 	)
+		 })
     }
 
 	render() {
+
+		const {
+			fullModels			
+		} = this.state
+
+		if (!fullModels) {
+			return (<Loader message="getting options... "/> )
+		}
+
 		return (
 			<div className='compare-container-wrapper'>
-				<Sidebar />
-				<Description
-					text="Example Description"
-				/>
-				<Option />
+				{ fullModels.map( (model, key) =>
+					<div key={`compare-${key}`} className='compare-model-wrapper'>
+						{ JSON.stringify(model.options)}
+					</div>
+				)}				
 			</div>
 		)
 	}
