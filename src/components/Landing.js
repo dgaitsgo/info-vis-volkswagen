@@ -11,7 +11,6 @@ import { Section } from "react-bulma-components/full"
 import { Heading } from "react-bulma-components/full"
 import { Columns } from "react-bulma-components/full"
 import { Container } from "react-bulma-components/full"
-import { Box } from "react-bulma-components/full"
 import '../style/landing.css'
 
 Modal.setAppElement('#root')

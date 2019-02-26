@@ -11,7 +11,7 @@ class LandingContainer extends Component {
 		super(props)
 
         this.state = {
-            modalIsOpen: true,
+            modalIsOpen: false,
             countries : null
         }
     }
