@@ -24,6 +24,7 @@ const Brands = (props) => {
 		"Skoda": skoda
 	}
 
+
 	const { brand_id, name } = props
 
 	return (
