@@ -56,7 +56,7 @@ class ModelsContainer extends Component {
 	setConfigurations = () => {
 
 		const { selectedModels } = this.state
-		const _selectedModels = Object.keys(selectedModels).map(key => ({ id : key }))
+		const _selectedModels = Object.keys(selectedModels).map(key => ({ id : key, name : selectedModels[key] }))
 
 		// console.log()
 		this.setState({ loadingConfigurations : true }, () => {
@@ -66,8 +66,6 @@ class ModelsContainer extends Component {
 					models : _selectedModels
 				}
 			}).then( res => {
-
-				console.log('new configurations', res.data)
 
 				this.setState({ loadingConfigurations : false, configurationIds : res.data, redirectTo : true })
 			})
