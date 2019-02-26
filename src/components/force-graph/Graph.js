@@ -5,38 +5,49 @@ import { NavLink } from 'react-router-dom'
 
 class GraphContainer extends Component {
 
+	constructor(){
+		super()
+
+		this.state = {
+			isRotating: true
+		}
+	}
+
 	prepGData = ( data ) => {
 		let res = {
 			nodes: [],
 			links: []
 		}
 
+		// define brand and model colors
 		const colors = {
 			"Audi": {
-				lighter:'lightblue',
-				darker:'darkblue'
+				lighter: ['#ffee58', '#fff59d', '#fdd835', '#f9a825'],
+				darker:'#f57f17'
 			},
 			"ŠKODA":{
-				lighter:'lightblue',
-				darker:'darkblue'
+				lighter: ['#43a047', '#66bb6a', '#a5d6a7', '#b9f6ca'],
+				darker:'#2e7d32'
 			},
 			"Volkswagen Passenger Cars": {
-				lighter:'lightblue',
-				darker:'darkblue'
+				lighter: ['#1976d2', '#2196f3', '#64b5f6', '#bbdefb'],
+				darker:'#0d47a1'
 			},
 			"Volkswagen Commercial Vehicles": {
-				lighter:'lightblue',
-				darker:'darkblue'
+				lighter: ['#1976d2 ', '#03a9f4', '#4fc3f7', '#b3e5fc'],
+				darker:'#01579b'
 			},
 			"SEAT": {
-				lighter:'red',
-				darker:'white'
+				lighter: ['#d32f2f', '#f44336', '#e57373', '#ff8a80'],
+				darker:'#b71c1c'
 			}
 		}
 
+		// define center Node
 		res.nodes.push({
-			id: 'vw-group',
-			name: "VW-Group",
+			id:'vw-group',
+			name:"VW-Group",
+			color:'white',
 			size: 10000
 		})
 
@@ -57,7 +68,7 @@ class GraphContainer extends Component {
 				res.nodes.push({
 					id: `${brand.id}-${i}`,
 					name: model.name,
-					color: colors[brand.name].lighter,
+					color: colors[brand.name].lighter[Math.floor(Math.random() * 3)],
 					size: 100
 				})
 				res.links.push({
@@ -69,24 +80,35 @@ class GraphContainer extends Component {
 		return res
 	}
 
-	onNodeClick(node){
+	_handleClick = node => {
 		// Aim at node from outside it
-		const distance = node.size / 10;
+		console.log(node)
+		const distance = 500;
 		const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
 		this.fg.cameraPosition(
-		{
-			x: node.x * distRatio,
-			y: node.y * distRatio,
-			z: node.z * distRatio
-		}, // new position
-			node, // lookAt ({ x, y, z })
-			2000  // ms transition duration
-		)
-	}
+		  { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
+		  node, // lookAt ({ x, y, z })
+		  3000  // ms transition duration
+		);
+
+		// this.setState({ isRotating: false })
+	  };
 
 	render() {
 
 		const gData = this.prepGData(data)
+		// const distance = 500
+		// let angle = 0;
+
+		// setInterval(() => {
+		// 	if (this.state.isRotating) {
+		// 		this.fg.cameraPosition({
+		// 			x: distance * Math.sin(angle),
+		// 			z: distance * Math.cos(angle)
+		// 		});
+		// 		angle += Math.PI / 300;
+		// 	}
+		// }, 30);
 
 		return (
 			<div className='graph-wrapper'>
@@ -101,7 +123,7 @@ class GraphContainer extends Component {
 					nodeRelSize={ 1 }
 					nodeColor='color'
 					nodeVal='size'
-					onNodeClick={ this.onNodeClick }
+					onNodeClick={ this._handleClick }
 				/>
 			</div>
 		)
