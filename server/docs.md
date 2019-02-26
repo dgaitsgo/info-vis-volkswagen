@@ -28,3 +28,5 @@ Solution :
 - default/base configurations to get images/emissions data easier
 - Make Request Body/Parameters headers clearer
 - Ability to filter by vehicle type (not just brand)
+- Image for a model
+- 3D vehicle endpoint

@@ -69,6 +69,17 @@ const resolveOptions = (apiURL, configId, token) =>
 		}
 	})
 
+const getOptions = (apiURL, configId, token) =>
+	axios({
+		method : 'get',
+		url : `${apiURL}/configurations/${configId}/options`,
+		headers : {
+			'Authorization' : 'bearer ' + token.access_token,
+			'Content-Type' : 'application/json',
+			'Accept' : 'application/json'
+		}
+})
+
 const addOption = (apiURL, configId, optionId, token) =>
 	axios({
 		method : 'post',
@@ -83,75 +94,24 @@ const addOption = (apiURL, configId, optionId, token) =>
 		}
 	})
 
-const getImages = (apiURL, configId, token) =>
-	axios({
-		method : 'get',
-		url : `${apiURL}/configurations/${configId}/images`,
-		headers : {
-			'Authorization' : 'bearer ' + token.access_token,
-			'Content-Type' : 'application/json',
-			'Accept' : 'application/json'
-		}
-	})
-
-
-app.get('/api/fullModels', async(req, res) => {
+app.get('/api/configureModels', async(req, res) => {
 
 	const _token = req.query.token
 	const modelsParam = req.query.models
 	const token = typeof(_token) === 'string' ? JSON.parse(_token) : _token
 	const _models = typeof(modelsParam) === 'string' ? JSON.parse(modelsParam) : modelsParam
-	const models = _models.map(model => JSON.parse(model))
-
-	let cachedModels = {}
-	let newEntries = {}
-	let now = (new Date()).toISOString()
-	let configsMap = {}
-
-	console.log('recieving models : ', models)
+	const models = _models.map(model => typeof(model) === 'string' ? JSON.parse(model) : model)
 
 	try {
 
 		const configsURL = `${apiURL}/configurations`
-		const missingModels = models.filter( model => {
-
-			let modelInDb = db.get('DefaultConfigs').find({ id : model.id }).value()
-			let missing = false
-
-			console.log('model in DB : ', modelInDb)
-
-			if (modelInDb) {
-
-				if (now > modelInDb.expirationDate || !modelInDb.images) {
-					missing = true
-					db('DefaultConfigs').remove(model.id)
-					newEntries[model.id] = {
-						id : model.id
-					}
-				} else {
-					cachedModels[model.id] = modelInDb
-				}
-			} else {
-				missing = true
-				newEntries[model.id] = {
-					id : model.id
-				}
-			}
-
-			return (missing)
-		})
 
 		// for all the missing models
-		const configIds = await Promise.all(missingModels.map(async model => {
+		const configIds = await Promise.all(models.map(async model => {
 
 			// make a new configuration
 			const newConfigRes = await makeConfiguration(configsURL, model.id, token)
 			const configId = newConfigRes.data.id
-
-			/* SET MODEL ID */
-			/* SET EXPIRATION DATE */
-			newEntries[model.id].configId = configId
-			newEntries[model.id].expirationDate = addHours(now, 24)
 
 			return configId
 		}))
@@ -164,48 +124,22 @@ app.get('/api/fullModels', async(req, res) => {
 			//get all of the options to complete the build
 			const optionsToSetRes = await resolveOptions(apiURL, configId, token)
 
-			console.log('options to set', optionsToSetRes.data)
-			if (optionsToSetRes.data && optionsToSetRes.data.data) {
+			const optionIds = optionsToSetRes.data.data.map(option => option.id)
+			let continues = true
 
-				const optionIds = optionsToSetRes.data.data.map(option => option.id)
-				let continues = true
+			return (Promise.all(optionIds.map( async optionId => {
 
-				optionIds.forEach( async optionId => {
-
-					const buildRes = await checkBuild(apiURL, configId, token)
-					console.log('config id passes ? ', buildRes.data)
-					if (!buildRes || !buildRes.data.buildable) {
-						await addOption(apiURL, configId, optionId, token)
-					}
-				})
-			}
+				const buildRes = await checkBuild(apiURL, configId, token)
+				console.log(buildRes.data)
+				return (addOption(apiURL, configId, optionId, token))
+			})))
 		}))
 
-		
-		await Promise.all(missingModels.map( async model => {
-		
-			const configId = newEntries[model.id].configId
-			console.log('getting image for', configId)
-			const imagesRes = await getImages(apiURL, configId, token)
-			console.log('got image for', configId)
-			const imageLinks = imagesRes.data
+		const moop = getOptions(apiURL, configIds[0])
 
-			console.log('images res', imagesRes.data)
+		console.log('options set', moop.data)
 
-			newEntries[model.id].images = imageLinks.data
-		}))
-
-		Object.keys(newEntries).forEach(key => {
-
-			db.get('DefaultConfigs')
-				.push(newEntries[key])
-				.assign({ id : newEntries[key].id })
-				.write()
-		})
-
-		const modelData = Object.assign({}, newEntries, cachedModels)
-
-		sendJSON(res, modelData)
+		sendJSON(res, configIds)
 
 	} catch (err) {
 
