@@ -5,6 +5,12 @@ import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
 import Model from '../components/Model'
 import { NavLink } from 'react-router-dom'
+import { Heading } from "react-bulma-components/full"
+import { Section } from "react-bulma-components/full"
+import { Container } from "react-bulma-components/full"
+import { Button } from "react-bulma-components/full"
+import { Columns } from "react-bulma-components/full"
+import '../style/model.css'
 
 class ModelsContainer extends Component {
 
@@ -33,16 +39,15 @@ class ModelsContainer extends Component {
         })
         .then( res => {
             const models = res.data.models.data
-			console.log(models)
+		// console.log(models)
             this.setState({ models, modelsLoading: false }, () =>{
-				console.log('iam a fucking chicken')
 				axios.get('/api/fullModels', {
 					params: {
 						models: models.map(({ id }) => ({ id }) )
 					}
 				})
 				.then( res => {
-					console.log('res is', res)
+					// console.log('res is', res)
 					this.setState({ modelImages: res.data, imagesLoading: false })
 				})
 				.catch(err => {
@@ -97,15 +102,18 @@ class ModelsContainer extends Component {
             return <Loader message={'Getting models...'} />
 
 		const compareButtonClassName = selectedModels
-			? 'compare-button active'
-			: 'compare-button'
+			? 'compare-button has-text-centered active'
+			: 'compare-button has-text-centered'
 
         return (
 			<div className='models-wrapper'>
-				<div className='models-header'>
-					Select Models
-				</div>
+			<Section>
+			<Container>
+				<Heading size={4} className='models-header has-text-centered'>
+					Select Models:
+				</Heading>
 				<div className='models-body'>
+					<Columns className="is-centered">
 					{models.map(({ id, name }, i) => {
 						return (
 							<Model key= { id }
@@ -117,15 +125,21 @@ class ModelsContainer extends Component {
 							/>
 						)
 					})}
+					</Columns>
 				</div>
+				<br />
 				<div className={compareButtonClassName}>
-					<NavLink to={{
-							pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`
-						}
-					}>
-						Compare selected Models
+					<Button>
+						<NavLink to={{
+								pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`
+							}
+						}>
+						Done
 					</NavLink>
+					</Button>
 				</div>
+				</Container>
+				</Section>
 			</div>
         )
     }

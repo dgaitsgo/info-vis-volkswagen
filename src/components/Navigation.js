@@ -70,7 +70,7 @@ class Navigation extends Component {
 					<Navbar.Container>
 					</Navbar.Container>
 					<Navbar.Container position="end">
-						<Navbar.Item href="#">At the end</Navbar.Item>
+						{/* <Navbar.Item href="#">At the end</Navbar.Item> */}
 					</Navbar.Container>
 				</Navbar.Menu>
 		</Navbar>

@@ -9,7 +9,7 @@ import 'react-dropdown-tree-select/dist/styles.css'
 import audi from '../res/audi-logo.png'
 import vw_nutz from '../res/VW_Nutzfahrzeuge-logo.png'
 import seat from '../res/Seat-logo.png'
-import vw_pkw from '../res/VW-logo.png'
+import vw_pkw from '../res/vw-logo.png'
 import skoda from '../res/Skoda-logo.png'
 import { Columns } from "react-bulma-components/full"
 import { Box } from "react-bulma-components/full"
@@ -30,10 +30,10 @@ const Brands = (props) => {
 	return (
 		<Columns.Column className='brand-wrapper has-text-centered'>
 			<Box>
-			<img src={brandLogos[name]}
-			alt="Image"
-			/>
-			{/* <p className='has-text-centered'>{ name } </p> */}
+				<img src={brandLogos[name]} 
+				alt="Image"
+				/>
+				{/* <p className='has-text-centered'>{ name } </p> */}
 			</Box>
 		</Columns.Column>
 	)

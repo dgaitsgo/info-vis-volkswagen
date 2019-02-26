@@ -1,6 +1,8 @@
 import React from 'react'
-
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
+import { Columns } from "react-bulma-components/full"
+import { Box } from "react-bulma-components/full"
+import '../style/model.css'
 
 const Model = ({
     id, name, onClick, selected, src
@@ -11,12 +13,13 @@ const Model = ({
 		: 'model'
 
     return (
-        <div className={className} onClick={ () => onClick(id) }>
-			<img src={ src } alt={ name } />
-			<div>
+        <Columns.Column>
+		<Box className={className} onClick={ () => onClick(id) }>
+			<div className="model-name has-text-centered">
 				{ name }
 			</div>
-		</div>
+			</Box>
+		</Columns.Column>
 
     )
 }
