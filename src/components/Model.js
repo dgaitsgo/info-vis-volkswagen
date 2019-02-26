@@ -14,7 +14,7 @@ const Model = ({
 
     return (
         <Columns.Column>
-		<Box className={className} onClick={ () => onClick(id) }>
+		<Box className={className} onClick={ () => onClick({ id, name }) }>
 			<div className="model-name has-text-centered">
 				{ name }
 			</div>
