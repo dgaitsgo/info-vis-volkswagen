@@ -80,6 +80,33 @@ const getOptions = (apiURL, configId, token) =>
 		}
 })
 
+const replaceOptions = ({ configId, optionIds, token }) => {
+
+	const data = JSON.stringify(optionIds)
+	const url = `${apiURL}/configurations/${configId}/options`
+
+	return (axios.put(url, data, {
+	 		headers : {
+	 			'Authorization' : 'bearer ' + token.access_token,
+				'Content-Type' : 'application/json',
+				'Accept' : 'application/json'
+	 		},
+		 })
+	)
+}
+	 
+	//axios({
+	//	method : 'put',
+	//	url : `${apiURL}/configurations/${configId}/options`,
+	//	headers : {
+	//		'Authorization' : 'bearer ' + token.access_token,
+	//		'Content-Type' : 'application/json',
+	//		'Accept' : 'application/json'
+	//	},
+	//	data : optionIds
+	//})
+ 
+
 const addOption = (apiURL, configId, optionId, token) =>
 	axios({
 		method : 'post',
@@ -116,28 +143,20 @@ app.get('/api/configureModels', async(req, res) => {
 			return configId
 		}))
 
-		console.log('new config ids : ', configIds)
-
 		//for all the new configs
 		await Promise.all(configIds.map( async configId => {
 
 			//get all of the options to complete the build
 			const optionsToSetRes = await resolveOptions(apiURL, configId, token)
+			const optionIds = optionsToSetRes.data.data.map(option => ({ id : option.id }))
+			
+			console.log('replacingOptions', optionIds, 'in', configId)
 
-			const optionIds = optionsToSetRes.data.data.map(option => option.id)
-			let continues = true
-
-			return (Promise.all(optionIds.map( async optionId => {
-
-				const buildRes = await checkBuild(apiURL, configId, token)
-				console.log(buildRes.data)
-				return (addOption(apiURL, configId, optionId, token))
-			})))
+			await replaceOptions({ configId, optionIds, token })
+			
 		}))
 
-		console.log('scopety poop', configIds)
-		// console.log('options set', moop.data)
-
+		// const buildRes = await checkBuild(apiURL, configIds[0], token)
 		sendJSON(res, configIds)
 
 	} catch (err) {
