@@ -9,7 +9,6 @@ import { Section } from "react-bulma-components/full"
 import { Heading } from "react-bulma-components/full"
 import { Container } from "react-bulma-components/full"
 import { Columns } from "react-bulma-components/full"
-import { Button } from "react-bulma-components/full"
 
 class BrandsContainer extends Component {
 
@@ -71,7 +70,6 @@ class BrandsContainer extends Component {
 				</Heading>
 				<Columns className="is-centered">
 				{brands.map(({ brand_id, name }, i) => {
-
 					const to = {
 						pathname : `/${urlData[1]}/${brand_id}`,
 						query : {
@@ -79,7 +77,6 @@ class BrandsContainer extends Component {
 							name
 						}
 					}
-
 					return (
 						<NavLink to={to} key={i}>
 							<Brands

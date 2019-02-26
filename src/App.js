@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
 import './App.css'
-import { Heading } from "react-bulma-components/full"
-import { Image } from "react-bulma-components/full"
-import { Icon } from "react-bulma-components/full"
-
 import { Footer } from 'react-bulma-components/full';
 import { Container } from 'react-bulma-components/full';
 import { Content } from 'react-bulma-components/full';
@@ -49,13 +45,7 @@ class App extends Component {
 					<Route exact path={`/:countryCode/:brand_id/:model_string`} component= { CompareContainer } />
 					<Route component={ NotFound }/>
 				</Switch>
-<<<<<<< HEAD
-				
 				<Hero>
-=======
-
-				<Hero size="fullheight">
->>>>>>> master
 					<Hero.Head renderAs="header" />
 						<Hero.Body />
 						<Hero.Footer>
