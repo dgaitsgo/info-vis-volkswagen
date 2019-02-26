@@ -69,10 +69,21 @@ const resolveOptions = (apiURL, configId, token) =>
 		}
 	})
 
-const getOptions = (apiURL, configId, token) =>
+const getOptions = ({ configId, token }) =>
 	axios({
 		method : 'get',
 		url : `${apiURL}/configurations/${configId}/options`,
+		headers : {
+			'Authorization' : 'bearer ' + token.access_token,
+			'Content-Type' : 'application/json',
+			'Accept' : 'application/json'
+		}
+})
+
+const getWLTP = ({ configId, token }) =>
+	axios({
+		method : 'get',
+		url : `${apiURL}/configurations/${configId}/wltp`,
 		headers : {
 			'Authorization' : 'bearer ' + token.access_token,
 			'Content-Type' : 'application/json',
@@ -94,18 +105,6 @@ const replaceOptions = ({ configId, optionIds, token }) => {
 		 })
 	)
 }
-	 
-	//axios({
-	//	method : 'put',
-	//	url : `${apiURL}/configurations/${configId}/options`,
-	//	headers : {
-	//		'Authorization' : 'bearer ' + token.access_token,
-	//		'Content-Type' : 'application/json',
-	//		'Accept' : 'application/json'
-	//	},
-	//	data : optionIds
-	//})
- 
 
 const addOption = (apiURL, configId, optionId, token) =>
 	axios({
@@ -156,8 +155,25 @@ app.get('/api/configureModels', async(req, res) => {
 			
 		}))
 
+		const defaultOptions = await Promise.all(configIds.map(configId => getOptions({ configId, token })))
+		const wltps = await Promise.all(configIds.map(configId => getWLTP({ configId, token })))
+
+		let configOptionsMap = {}
+
+		models.forEach( (model, i) => {
+			
+			configOptionsMap[model.id] = {}
+			configOptionsMap[model.id].model = model
+			configOptionsMap[model.id].defaultOptions = defaultOptions[i].data
+			configOptionsMap[model.id].wltp = wltps[i].data
+			configOptionsMap[model.id].configId = configIds[i]
+
+		})
+
+		console.log(configOptionsMap)
+
 		// const buildRes = await checkBuild(apiURL, configIds[0], token)
-		sendJSON(res, configIds)
+		sendJSON(res, configOptionsMap)
 
 	} catch (err) {
 
