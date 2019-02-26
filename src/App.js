@@ -10,13 +10,16 @@ import { Content } from 'react-bulma-components/full';
 import { Hero } from 'react-bulma-components/full';
 
 import axios from 'axios'
+
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Navigation from './components/Navigation'
+import GraphContainer from './components/force-graph/Graph'
+import NotFound from './components/NotFound'
+
 import LandingContainer from './containers/LandingContainer'
 import BrandsContainer from './containers/BrandsContainer'
 import ModelsContainer from './containers/ModelsContainer'
 import CompareContainer from './containers/CompareContainer'
-import NotFound from './components/NotFound'
 import { withRouter } from 'react-router-dom'
 
 class App extends Component {
@@ -43,19 +46,15 @@ class App extends Component {
 			<div className="main">
 				<Navigation />
 				<Switch>
-					<Route exact path='/' component= { LandingContainer } />
+					<Route exact path='/' component={ GraphContainer } />
+					<Route exact path='/explore' component= { LandingContainer } />
 					<Route exact path={`/:countryCode`} component={ BrandsContainer} />
 					<Route exact path={`/:countryCode/:brand_id`} component= { ModelsContainer } />
 					<Route exact path={`/:countryCode/:brand_id/:model_string`} component= { CompareContainer } />
 					<Route component={ NotFound }/>
 				</Switch>
-<<<<<<< HEAD
-				
-				<Hero>
-=======
 
-				<Hero size="fullheight">
->>>>>>> master
+				<Hero>
 					<Hero.Head renderAs="header" />
 						<Hero.Body />
 						<Hero.Footer>
