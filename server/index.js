@@ -21,6 +21,7 @@ const app = require('./services/app')
 const refreshToken = require('./services/refreshToken')
 const productCatalog = require('./services/productCatalog')
 const configureCar = require('./services/configureCar')
+const allUniqueModels = require('./services/allUniqueModels')
 
 /******************************************************************************
  * Server 
