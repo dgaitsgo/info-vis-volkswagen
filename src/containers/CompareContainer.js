@@ -48,9 +48,71 @@ class CompareContainer extends Component {
 		}
 	}
 
+	getChoices = (configId) => {
+//		const urlData = this.props.location.pathname.split('/')
+//		const models = JSON.parse(urlData[3])
+//		const configurationIds = this.props.location.params.configurationIds
+//		
+
+
+//		Promise.all(configurationIds.map(configId =>
+//			axios.get('/api/choices', {
+//				params : {
+//					configurationId : configId
+//				}
+//		 })
+//		)).then(results => {
+//			 
+//			let fullModels = []
+//
+//			results.forEach( (res, i) => {
+//				fullModels.push({
+//					//get : model.id, model.name
+//					model : models[i],
+//					configId : configurationIds[i],
+//					options : res.data
+//				})
+//			})
+//
+//			console.log(fullModels)
+//
+//			this.setState({ fullModels })
+//
+//		 })
+//		 .catch(err => {
+//		 	const to = {
+//		 		pathname : '/server-error',
+//		 		query : {
+//		 			err
+//		 		}
+//		 	}
+//		 	return (
+//		 		<Redirect to={to} />
+//		 	)
+//		 })
+//    }
+
+	}
+
     componentDidMount() {
 
+		const urlData = this.props.location.pathname.split('/')
+		const models = JSON.parse(urlData[3])
+		// const configurationIds = this.props.location.params.configurationIds
+
+		// configurationIds
+		axios.get('/api/configureModels', {
+			params : {
+				models
+			}
+		}).then(results => {
+
+			console.log(results.data)
+			this.setState({ configurations : results.data })
+		})
+	}
     }
+
 
 	render() {
 
