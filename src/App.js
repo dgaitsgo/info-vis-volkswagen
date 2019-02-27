@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import './App.css'
 import { Footer } from 'react-bulma-components/full';
 import { Container } from 'react-bulma-components/full';
 import { Content } from 'react-bulma-components/full';
@@ -17,6 +16,7 @@ import BrandsContainer from './containers/BrandsContainer'
 import ModelsContainer from './containers/ModelsContainer'
 import CompareContainer from './containers/CompareContainer'
 import { withRouter } from 'react-router-dom'
+import './style/app.css'
 
 class App extends Component {
 
