@@ -122,7 +122,7 @@ class ModelsContainer extends Component {
 					Select Models:
 				</Heading>
 				<div className='models-body'>
-					<Columns className="is-centered">
+					<Columns>
 					{loadingConfigurations && <Loader />}
 					{models.map(({ id, name }, i) => {
 						return (

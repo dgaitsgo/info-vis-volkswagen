@@ -3,9 +3,11 @@
 */
 
 import React, { Component } from 'react'
-import ForceGraph3D from 'react-force-graph-3d';
+import ForceGraph3D from 'react-force-graph-3d'
 import data from './data.js'
 import { NavLink } from 'react-router-dom'
+import { Heading } from "react-bulma-components/full"
+import '../../style/graph.css'
 
 class GraphContainer extends Component {
 
@@ -34,8 +36,8 @@ class GraphContainer extends Component {
 				darker:'#2e7d32'
 			},
 			"Volkswagen Passenger Cars": {
-				lighter: ['#1976d2', '#2196f3', '#64b5f6', '#bbdefb'],
-				darker:'#0d47a1'
+				lighter: ['#512da8', '#673ab7', '#9575cd', '#d1c4e9'],
+				darker:'#311b92'
 			},
 			"Volkswagen Commercial Vehicles": {
 				lighter: ['#1976d2 ', '#03a9f4', '#4fc3f7', '#b3e5fc'],
@@ -86,23 +88,23 @@ class GraphContainer extends Component {
 
 	render() {
 		const gData = this.prepGData(data)
-		const distance = 500
-		let angle = 0
+		// const distance = 500
+		// let angle = 0
 
-		// setInterval(() => {
-		// 	this.fg.cameraPosition({
-		// 		x: distance * Math.sin(angle),
-		// 		z: distance * Math.cos(angle)
-		// 	});
-		// 	angle += Math.PI / 300;
-		// }, 30)
+		//  setInterval(() => {
+		//  	this.fg.cameraPosition({
+		//  		x: distance * Math.sin(angle),
+		//  		z: distance * Math.cos(angle)
+		//  	});
+		//  	angle += Math.PI / 300;
+		//  }, 30)
 
 		return (
 			<div className='graph-wrapper'>
 				<NavLink to='/explore'>
-					<span className='graph-title'>
-						Explore the possibilities
-					</span>
+					<Heading className='graph-title'>
+						Explore the Possibilities
+					</Heading>
 				</NavLink>
 				<ForceGraph3D
 					ref={el => { this.fg = el; }}

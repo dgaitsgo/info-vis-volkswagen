@@ -13,13 +13,15 @@ const Model = ({
 		: 'model'
 
     return (
+		<div>
         <Columns.Column>
-		<Box className={className} onClick={ () => onClick({ id, name }) }>
-			<div className="model-name has-text-centered">
-				{ name }
-			</div>
+			<Box className={className} onClick={ () => onClick({ id, name }) }>
+				<div className="model-name has-text-centered">
+					{ name }
+				</div>
 			</Box>
 		</Columns.Column>
+		</div>
 
     )
 }

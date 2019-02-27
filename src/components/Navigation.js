@@ -5,8 +5,7 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import logo from '../res/nav-vw-logo.png'
-import { Breadcrumb, BreadcrumbItem } from 'reactstrap'
-import { Field, Control } from 'react-bulma-components/full'
+// import { Breadcrumb, BreadcrumbItem } from 'reactstrap'
 import { Button } from 'react-bulma-components/full'
 import { Navbar } from 'react-bulma-components/full'
 import { withRouter } from 'react-router-dom'
@@ -30,7 +29,7 @@ class Navigation extends Component {
 				active={!open}
 				transparent={false}
 			>
-				<Navbar.Brand>
+				<Navbar.Brand className='unordered-nav'>	
 					<Navbar.Item renderAs="a" href="/">
 						<img
 							src={logo}
@@ -38,23 +37,7 @@ class Navigation extends Component {
 							width = "112"
 							height = "31"
 						/>
-
 					</Navbar.Item>
-					<Navbar.Item>
-						<Breadcrumb>
-							<ul className='unordered-nav'>
-									{/* {urlData.map( ( name ) => {
-										return (
-											<li> <NavLink to='/'>{ name }</NavLink> </li>
-										)
-								})} */}
-								{/* {urlData[1] && <li> <NavLink to='/'>{ urlData[1] }</NavLink> </li>}
-								{urlData[2] && <li> <NavLink to={`/${ urlData[1] }`}>Brands</NavLink> </li>}
-								{urlData[3] && <li> <NavLink to={`/${ urlData[1] }/${ urlData[2] }`}>Models</NavLink> </li>} */}
-							</ul>
-						</Breadcrumb>
-					</Navbar.Item>
-
 					<Navbar.Burger
 						active={open}
 						onClick={() =>
@@ -63,15 +46,24 @@ class Navigation extends Component {
 							})
 						}
 					/>
-
 				</Navbar.Brand>
 
 				<Navbar.Menu active={open}>
-					<Navbar.Container>
-					</Navbar.Container>
-					<Navbar.Container position="end">
-						{/* <Navbar.Item href="#">At the end</Navbar.Item> */}
-					</Navbar.Container>
+					{urlData.map(( name, i ) => {
+							return (
+								<Navbar.Container position="left">
+									<Navbar.Item href={urlData[i]}>{ name }</Navbar.Item>
+								</Navbar.Container> 
+							)
+					})}	
+									{/* {urlData[2] && <li> <NavLink to={`/${ urlData[1] }`}>Brands</NavLink> </li>} */}
+									{/* {urlData[3] && <li> <NavLink to={`/${ urlData[1] }/${ urlData[2] }`}>Models</NavLink> </li>} */}
+					{/* <Navbar.Container> */}
+						{/* <Navbar.Item href={ urlData[1] }>
+								{urlData[1] && <li> <NavLink to='/'></NavLink> </li>}	
+									Countries
+						</Navbar.Item> 
+					</Navbar.Container>*/}
 				</Navbar.Menu>
 		</Navbar>
 		)
