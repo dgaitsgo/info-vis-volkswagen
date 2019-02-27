@@ -30,7 +30,7 @@ const Brands = (props) => {
 	return (
 		<Columns.Column className='brand-wrapper has-text-centered'>
 			<Box>
-				<img src={brandLogos[name]} 
+				<img src={brandLogos[name]}
 				alt="Image"
 				/>
 				{/* <p className='has-text-centered'>{ name } </p> */}

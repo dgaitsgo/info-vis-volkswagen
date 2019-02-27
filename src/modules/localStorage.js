@@ -11,7 +11,7 @@ const to = promise =>
 		   .catch(err => [err])
 
 const getLocalStorage = name => {
-	
+
 	const ls = new PouchDB(name, {
 		auto_compaction: true,
 		revs_limit: 1
@@ -31,13 +31,13 @@ const getLocalStorage = name => {
 	ls.insert = async (doc, attempt) => {
 
 		let err, res
-		
+
 		[err, res] = await to(ls.post(doc))
 		//cancel after n attempts
 		if (err) {
-			
+
 			let latest = await ls.get(doc._id)
-			
+
 			if (!latest) {
 				latest = await ls.find({ selector : { _id : doc._id } })
 			}
@@ -46,7 +46,6 @@ const getLocalStorage = name => {
 			if ( attempt < 5 )
 				ls.insert(doc, attempt ? 0 : attempt + 1)
 		}
-
 		return (res.rev)
 	}
 
@@ -60,4 +59,4 @@ const getLocalStorage = name => {
 	return (ls)
 }
 
-export default getLocalStorage 
+export default getLocalStorage
