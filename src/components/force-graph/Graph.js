@@ -89,13 +89,13 @@ class GraphContainer extends Component {
 		const distance = 500
 		let angle = 0
 
-		setInterval(() => {
-			this.fg.cameraPosition({
-				x: distance * Math.sin(angle),
-				z: distance * Math.cos(angle)
-			});
-			angle += Math.PI / 300;
-		}, 30)
+		// setInterval(() => {
+		// 	this.fg.cameraPosition({
+		// 		x: distance * Math.sin(angle),
+		// 		z: distance * Math.cos(angle)
+		// 	});
+		// 	angle += Math.PI / 300;
+		// }, 30)
 
 		return (
 			<div className='graph-wrapper'>
