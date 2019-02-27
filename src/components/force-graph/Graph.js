@@ -1,3 +1,7 @@
+/*
+ * Component by Sebastian Kunz
+*/
+
 import React, { Component } from 'react'
 import ForceGraph3D from 'react-force-graph-3d';
 import data from './data.js'
@@ -47,7 +51,7 @@ class GraphContainer extends Component {
 		res.nodes.push({
 			id:'vw-group',
 			name:"VW-Group",
-			color:'white',
+			color:'#e0e0e0',
 			size: 10000
 		})
 
@@ -80,35 +84,18 @@ class GraphContainer extends Component {
 		return res
 	}
 
-	_handleClick = node => {
-		// Aim at node from outside it
-		console.log(node)
-		const distance = 500;
-		const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
-		this.fg.cameraPosition(
-		  { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
-		  node, // lookAt ({ x, y, z })
-		  3000  // ms transition duration
-		);
-
-		// this.setState({ isRotating: false })
-	  };
-
 	render() {
-
 		const gData = this.prepGData(data)
-		// const distance = 500
-		// let angle = 0;
+		const distance = 500
+		let angle = 0
 
 		// setInterval(() => {
-		// 	if (this.state.isRotating) {
-		// 		this.fg.cameraPosition({
-		// 			x: distance * Math.sin(angle),
-		// 			z: distance * Math.cos(angle)
-		// 		});
-		// 		angle += Math.PI / 300;
-		// 	}
-		// }, 30);
+		// 	this.fg.cameraPosition({
+		// 		x: distance * Math.sin(angle),
+		// 		z: distance * Math.cos(angle)
+		// 	});
+		// 	angle += Math.PI / 300;
+		// }, 30)
 
 		return (
 			<div className='graph-wrapper'>
@@ -123,7 +110,8 @@ class GraphContainer extends Component {
 					nodeRelSize={ 1 }
 					nodeColor='color'
 					nodeVal='size'
-					onNodeClick={ this._handleClick }
+					enableNavigationControls={ false }
+					showNavInfo={ false }
 				/>
 			</div>
 		)

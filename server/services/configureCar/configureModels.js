@@ -69,7 +69,7 @@ const resolveOptions = (apiURL, configId, token) =>
 		}
 	})
 
-const getOptions = (apiURL, configId, token) =>
+const getOptions = ({ configId, token }) =>
 	axios({
 		method : 'get',
 		url : `${apiURL}/configurations/${configId}/options`,
@@ -79,6 +79,32 @@ const getOptions = (apiURL, configId, token) =>
 			'Accept' : 'application/json'
 		}
 })
+
+const getWLTP = ({ configId, token }) =>
+	axios({
+		method : 'get',
+		url : `${apiURL}/configurations/${configId}/wltp`,
+		headers : {
+			'Authorization' : 'bearer ' + token.access_token,
+			'Content-Type' : 'application/json',
+			'Accept' : 'application/json'
+		}
+})
+
+const replaceOptions = ({ configId, optionIds, token }) => {
+
+	const data = JSON.stringify(optionIds)
+	const url = `${apiURL}/configurations/${configId}/options`
+
+	return (axios.put(url, data, {
+	 		headers : {
+	 			'Authorization' : 'bearer ' + token.access_token,
+				'Content-Type' : 'application/json',
+				'Accept' : 'application/json'
+	 		},
+		 })
+	)
+}
 
 const addOption = (apiURL, configId, optionId, token) =>
 	axios({
@@ -116,29 +142,38 @@ app.get('/api/configureModels', async(req, res) => {
 			return configId
 		}))
 
-		console.log('new config ids : ', configIds)
-
 		//for all the new configs
 		await Promise.all(configIds.map( async configId => {
 
 			//get all of the options to complete the build
 			const optionsToSetRes = await resolveOptions(apiURL, configId, token)
+			const optionIds = optionsToSetRes.data.data.map(option => ({ id : option.id }))
+			
+			console.log('replacingOptions', optionIds, 'in', configId)
 
-			const optionIds = optionsToSetRes.data.data.map(option => option.id)
-			let continues = true
-
-			return (Promise.all(optionIds.map( async optionId => {
-
-				const buildRes = await checkBuild(apiURL, configId, token)
-				console.log(buildRes.data)
-				return (addOption(apiURL, configId, optionId, token))
-			})))
+			await replaceOptions({ configId, optionIds, token })
+			
 		}))
 
-		console.log('scopety poop', configIds)
-		// console.log('options set', moop.data)
+		const defaultOptions = await Promise.all(configIds.map(configId => getOptions({ configId, token })))
+		const wltps = await Promise.all(configIds.map(configId => getWLTP({ configId, token })))
 
-		sendJSON(res, configIds)
+		let configOptionsMap = {}
+
+		models.forEach( (model, i) => {
+			
+			configOptionsMap[model.id] = {}
+			configOptionsMap[model.id].model = model
+			configOptionsMap[model.id].defaultOptions = defaultOptions[i].data
+			configOptionsMap[model.id].wltp = wltps[i].data
+			configOptionsMap[model.id].configId = configIds[i]
+
+		})
+
+		console.log(configOptionsMap)
+
+		// const buildRes = await checkBuild(apiURL, configIds[0], token)
+		sendJSON(res, configOptionsMap)
 
 	} catch (err) {
 
