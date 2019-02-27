@@ -52,7 +52,7 @@ class CompareContainer extends Component {
 //		const urlData = this.props.location.pathname.split('/')
 //		const models = JSON.parse(urlData[3])
 //		const configurationIds = this.props.location.params.configurationIds
-//		
+//
 
 
 //		Promise.all(configurationIds.map(configId =>
@@ -62,7 +62,7 @@ class CompareContainer extends Component {
 //				}
 //		 })
 //		)).then(results => {
-//			 
+//
 //			let fullModels = []
 //
 //			results.forEach( (res, i) => {
@@ -111,8 +111,6 @@ class CompareContainer extends Component {
 			this.setState({ configurations : results.data })
 		})
 	}
-    }
-
 
 	render() {
 
