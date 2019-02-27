@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Option = () => {
+const Option = (props) => {
 	return (
 		<div>
 			Option
