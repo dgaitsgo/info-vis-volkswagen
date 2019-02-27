@@ -149,7 +149,7 @@ app.get('/api/configureModels', async(req, res) => {
 			const optionsToSetRes = await resolveOptions(apiURL, configId, token)
 			const optionIds = optionsToSetRes.data.data.map(option => ({ id : option.id }))
 			
-			console.log('replacingOptions', optionIds, 'in', configId)
+			// console.log('replacingOptions', optionIds, 'in', configId)
 
 			await replaceOptions({ configId, optionIds, token })
 			
@@ -170,7 +170,7 @@ app.get('/api/configureModels', async(req, res) => {
 
 		})
 
-		console.log(configOptionsMap)
+		// console.log(configOptionsMap)
 
 		// const buildRes = await checkBuild(apiURL, configIds[0], token)
 		sendJSON(res, configOptionsMap)
