@@ -148,11 +148,11 @@ app.get('/api/configureModels', async(req, res) => {
 			//get all of the options to complete the build
 			const optionsToSetRes = await resolveOptions(apiURL, configId, token)
 			const optionIds = optionsToSetRes.data.data.map(option => ({ id : option.id }))
-			
+
 			// console.log('replacingOptions', optionIds, 'in', configId)
 
 			await replaceOptions({ configId, optionIds, token })
-			
+
 		}))
 
 		const defaultOptions = await Promise.all(configIds.map(configId => getOptions({ configId, token })))
@@ -161,7 +161,7 @@ app.get('/api/configureModels', async(req, res) => {
 		let configOptionsMap = {}
 
 		models.forEach( (model, i) => {
-			
+
 			configOptionsMap[model.id] = {}
 			configOptionsMap[model.id].model = model
 			configOptionsMap[model.id].defaultOptions = defaultOptions[i].data

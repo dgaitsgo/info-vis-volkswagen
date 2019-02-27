@@ -24,7 +24,8 @@ class CompareContainer extends Component {
 		super(props)
 
         this.state = {
-			fullModels : null
+			fullModels : null,
+			compareMode : 'CO2'
 		}
 	}
 
@@ -41,7 +42,7 @@ class CompareContainer extends Component {
 	//			}
 	//	 })
 	//	)).then(results => {
-	//		 
+	//
 	//		let fullModels = []
 
 	//		results.forEach( (res, i) => {
@@ -70,14 +71,14 @@ class CompareContainer extends Component {
 	//	 	)
 	//	 })
 	//}
-	
+
 	checkBuild = () => {
-		//to do 
+		//to do
 	}
 
 
 	saveToLocal = () => {
-		
+
 		// todo
 		// fullModels.
 	}
@@ -87,7 +88,6 @@ class CompareContainer extends Component {
 		const urlData = this.props.location.pathname.split('/')
 		const models = JSON.parse(urlData[3])
 		let modelsArr = Object.keys(models).map(modelId => ({ id : modelId, name : models[modelId] }))
-		console.log('looking for models', models)
 
 		//get local stage object
 		const ls = getLocalStorage('vw-product-data-configs')
@@ -97,16 +97,17 @@ class CompareContainer extends Component {
 			//look at the configurations the user has in loca
 			ls.find({ selector : { _id : 'configs' }})
 				.then(async res => {
-					
-					let fullModels = {}
-					let cachedModels = res.docs.length ? res.docs[0] : {}
-					
-					console.log('cached models', cachedModels)
-					//get the missing models
-					const missingModels = modelsArr.filter(model => !cachedModels[model.id])	
 
-					console.log('missing models', missingModels)
-					
+					let fullModels = {}
+					fullModels.data = {}
+					fullModels.rev = 'randomfuckingstinrg'
+					let cachedModels = res.docs.length ? res.docs[0] : {}
+
+					//get the missing models
+					const missingModels = !cachedModels.data
+						? modelsArr
+						: modelsArr.filter(model => !cachedModels.data[model.id])
+
 					if (missingModels.length) {
 						const fullModelsRes = await axios.get('/api/configureModels', {
 							params : {
@@ -114,30 +115,34 @@ class CompareContainer extends Component {
 							}
 						})
 
-						fullModels = fullModelsRes.data
-
-						console.log('missing model results', fullModels)
+						fullModels.data = fullModelsRes.data
 					}
-						
-					fullModels = _.merge(cachedModels, fullModels)
+
+					let data = _.merge(cachedModels.data, fullModels.data)
+					fullModels.data = data
 					fullModels._id = 'configs'
 
-					console.log('final fall models', fullModels)
-						
+					fullModels.rev = cachedModels ? cachedModels.rev : null
+					fullModels._rev = cachedModels ? cachedModels._rev : null
+
 					ls.insert(fullModels).then(_rev => {
-						fullModels._rev = _rev
+						fullModels.rev = _rev
+						fullModels._rev = fullModels._rev
 						this.setState({ fullModels })
 					})
 				})
-
+			})
 	}
 
 	setCompareMode = compareMode => this.setState({compareMode})
 
 	getInterpolations = ({ fullModels, phase, compareMode}) => {
 
-		return Object.keys(fullModels).map( (modelId, i) => {
-			const model = fullModels[modelId]
+		return Object.keys(fullModels.data).map( (modelId, i) => {
+
+			const model = fullModels.data[modelId]
+
+			console.log(model)
 
 			if (model.wltp.data.length) {
 
@@ -213,14 +218,15 @@ class CompareContainer extends Component {
 			compareMode
 		} = this.state
 
+		if (!fullModels)
+			return <Loader message={'Getting configurations...'} />
+
 		const lowEmissions = this.getInterpolations({ fullModels, compareMode, phase:'LOW' })
 		const medEmissions = this.getInterpolations({ fullModels, compareMode, phase:'MEDIUM' })
 		const highEmissions = this.getInterpolations({ fullModels, compareMode, phase:'HIGH' })
 		const extraHighEmissions = this.getInterpolations({ fullModels, compareMode, phase:'EXTRA_HIGH' })
 
 		const dataSet = this.transformToDataSet({ low: lowEmissions, med: medEmissions, high: highEmissions, extra: extraHighEmissions })
-
-		console.log(fullModels)
 
 		return (
 			<div className='compare-container-wrapper'>
