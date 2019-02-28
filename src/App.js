@@ -53,7 +53,7 @@ class App extends Component {
 					<Hero.Head renderAs="header" />
 						<Hero.Body />
 						<Hero.Footer>
-							<Footer>
+							<Footer className='custom-footer'>
 								<Container>
 									<Content className='has-text-centered'>
 											<p>

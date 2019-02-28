@@ -3,3 +3,10 @@
     min-height: 100vh;
     flex-direction: column;
   }
+
+/* .hero-foot {
+	position : fixed;
+	left : 0;
+	bottom: 0;
+	width: 100%;
+} */

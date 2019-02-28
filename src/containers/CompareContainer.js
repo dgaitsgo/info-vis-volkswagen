@@ -83,56 +83,75 @@ class CompareContainer extends Component {
 		// fullModels.
 	}
 
-    async componentDidMount() {
+	async componentDidMount() {
 
 		const urlData = this.props.location.pathname.split('/')
-		const models = JSON.parse(urlData[3])
-		let modelsArr = Object.keys(models).map(modelId => ({ id : modelId, name : models[modelId] }))
+		const _models = JSON.parse(urlData[3])
+		let models = Object.keys(_models).map(modelId => ({ id : modelId, name : _models[modelId] }))
 
-		//get local stage object
-		const ls = getLocalStorage('vw-product-data-configs')
+		const fullModelsRes = await axios.get('/api/configureModels', {
+			params : {
+				models,
+			}
+		})
 
-		ls.info().then(res => {
+		const fullModels = {
+			data : fullModelsRes.data
+		}
 
-			//look at the configurations the user has in loca
-			ls.find({ selector : { _id : 'configs' }})
-				.then(async res => {
-
-					let fullModels = {}
-					fullModels.data = {}
-					fullModels.rev = 'randomfuckingstinrg'
-					let cachedModels = res.docs.length ? res.docs[0] : {}
-
-					//get the missing models
-					const missingModels = !cachedModels.data
-						? modelsArr
-						: modelsArr.filter(model => !cachedModels.data[model.id])
-
-					if (missingModels.length) {
-						const fullModelsRes = await axios.get('/api/configureModels', {
-							params : {
-								models : missingModels
-							}
-						})
-
-						fullModels.data = fullModelsRes.data
-					}
-
-					let data = _.merge(cachedModels.data, fullModels.data)
-					fullModels.data = data
-					fullModels._id = 'configs'
-
-					fullModels.rev = cachedModels ? cachedModels.rev : null
-					fullModels._rev = cachedModels ? cachedModels._rev : null
-
-					ls.insert(fullModels).then(_rev => {
-						fullModels.rev = _rev
-						fullModels._rev = fullModels._rev
-						this.setState({ fullModels })
-					})
-				})
-			})
+		this.setState({ fullModels })
 	}
+
+    // async componentDidMount() {
+
+	// 	const urlData = this.props.location.pathname.split('/')
+	// 	const models = JSON.parse(urlData[3])
+	// 	let modelsArr = Object.keys(models).map(modelId => ({ id : modelId, name : models[modelId] }))
+
+	// 	//get local stage object
+	// 	const ls = getLocalStorage('vw-product-data-configs')
+
+	// 	ls.info().then(res => {
+
+	// 		//look at the configurations the user has in loca
+	// 		ls.find({ selector : { _id : 'configs' }})
+	// 			.then(async res => {
+
+	// 				let fullModels = {}
+	// 				fullModels.data = {}
+	// 				fullModels.rev = 'randomfuckingstinrg'
+	// 				let cachedModels = res.docs.length ? res.docs[0] : {}
+
+	// 				//get the missing models
+	// 				const missingModels = !cachedModels.data
+	// 					? modelsArr
+	// 					: modelsArr.filter(model => !cachedModels.data[model.id])
+
+	// 				if (missingModels.length) {
+	// 					const fullModelsRes = await axios.get('/api/configureModels', {
+	// 						params : {
+	// 							models : missingModels
+	// 						}
+	// 					})
+
+	// 					fullModels.data = fullModelsRes.data
+	// 				}
+
+	// 				let data = _.merge(cachedModels.data, fullModels.data)
+	// 				fullModels.data = data
+	// 				fullModels._id = 'configs'
+
+	// 				fullModels.rev = cachedModels ? cachedModels.rev : null
+	// 				fullModels._rev = cachedModels ? cachedModels._rev : null
+
+	// 				ls.insert(fullModels).then(_rev => {
+	// 					fullModels.rev = _rev
+	// 					fullModels._rev = fullModels._rev
+	// 					this.setState({ fullModels })
+	// 				})
+	// 			})
+	// 		})
+	// }
 
 	setCompareMode = compareMode => this.setState({compareMode})
 
@@ -141,8 +160,6 @@ class CompareContainer extends Component {
 		return Object.keys(fullModels.data).map( (modelId, i) => {
 
 			const model = fullModels.data[modelId]
-
-			console.log(model)
 
 			if (model.wltp.data.length) {
 
@@ -168,10 +185,9 @@ class CompareContainer extends Component {
 	transformToDataSet = ({ low, med, high, extra }) => {
 		return (
 			{
-				labels: low.map(({ name }) => name),
-				label: 'ass fucker',
+				labels: low.filter(({ value }) => value && value.length).map(({ name }) => name),
 				datasets: [{
-					data: low.map(({ value }) => value),
+					data: low.map( ({ value }) => value),
 					label:"Low",
 					backgroundColor:"#4caf50",
 					borderColor:"#43a047",
