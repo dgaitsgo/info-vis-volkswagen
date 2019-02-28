@@ -7,7 +7,8 @@ const apiURL = 'https://api.productdata.vwgroup.com/v2'
 const defaultHeaders = access_token => ({
 	headers: {
 		'Authorization': 'bearer ' + access_token,
-		'Accept' : 'application/json'
+		'Accept' : 'application/json',
+		'Cache-Control' : 'max-age : 3600000'
 	}
 })
 
