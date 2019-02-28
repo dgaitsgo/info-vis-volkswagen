@@ -53,7 +53,17 @@ class LandingContainer extends Component {
 
         if (!countries) {
             return (
-                <Loader message={'Getting markets...'} />
+                <div className="has-text-centered">
+                <Loader
+                style={{
+                    width:300,
+                    height:300,
+                    border: '4px solid blue',
+                    borderTopColor: 'transparent',
+                    boderRightColor: 'transparent'
+                }}
+                message={'Getting markets...'} />
+                </div>
             )
         }
 

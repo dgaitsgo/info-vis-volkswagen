@@ -1,22 +1,21 @@
 import React, { Component } from 'react'
-import './App.css'
 import { Footer } from 'react-bulma-components/full';
 import { Container } from 'react-bulma-components/full';
 import { Content } from 'react-bulma-components/full';
 import { Hero } from 'react-bulma-components/full';
 
 import axios from 'axios'
-
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Navigation from './components/Navigation'
-import GraphContainer from './components/force-graph/Graph'
 import NotFound from './components/NotFound'
 
+import GraphContainer from './containers/GraphContainer'
 import LandingContainer from './containers/LandingContainer'
 import BrandsContainer from './containers/BrandsContainer'
 import ModelsContainer from './containers/ModelsContainer'
 import CompareContainer from './containers/CompareContainer'
 import { withRouter } from 'react-router-dom'
+import './style/app.css'
 
 class App extends Component {
 
@@ -53,7 +52,7 @@ class App extends Component {
 					<Hero.Head renderAs="header" />
 						<Hero.Body />
 						<Hero.Footer>
-							<Footer>
+							<Footer className='custom-footer'>
 								<Container>
 									<Content className='has-text-centered'>
 											<p>

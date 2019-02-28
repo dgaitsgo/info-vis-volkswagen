@@ -23,8 +23,6 @@ app.get('/api/deleteAllConfigurations', async(req, res) => {
 
 		const configurations = configurationsRes.data.data
 
-		// console.log(configurations)
-
 		configurations.forEach(config => {
 
 			const url = `${apiURL}/configurations/${config.id}`
