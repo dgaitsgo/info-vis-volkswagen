@@ -5,9 +5,6 @@
 import React, { Component } from 'react'
 import ForceGraph3D from 'react-force-graph-3d'
 import data from './data.js'
-import { NavLink } from 'react-router-dom'
-import { Heading } from "react-bulma-components/full"
-import '../../style/graph.css'
 
 class GraphContainer extends Component {
 
@@ -17,6 +14,7 @@ class GraphContainer extends Component {
 		this.state = {
 			isRotating: true
 		}
+		this.rotateInterval = null
 	}
 
 	prepGData = ( data ) => {
@@ -24,7 +22,6 @@ class GraphContainer extends Component {
 			nodes: [],
 			links: []
 		}
-
 		// define brand and model colors
 		const colors = {
 			"Audi": {
@@ -48,7 +45,6 @@ class GraphContainer extends Component {
 				darker:'#b71c1c'
 			}
 		}
-
 		// define center Node
 		res.nodes.push({
 			id:'vw-group',
@@ -56,7 +52,6 @@ class GraphContainer extends Component {
 			color:'#e0e0e0',
 			size: 10000
 		})
-
 		Object.keys(data).forEach( brandKey => {
 			const brand = data[brandKey]
 
@@ -84,29 +79,27 @@ class GraphContainer extends Component {
 			})
 		})
 		return res
-	}
+		}
+		componentWillUnmount()
+		{
+			clearInterval(this.rotateInterval)
+		}
+		componentDidMount() {
+			
+			const distance = 400
+			let angle = 0
 
+			this.rotateInterval = setInterval(() => {
+				this.fg.cameraPosition({
+					x: distance * Math.sin(angle),
+					z: distance * Math.cos(angle)
+				});
+				angle += Math.PI / 300;
+			}, 30)
+		}
 	render() {
 		const gData = this.prepGData(data)
-		// const distance = 500
-		// let angle = 0
-
-		//  setInterval(() => {
-		//  	this.fg.cameraPosition({
-		//  		x: distance * Math.sin(angle),
-		//  		z: distance * Math.cos(angle)
-		//  	});
-		//  	angle += Math.PI / 300;
-		//  }, 30)
-
-		return (
-			<div className='graph-wrapper'>
-				<NavLink to='/explore'>
-					<Heading className='graph-title'>
-						Explore the Possibilities
-					</Heading>
-				</NavLink>
-				<ForceGraph3D
+		return <ForceGraph3D
 					ref={el => { this.fg = el; }}
 					graphData={ gData }
 					nodeRelSize={ 1 }
@@ -115,8 +108,6 @@ class GraphContainer extends Component {
 					enableNavigationControls={ false }
 					showNavInfo={ false }
 				/>
-			</div>
-		)
 	}
 }
 
