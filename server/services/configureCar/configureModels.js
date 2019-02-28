@@ -127,6 +127,20 @@ app.get('/api/configureModels', async(req, res) => {
 	const _models = typeof(modelsParam) === 'string' ? JSON.parse(modelsParam) : modelsParam
 	const models = _models.map(model => typeof(model) === 'string' ? JSON.parse(model) : model)
 
+	/*
+	
+		Default configuration table :
+
+		right now, chained calls go as so:
+
+		- for each model, make a configuration
+		- for each configuration, resolve options
+		- for each configuration, replace options
+		- for each configuration, get WLTP values
+
+		5 models + 5 configs + 5 replacements + 5 wltp
+	*/
+
 	try {
 
 		const configsURL = `${apiURL}/configurations`
@@ -142,7 +156,7 @@ app.get('/api/configureModels', async(req, res) => {
 		}))
 
 		//for all the new configs
-		await Promise.all(configIds.map( async configId => {
+		const defaultOptions = await Promise.all(configIds.map( async configId => {
 
 			//get all of the options to complete the build
 			const optionsToSetRes = await resolveOptions(apiURL, configId, token)
@@ -150,11 +164,11 @@ app.get('/api/configureModels', async(req, res) => {
 
 			// console.log('replacingOptions', optionIds, 'in', configId)
 
-			await replaceOptions({ configId, optionIds, token })
-
+			const defaultOptions = await replaceOptions({ configId, optionIds, token })
+			return (defaultOptions)
 		}))
 
-		const defaultOptions = await Promise.all(configIds.map(configId => getOptions({ configId, token })))
+		// = await Promise.all(configIds.map(configId => getOptions({ configId, token })))
 		const wltps = await Promise.all(configIds.map(configId => getWLTP({ configId, token })))
 
 		let configOptionsMap = {}
