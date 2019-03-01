@@ -9,7 +9,7 @@ class GraphContainer extends Component{
         return(
             <div className="graph-wrapper">
             <NavLink to='/explore'>
-				<Heading className='graph-title'>
+				<Heading size={1} className='graph-title'>
 					Explore the Possibilities
 				</Heading>
 			</NavLink>

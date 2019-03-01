@@ -56,7 +56,7 @@ class App extends Component {
 								<Container>
 									<Content className='has-text-centered'>
 											<p>
-												<strong>this made</strong> by David, Sebastian, <a href="#">Jessica</a>. The source code is licensed
+												<strong>this made</strong> by <a href="#">David</a>, <a href="#">Sebastian</a>, <a href="#">Jessica</a>. The source code is licensed
 												<a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content is licensed{' '}
 												<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
 											</p>

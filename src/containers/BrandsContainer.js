@@ -59,7 +59,23 @@ class BrandsContainer extends Component {
 
         if (!brands) {
             return (
-                <Loader message={'Getting brands...'} />
+				<div className="loaders">
+					<Loader 
+					style={{
+						position:'fixed',
+						width:300,
+						height:300,
+						border: '4px solid #01579b',
+						borderTopColor: 'transparent',
+						boderRightColor: 'transparent',
+						margin: 'auto',
+						top: '-50px',
+						left: 0,
+						bottom: 0,
+						right: 0
+					}}
+					message={'Getting brands...'} />
+				</div>
             )
 		}
 		return (
