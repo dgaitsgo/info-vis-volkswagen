@@ -14,7 +14,6 @@ import '../style/brand.css'
 class BrandsContainer extends Component {
 
     constructor(props) {
-
 		super(props)
 
         this.state = {
