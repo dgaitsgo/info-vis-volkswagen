@@ -42,7 +42,6 @@ class ModelsContainer extends Component {
 			const models = res.data.models.data
 
 			this.setState({ models, modelsLoading: false })
-		
 		}).catch(err => {
 			const to = {
 				pathname : '/server-error',
@@ -58,7 +57,6 @@ class ModelsContainer extends Component {
 		const { selectedModels } = this.state
 		const _selectedModels = Object.keys(selectedModels).map(key => ({ id : key, name : selectedModels[key] }))
 
-		// console.log()
 		this.setState({ loadingConfigurations : true }, () => {
 
 			axios.get('/api/configureModels', {
@@ -66,12 +64,11 @@ class ModelsContainer extends Component {
 					models : _selectedModels
 				}
 			}).then( res => {
-
 				this.setState({ loadingConfigurations : false, configurationIds : res.data, redirectTo : true })
 			})
 
 		})
-		
+
 	}
 
 	onClickModel = ({ name, id }) => {
@@ -99,8 +96,8 @@ class ModelsContainer extends Component {
         } = this.state
 
         if (modelsLoading)
-            return <Loader message={'Getting models...'} />		
-		
+            return <Loader message={'Getting models...'} />
+
 		if (configurationIds) {
 			return <Redirect to={{
 				pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`,

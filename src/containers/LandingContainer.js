@@ -16,34 +16,31 @@ class LandingContainer extends Component {
         }
     }
 
-	openModal = () => {
-		this.setState({ modalIsOpen: true })
+	openModal = () => this.setState({ modalIsOpen: true })
+
+
+	closeModal = () => this.setState({ modalIsOpen: false })
+
+    componentDidMount() {
+
+		const { token } = this.props
+
+		axios.get('/api/countries').then(res => {
+			const countries = res.data.countries.data
+			this.setState({ countries })
+		})
+		.catch(err => {
+			const to = {
+				pathname : '/server-error',
+				query : {
+					err
+				}
+			}
+			return (
+				<Redirect to={to} />
+			)
+		})
 	}
-
-	closeModal = () => {
-		this.setState({ modalIsOpen: false })
-	}
-
-     componentDidMount() {
-
-         const { token } = this.props
-
-         axios.get('/api/countries').then(res => {
-             const countries = res.data.countries.data
-             this.setState({ countries })
-         })
-         .catch(err => {
-             const to = {
-                 pathname : '/server-error',
-                 query : {
-					 err
-                 }
-             }
-             return (
-                 <Redirect to={to} />
-             )
-         })
-     }
 
     render() {
 
@@ -54,15 +51,15 @@ class LandingContainer extends Component {
         if (!countries) {
             return (
                 <div className="has-text-centered">
-                <Loader
-                style={{
-                    width:300,
-                    height:300,
-                    border: '4px solid blue',
-                    borderTopColor: 'transparent',
-                    boderRightColor: 'transparent'
-                }}
-                message={'Getting markets...'} />
+					<Loader
+						style={{
+							width:300,
+							height:300,
+							border: '4px solid blue',
+							borderTopColor: 'transparent',
+							boderRightColor: 'transparent'
+						}}
+						message={'Getting markets...'} />
                 </div>
             )
         }

@@ -30,12 +30,7 @@ class BrandsContainer extends Component {
 			params : {
 				countryCode
 			}
-		}).then(res => {
-
-			const brands = res.data.brands.data
-
-			this.setState({ brands })
-		})
+		}).then(res => this.setState({ brands: res.data.brands.data }))
 		.catch(err => {
 			const to = {
 				pathname : '/server-error',
@@ -57,38 +52,36 @@ class BrandsContainer extends Component {
             brands
         } = this.state
 
-        if (!brands) {
-            return (
-                <Loader message={'Getting brands...'} />
-            )
-		}
+        if (!brands)
+            return <Loader message={'Getting brands...'} />
+
 		return (
 			<div className='brands-wrapper'>
-			<Section>
-			<Container>
-				<Heading className='brands-headline has-text-centered' size={4}>
-					Choose A Brand:
-				</Heading>
-				<Columns className="is-centered">
-				{brands.map(({ brand_id, name }, i) => {
-					const to = {
-						pathname : `/${urlData[1]}/${brand_id}`,
-						query : {
-							brand_id,
-							name
-						}
-					}
-					return (
-						<NavLink to={to} key={i}>
-							<Brands
-								name={ name }
-								brand_id={ brand_id }
-							/>
-						</NavLink>
-					)
-				})}
-				</Columns>
-				</Container>
+				<Section>
+					<Container>
+						<Heading className='brands-headline has-text-centered' size={4}>
+							Choose A Brand:
+						</Heading>
+						<Columns className="is-centered">
+							{brands.map(({ brand_id, name }, i) => {
+								const to = {
+									pathname : `/${urlData[1]}/${brand_id}`,
+									query : {
+										brand_id,
+										name
+									}
+								}
+								return (
+									<NavLink to={to} key={i}>
+										<Brands
+											name={ name }
+											brand_id={ brand_id }
+										/>
+									</NavLink>
+								)
+							})}
+						</Columns>
+					</Container>
 				</Section>
 			</div>
 		)

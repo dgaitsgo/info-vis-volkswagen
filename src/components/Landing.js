@@ -34,13 +34,14 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 	// }
 
 	return (
-		<div className='app'>
+		<div className='landing-wrapper'>
 			<Section>
 				<Container>
-					<Heading size={4} className='has-text-centered'>Choose Your Country:</Heading>
+					<Heading size={4} className='has-text-centered'>
+						Choose Your Country:
+					</Heading>
 					<Columns>
 						{countries.map(({ countryCode, name }, i) => {
-
 							const to = {
 								pathname : `/${countryCode}`,
 								query : {
@@ -59,7 +60,6 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 			<Modal
 				isOpen={modalIsOpen}
 				onRequestClose={closeModal}
-				contentLabel="Example Modal"
 				ariaHideApp={true}
 			>
 			<Section>

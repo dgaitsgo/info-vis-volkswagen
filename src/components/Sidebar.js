@@ -10,18 +10,13 @@ const rankModels = (props) => {
 
 	const { fullModels, compareMode } = props
 
-	console.log('compare ', props)
-
 	const averageModelMap = Object.keys(fullModels.data).map( (modelId, i) => {
 
 		const model = fullModels.data[modelId]
 
-		console.log('current model ', model)
-
 		if (model.wltp.data.length) {
 
 			const currentInterps = model.wltp.data[0].interpolations.filter(interp => interp.value_type === compareMode)
-			// console.log('current interps', currentInterps)
 			if (currentInterps.length) {
 				const interpAverage = average(currentInterps.map( item => item.value ))
 
@@ -35,34 +30,37 @@ const rankModels = (props) => {
 		return null
 	}).filter(val => val)
 
-	_.sortBy(averageModelMap, 'average').reverse()
-
-	return (averageModelMap)
+	return (_.sortBy(averageModelMap, elem => elem.average).reverse())
 }
 
 
 const Sidebar = (props) => {
-	const{
+
+	const {
 		fullModels,
 		compareMode
 	} = props
+
 	const rankedModels = rankModels(props)
+
 	const modelElems = rankedModels.map( (rankedModel, i) => {
 
 		const currModel = fullModels.data[rankedModel.modelId]
 
-		console.log('fucking side bar', currModel)
-
 		return (
 			<div className='compare-model-wrapper' key={i}>
 				<div className='compare-model-name-wrapper'>
-					<span className='compare-model-name'>
-						{`${i + 1}. ${currModel.model.name } `}
-					</span>
+					<div className='compare-model-name'>
+						{ i === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
+						{ i === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
+						{ i === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
+						<span>{`${i + 1}. ${currModel.model.name } `}</span>
+						<span className='options-plus' style={{ color : 'blue' }}> +</span>
+					</div>
+
 					<span className='compare-model-value'>
-						{ rankedModel.average }
+						{ rankedModel.average.toFixed(2) }
 					</span>
-					<Button><Icon icon="bars" color="info" /></Button>
 				</div>
 
 			</div>
