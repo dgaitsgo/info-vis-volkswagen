@@ -1,11 +1,11 @@
 ## Backend
 
 The backend can be split into several main services :
-- Identity
-- Product data
-- Default configuration
-- Thumbnail service
-- Custom configuration
+[ ] Identity
+[-] Product data
+[ ] Default configuration
+[ ] Thumbnail service
+[ ] Custom configuration
 
 ### Identity
 One authenticates to Okapi through the use of a JSON Web Token, generated as a seed from client credentials.
@@ -47,6 +47,10 @@ post on the API. Cacheing cannot save us as a configuration is unique everytime 
 
 There's only four steps, so elimenating just one of them means 25% less work. What we did was imagine a new service
 that could be integrated into the OKAPI : default configurations for models.
+
+
+### Custom Configuration
+
 
 
 
