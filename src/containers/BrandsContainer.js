@@ -24,7 +24,7 @@ class BrandsContainer extends Component {
 
     componentDidMount() {
 
-		const countryCode = this.props.location.pathname.split('/')[1]
+		const countryCode = this.props.location.pathname.split('/')[2]
 
         axios.get('/api/brands', {
 			params : {
@@ -83,8 +83,8 @@ class BrandsContainer extends Component {
 						<Columns className="is-centered">
 							{brands.map(({ brand_id, name }, i) => {
 								const to = {
-									pathname : `/${urlData[1]}/${brand_id}`,
-									query : {
+									pathname: `${urlData[2]}/${brand_id}`,
+									query: {
 										brand_id,
 										name
 									}

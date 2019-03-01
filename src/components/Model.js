@@ -33,7 +33,6 @@ const Model = ({
 			</Card>
 		</Columns.Column>
 		</div>
-
     )
 }
 
