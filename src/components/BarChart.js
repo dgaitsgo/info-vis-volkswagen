@@ -74,7 +74,7 @@ class BarChart extends Component{
 
 		return (
 			<div className='bar-chart-wrapper'>
-				{/* <XYPlot xType="ordinal" width={500} height={300} xDistance={500}>
+				<XYPlot xType="ordinal" width={500} height={300} xDistance={500}>
 					<VerticalGridLines />
 					<HorizontalGridLines />
 					<XAxis />
@@ -90,28 +90,8 @@ class BarChart extends Component{
 						/>
 					}) }
 					{/* <LabelSeries data={ data[0] }  /> */}
-					{/* {value ? <Hint value={ value } /> : null}
-					{</XYPlot> */}
-					<XYPlot margin={{bottom: 70}} xType="ordinal" width={300} height={300}>
-      <VerticalGridLines />
-      <HorizontalGridLines />
-      <XAxis tickLabelAngle={-45} />
-      <YAxis />
-      <VerticalBarSeries
-        data={[
-          {x: 'Apples', y: 10},
-          {x: 'Bananas', y: 5},
-          {x: 'Cranberries', y: 15}
-        ]}
-      />
-      <VerticalBarSeries
-        data={[
-          {x: 'Apples', y: 12},
-          {x: 'Bananas', y: 2},
-          {x: 'Cranberries', y: 11}
-        ]}
-      />
-    </XYPlot>
+					{value ? <Hint value={ value } /> : null}
+					</XYPlot>
 			</div>
 		)
 	}

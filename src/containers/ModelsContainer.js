@@ -72,6 +72,7 @@ class ModelsContainer extends Component {
 	}
 
 	onClickModel = ({ name, id }) => {
+		console.log('try me bitch')
 
 		let { selectedModels } = this.state
 
@@ -136,17 +137,17 @@ class ModelsContainer extends Component {
 				</Heading>
 				<div className='models-body'>
 					<Columns>
-					{loadingConfigurations && <Loader />}
-					{models.map(({ id, name }, i) => {
-						return (
-							<Model key= { id }
-								id={ id }
-								name={ name }
-								onClick= {this.onClickModel}
-								selected={selectedModels[id]}
-							/>
-						)
-					})}
+						{loadingConfigurations && <Loader />}
+						{models.map(({ id, name }, i) => {
+							return (
+								<Model key= { id }
+									id={ id }
+									name={ name }
+									onClick= {this.onClickModel}
+									selected={selectedModels[id]}
+								/>
+							)
+						})}
 					</Columns>
 				</div>
 				<br />
