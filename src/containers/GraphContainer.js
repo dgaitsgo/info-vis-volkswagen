@@ -8,13 +8,13 @@ class GraphContainer extends Component{
     render(){
         return(
             <div className="graph-wrapper">
-				<NavLink to='/explore'>
-					<Heading className='graph-title'>
-						Explore the Possibilities
-					</Heading>
-				</NavLink>
-				<Graph />
-            </div>
+            <NavLink to='/explore'>
+				<Heading size={1} className='graph-title'>
+					Explore the Possibilities
+				</Heading>
+			</NavLink>
+             <Graph />
+             </div>
         )
 
     }

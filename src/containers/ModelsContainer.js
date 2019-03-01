@@ -96,7 +96,23 @@ class ModelsContainer extends Component {
         } = this.state
 
         if (modelsLoading)
-            return <Loader message={'Getting models...'} />
+			return (
+				<div className="loaders">
+					<Loader
+					style={{
+						position:'fixed',
+						width:300,
+						height:300,
+						border: '4px solid #01579b',
+						borderTopColor: 'transparent',
+						boderRightColor: 'transparent',
+						margin: 'auto',
+						top: '-50px',
+						left: 0,
+						bottom: 0,
+						right: 0
+					}}
+				message={'Getting models...'} /></div>)
 
 		if (configurationIds) {
 			return <Redirect to={{
