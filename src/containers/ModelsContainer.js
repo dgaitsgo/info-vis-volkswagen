@@ -33,8 +33,8 @@ class ModelsContainer extends Component {
 
         axios.get('/api/models', {
             params : {
-                countryCode: urlData[1],
-                brand_id : urlData[2]
+                countryCode: urlData[2],
+                brand_id : urlData[3]
             }
         })
         .then( res => {
@@ -72,7 +72,6 @@ class ModelsContainer extends Component {
 	}
 
 	onClickModel = ({ name, id }) => {
-
 		let { selectedModels } = this.state
 
 		id in selectedModels
@@ -136,28 +135,23 @@ class ModelsContainer extends Component {
 				</Heading>
 				<div className='models-body'>
 					<Columns>
-					{loadingConfigurations && <Loader />}
-					{models.map(({ id, name }, i) => {
-						return (
-							<Model key= { id }
-								id={ id }
-								name={ name }
-								onClick= {this.onClickModel}
-								selected={selectedModels[id]}
-							/>
-						)
-					})}
+						{loadingConfigurations && <Loader />}
+						{models.map(({ id, name }, i) => {
+							return (
+								<Model key= { id }
+									id={ id }
+									name={ name }
+									onClick= {this.onClickModel}
+									selected={selectedModels[id]}
+								/>
+							)
+						})}
 					</Columns>
 				</div>
 				<br />
 				<div className={compareButtonClassName}>
-					<Button onClick={this.setConfigurations} >
-						{/* <NavLink to={{
-								pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`
-							}
-						}> */}
+					<Button onClick={this.setConfigurations}>
 						Done
-					{/* </NavLink> */}
 					</Button>
 				</div>
 				</Container>
