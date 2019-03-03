@@ -14,7 +14,6 @@ const sendJSON = require('./helpers/sendJSON')
  * Config 
  *****************************************************************************/
 const app = require('./services/app')
-
 /******************************************************************************
  * Services 
  *****************************************************************************/
@@ -29,4 +28,5 @@ const allUniqueModels = require('./services/allUniqueModels')
  * Server 
  *****************************************************************************/
 const port = process.env.PORT
+console.log('desapsisroi')
 app.listen(port, () => console.log(`Server started on ${port}`))

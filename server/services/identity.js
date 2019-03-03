@@ -30,19 +30,24 @@ app.use( async (req, res, next) => {
 
     console.log(token)
 
-	if (!token || isAfter(now, token.expirationDate)) {
+	if (!token || !token.access_token || isAfter(now, token.expirationDate)) {
 
+		console.log('So profit')
 		try {
-
+	
             const nextTokenRes = await refreshAccessToken()
             const nextToken = nextTokenRes.data 
-            
+   
             token = await new Identity ({
                 token : nextTokenRes.access_token,
                 expirationDate : addSeconds(now, nextToken.expires_in),
                 createdAt : now 
             }).save()
 
+   			console.log('next token', nextToken)
+			req.query.token = token
+
+			next()
 
 		} catch(err) {
 
@@ -56,9 +61,8 @@ app.use( async (req, res, next) => {
 				userMessage : 'Could not get access'
 			}))
 		}
+	} else {
+		req.query.token = token
+		next()
 	}
-
-	req.query.token = token
-
-	next()
 })

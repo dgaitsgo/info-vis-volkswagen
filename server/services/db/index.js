@@ -1,8 +1,14 @@
 const mongoose = require('mongoose')
 
-const mongoDB = 'mongodb://127.0.0.1/vw-okapi'
+const mongoDB = 'mongodb://mongo:27017/vw-okapi'
 
 mongoose.connect(mongoDB, { useNewUrlParser : true })
+    .then( () => {
+        console.log('Connected to mongodb')
+    })
+    .catch( () => {
+        console.log(err)
+    })
 
 const db = mongoose.connection
 
