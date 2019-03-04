@@ -20,19 +20,17 @@ const Brands = (props) => {
 		"Audi": audi,
 		"Volkswagen Nutzfahrzeuge": vw_nutz,
 		"Seat": seat,
-		"Volkswagen PKW": vw_pkw,
+		// "Volkswagen PKW": vw_pkw,
 		"Skoda": skoda
 	}
 
 
-	const { brand_id, name } = props
+	const { name } = props
 
 	return (
 		<Columns.Column className='brand-wrapper has-text-centered'>
 			<Box>
-				<img src={brandLogos[name]}
-				alt="Image"
-				/>
+				<img src={brandLogos[name] || null} alt={`${brandLogos[name]} logo`} />
 				{/* <p className='has-text-centered'>{ name } </p> */}
 			</Box>
 		</Columns.Column>
