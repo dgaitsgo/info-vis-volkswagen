@@ -1,7 +1,7 @@
 ## Backend
 
 The backend can be split into several main services :
-[ ] Identity
+[-] Identity
 [-] Product data
 [ ] Default configuration
 [ ] Thumbnail service

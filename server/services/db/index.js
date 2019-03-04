@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const mongoDB = 'mongodb://mongo:27017/vw-okapi'
+const mongoDB = process.env.MONGO_URL
 
 mongoose.connect(mongoDB, { useNewUrlParser : true })
     .then( () => {

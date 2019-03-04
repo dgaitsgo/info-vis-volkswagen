@@ -1,19 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-
-import Modal from 'react-modal'
-import { Loader, Button, Icon } from 'react-bulma-components/full'
-import Description from '../components/Description'
-import data from './compareData.js'
 import Sidebar from '../components/Sidebar'
-import Option from '../components/Option'
-import ModelCard from '../components/ModelCard'
-import ReactD3 from 'react-d3-components'
-import Redirect from 'react-router-dom/Redirect'
-
-import getLocalStorage from '../modules/localStorage'
-import _ from 'lodash'
-
+import { Button } from 'react-bulma-components/full'
+import { Loader } from 'react-bulma-components/full'
 import { Bar } from 'react-chartjs-2'
 
 
@@ -24,64 +13,14 @@ class CompareContainer extends Component {
 		super(props)
 
         this.state = {
-			fullModels : null,
+			defaultModels : null,
 			compareMode : 'CO2'
 		}
 	}
 
-	//getChoices = (configId) => {
-
-	//	const urlData = this.props.location.pathname.split('/')
-	//	const models = JSON.parse(urlData[3])
-	//	const configurationIds = this.props.location.params.configurationIds
-
-	//	Promise.all(configurationIds.map(configId =>
-	//		axios.get('/api/choices', {
-	//			params : {
-	//				configurationId : configId
-	//			}
-	//	 })
-	//	)).then(results => {
-	//
-	//		let fullModels = []
-
-	//		results.forEach( (res, i) => {
-	//			fullModels.push({
-	//				//get : model.id, model.name
-	//				model : models[i],
-	//				configId : configurationIds[i],
-	//				options : res.data
-	//			})
-	//		})
-
-	//		console.log(fullModels)
-
-	//		this.setState({ fullModels })
-
-	//	 })
-	//	 .catch(err => {
-	//	 	const to = {
-	//	 		pathname : '/server-error',
-	//	 		query : {
-	//	 			err
-	//	 		}
-	//	 	}
-	//	 	return (
-	//	 		<Redirect to={to} />
-	//	 	)
-	//	 })
-	//}
-
-	checkBuild = () => {
-		//to do
-	}
-
-
-	saveToLocal = () => {
-
-		// todo
-		// fullModels.
-	}
+	checkBuild = () => { }
+		
+	saveToLocal = () => { }
 
 	async componentDidMount() {
 
@@ -89,93 +28,49 @@ class CompareContainer extends Component {
 		const _models = JSON.parse(urlData[3])
 		let models = Object.keys(_models).map(modelId => ({ id : modelId, name : _models[modelId] }))
 
-		const fullModelsRes = await axios.get('/api/configureModels', {
+		console.log('requesting models', models)
+
+		const defaultModelsRes = await axios.get('/api/defaultModels', {
 			params : {
 				models,
 			}
 		})
 
-		const fullModels = {
-			data : fullModelsRes.data
-		}
+		let defaultModelsArr = defaultModelsRes.data
+		let defaultModels = {}
 
-		this.setState({ fullModels })
+		defaultModelsArr.forEach(model => {
+			defaultModels[model.model_id] = model
+		})
+
+		console.log(defaultModels)
+
+		this.setState({ defaultModels })
 	}
-
-    // async componentDidMount() {
-
-	// 	const urlData = this.props.location.pathname.split('/')
-	// 	const models = JSON.parse(urlData[3])
-	// 	let modelsArr = Object.keys(models).map(modelId => ({ id : modelId, name : models[modelId] }))
-
-	// 	//get local stage object
-	// 	const ls = getLocalStorage('vw-product-data-configs')
-
-	// 	ls.info().then(res => {
-
-	// 		//look at the configurations the user has in loca
-	// 		ls.find({ selector : { _id : 'configs' }})
-	// 			.then(async res => {
-
-	// 				let fullModels = {}
-	// 				fullModels.data = {}
-	// 				fullModels.rev = 'randomfuckingstinrg'
-	// 				let cachedModels = res.docs.length ? res.docs[0] : {}
-
-	// 				//get the missing models
-	// 				const missingModels = !cachedModels.data
-	// 					? modelsArr
-	// 					: modelsArr.filter(model => !cachedModels.data[model.id])
-
-	// 				if (missingModels.length) {
-	// 					const fullModelsRes = await axios.get('/api/configureModels', {
-	// 						params : {
-	// 							models : missingModels
-	// 						}
-	// 					})
-
-	// 					fullModels.data = fullModelsRes.data
-	// 				}
-
-	// 				let data = _.merge(cachedModels.data, fullModels.data)
-	// 				fullModels.data = data
-	// 				fullModels._id = 'configs'
-
-	// 				fullModels.rev = cachedModels ? cachedModels.rev : null
-	// 				fullModels._rev = cachedModels ? cachedModels._rev : null
-
-	// 				ls.insert(fullModels).then(_rev => {
-	// 					fullModels.rev = _rev
-	// 					fullModels._rev = fullModels._rev
-	// 					this.setState({ fullModels })
-	// 				})
-	// 			})
-	// 		})
-	// }
 
 	setCompareMode = compareMode => this.setState({compareMode})
 
-	getInterpolations = ({ fullModels, phase, compareMode}) => {
+	getInterpolations = ({ defaultModels, phase, compareMode}) => {
 
-		return Object.keys(fullModels.data).map( (modelId, i) => {
+		return Object.keys(defaultModels).map( (modelId, i) => {
 
-			const model = fullModels.data[modelId]
+			const model = defaultModels[modelId]
 
-			if (model.wltp.data.length) {
+			if (model.wltp.length) {
 
-				const currentInterps = model.wltp.data[0].interpolations
+				const currentInterps = model.wltp[0].interpolations
 					.filter(interp => interp.value_type === compareMode && interp.phase == phase)
 					.map( interp => interp.value)
 
 					return ({
 						value: currentInterps,
-						name: model.model.name
+						name: model.name
 					})
 			}
 			else{
 				return ({
 					value: null,
-					name: model.model.name
+					name: model.name
 				})
 			}
 
@@ -230,17 +125,17 @@ class CompareContainer extends Component {
 	render() {
 
 		const {
-			fullModels,
+			defaultModels,
 			compareMode
 		} = this.state
 
-		if (!fullModels)
+		if (!defaultModels)
 			return <Loader message={'Getting configurations...'} />
 
-		const lowEmissions = this.getInterpolations({ fullModels, compareMode, phase:'LOW' })
-		const medEmissions = this.getInterpolations({ fullModels, compareMode, phase:'MEDIUM' })
-		const highEmissions = this.getInterpolations({ fullModels, compareMode, phase:'HIGH' })
-		const extraHighEmissions = this.getInterpolations({ fullModels, compareMode, phase:'EXTRA_HIGH' })
+		const lowEmissions = this.getInterpolations({ defaultModels, compareMode, phase:'LOW' })
+		const medEmissions = this.getInterpolations({ defaultModels, compareMode, phase:'MEDIUM' })
+		const highEmissions = this.getInterpolations({ defaultModels, compareMode, phase:'HIGH' })
+		const extraHighEmissions = this.getInterpolations({ defaultModels, compareMode, phase:'EXTRA_HIGH' })
 
 		const dataSet = this.transformToDataSet({ low: lowEmissions, med: medEmissions, high: highEmissions, extra: extraHighEmissions })
 
@@ -252,7 +147,7 @@ class CompareContainer extends Component {
 				<Button onClick={() => this.setCompareMode('CONSUMPTION')}>Consumption</Button>
 			</div>
 				<Sidebar
-					fullModels={ fullModels }
+					defaultModels={ defaultModels }
 					compareMode={ compareMode }
 				/>
 				<Bar

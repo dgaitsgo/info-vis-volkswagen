@@ -22,7 +22,6 @@ class ModelsContainer extends Component {
 			models: null,
 			selectedModels: {},
 			modelImages: null,
-			loadingConfigurations : false,
 			modelsLoading: true
         }
 	}
@@ -53,27 +52,6 @@ class ModelsContainer extends Component {
 		})
     }
 
-	setConfigurations = () => {
-
-		const { selectedModels } = this.state
-		const _selectedModels = Object.keys(selectedModels).map(key => ({ id : key, name : selectedModels[key] }))
-
-		// console.log()
-		this.setState({ loadingConfigurations : true }, () => {
-
-			axios.get('/api/configureModels', {
-				params : {
-					models : _selectedModels
-				}
-			}).then( res => {
-
-				this.setState({ loadingConfigurations : false, configurationIds : res.data, redirectTo : true })
-			})
-
-		})
-		
-	}
-
 	onClickModel = ({ name, id }) => {
 
 		let { selectedModels } = this.state
@@ -87,26 +65,20 @@ class ModelsContainer extends Component {
 
     render() {
 
-		const urlData = this.props.location.pathname.split('/')
-
 		const {
 			models,
 			selectedModels,
-			fullModels,
 			modelsLoading,
-			loadingConfigurations,
-			configurationIds
+			redirect
         } = this.state
 
         if (modelsLoading)
             return <Loader message={'Getting models...'} />		
 		
-		if (configurationIds) {
+		if (redirect) {
 			return <Redirect to={{
 				pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`,
-				params : {
-					configurationIds
-				}
+				params : {  selectedModels }
 			}} />
 		}
 
@@ -123,7 +95,7 @@ class ModelsContainer extends Component {
 				</Heading>
 				<div className='models-body'>
 					<Columns>
-					{loadingConfigurations && <Loader />}
+					{/* {loadingConfigurations && <Loader />} */}
 					{models.map(({ id, name }, i) => {
 						return (
 							<Model key= { id }
@@ -138,13 +110,8 @@ class ModelsContainer extends Component {
 				</div>
 				<br />
 				<div className={compareButtonClassName}>
-					<Button onClick={this.setConfigurations} >
-						{/* <NavLink to={{
-								pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`
-							}
-						}> */}
+					<Button onClick={() => this.setState({ redirect : true })} >
 						Done
-					{/* </NavLink> */}
 					</Button>
 				</div>
 				</Container>

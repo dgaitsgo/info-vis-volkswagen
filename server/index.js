@@ -19,7 +19,7 @@ const app = require('./services/app')
  *****************************************************************************/
 const db = require('./services/db')
 const identity = require('./services/identity')
-const refreshToken = require('./services/refreshToken')
+const defaultModels = require('./services/defaultModels')
 const productCatalog = require('./services/productCatalog')
 const configureCar = require('./services/configureCar')
 const allUniqueModels = require('./services/allUniqueModels')
@@ -28,5 +28,5 @@ const allUniqueModels = require('./services/allUniqueModels')
  * Server 
  *****************************************************************************/
 const port = process.env.PORT
-console.log('desapsisroi')
+
 app.listen(port, () => console.log(`Server started on ${port}`))

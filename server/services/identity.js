@@ -28,23 +28,19 @@ app.use( async (req, res, next) => {
     //find latest token
     let token = await Identity.findOne().sort({ createdAt : -1 })
 
-    console.log(token)
-
 	if (!token || !token.access_token || isAfter(now, token.expirationDate)) {
 
-		console.log('So profit')
 		try {
 	
             const nextTokenRes = await refreshAccessToken()
             const nextToken = nextTokenRes.data 
-   
+			
             token = await new Identity ({
-                token : nextTokenRes.access_token,
+				access_token : nextToken.access_token,				
                 expirationDate : addSeconds(now, nextToken.expires_in),
                 createdAt : now 
             }).save()
 
-   			console.log('next token', nextToken)
 			req.query.token = token
 
 			next()

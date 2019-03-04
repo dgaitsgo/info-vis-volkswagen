@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import _ from 'lodash'
-import { Loader, Button, Icon } from 'react-bulma-components/full'
+import {  Button, Icon } from 'react-bulma-components/full'
 
 const sum = (accumulator, currentValue) => accumulator + currentValue
 
@@ -8,19 +8,17 @@ const average = array => array.reduce(sum) / array.length
 
 const rankModels = (props) => {
 
-	const { fullModels, compareMode } = props
+	const { defaultModels, compareMode } = props
 
-	console.log('compare ', props)
+	const averageModelMap = Object.keys(defaultModels).map( (modelId, i) => {
 
-	const averageModelMap = Object.keys(fullModels.data).map( (modelId, i) => {
-
-		const model = fullModels.data[modelId]
+		const model = defaultModels[modelId]
 
 		console.log('current model ', model)
 
-		if (model.wltp.data.length) {
+		if (model.wltp.length) {
 
-			const currentInterps = model.wltp.data[0].interpolations.filter(interp => interp.value_type === compareMode)
+			const currentInterps = model.wltp[0].interpolations.filter(interp => interp.value_type === compareMode)
 			// console.log('current interps', currentInterps)
 			if (currentInterps.length) {
 				const interpAverage = average(currentInterps.map( item => item.value ))
@@ -42,14 +40,14 @@ const rankModels = (props) => {
 
 
 const Sidebar = (props) => {
-	const{
-		fullModels,
-		compareMode
+	
+	const {
+		defaultModels,
 	} = props
 	const rankedModels = rankModels(props)
 	const modelElems = rankedModels.map( (rankedModel, i) => {
 
-		const currModel = fullModels.data[rankedModel.modelId]
+		const currModel = defaultModels[rankedModel.modelId]
 
 		console.log('fucking side bar', currModel)
 
@@ -57,7 +55,7 @@ const Sidebar = (props) => {
 			<div className='compare-model-wrapper' key={i}>
 				<div className='compare-model-name-wrapper'>
 					<span className='compare-model-name'>
-						{`${i + 1}. ${currModel.model.name } `}
+						{`${i + 1}. ${currModel.name } `}
 					</span>
 					<span className='compare-model-value'>
 						{ rankedModel.average }

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const IdentitySchema = new Schema(
     {
-        token : { type : String, require : true },
+        access_token : { type : String, require : true },
         createdAt : { type : Date, require : true },
         expirationDate : { type : Date, require : true }
     },
