@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import ContentLoader from 'react-content-loader'
 import axios from 'axios'
-import { Loader } from 'react-bulma-components/full'
 import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
 import Model from '../components/Model'
@@ -38,9 +38,7 @@ class ModelsContainer extends Component {
             }
         })
         .then( res => {
-
 			const models = res.data.models.data
-
 			this.setState({ models, modelsLoading: false })
 		}).catch(err => {
 			const to = {
@@ -96,22 +94,21 @@ class ModelsContainer extends Component {
 
         if (modelsLoading)
 			return (
-				<div className="loaders">
-					<Loader
-					style={{
-						position:'fixed',
-						width:300,
-						height:300,
-						border: '4px solid #01579b',
-						borderTopColor: 'transparent',
-						boderRightColor: 'transparent',
-						margin: 'auto',
-						top: '-50px',
-						left: 0,
-						bottom: 0,
-						right: 0
-					}}
-				message={'Getting models...'} /></div>)
+				<ContentLoader 
+					height={190}
+					width={450}
+					speed={2}
+					primaryColor="#f3f3f3"
+					secondaryColor="#ecebeb"
+					>
+					<rect x="80" y="30" rx="0" ry="0" width="90" height="70" /> 
+					<rect x="180" y="30" rx="0" ry="0" width="90" height="70" /> 
+					<rect x="280" y="30" rx="0" ry="0" width="90" height="70" /> 
+					<rect x="80" y="105" rx="0" ry="0" width="90" height="70" /> 
+					<rect x="180" y="105" rx="0" ry="0" width="90" height="70" /> 
+					<rect x="280" y="105" rx="0" ry="0" width="90" height="70" /> 
+				</ContentLoader>
+			)
 
 		if (configurationIds) {
 			return <Redirect to={{
@@ -131,11 +128,11 @@ class ModelsContainer extends Component {
 			<Section>
 			<Container>
 				<Heading size={4} className='models-header has-text-centered'>
-					Select Models:
+					Compare Models and Types:
 				</Heading>
 				<div className='models-body'>
 					<Columns>
-						{loadingConfigurations && <Loader />}
+						{loadingConfigurations && <ContentLoader />}
 						{models.map(({ id, name }, i) => {
 							return (
 								<Model key= { id }
