@@ -7,11 +7,11 @@ class OptionsContainer extends Component {
 
 
 	constructor(props) {
-	
+
 		super(props)
 		this.state = {
 
-			// initially loading all othe choices 
+			// initially loading all othe choices
 			loadingConfigOptions : true,
 
 			//we're reloading the config after every addition and removal of options
@@ -28,23 +28,23 @@ class OptionsContainer extends Component {
 	}
 
 	addOption = (optionId) => {
-	
+
 		const { configId } = this.props
 
 		this.setState({ loadingConfig : true }, () => {
-			
+
 			axios.get('/api/addOption'
 				params : {
 					configId,
 					optionId
 				}).then(res => {
-					
+
 					this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
 						this.checkBuild()
 					})
 			})
 		})
-		.catch(err => <Error />)	
+		.catch(err => <Error />)
 	}
 
 	removeOption = (optionId) => {
@@ -63,49 +63,49 @@ class OptionsContainer extends Component {
 						this.checkBuild()
 					})
 				})
-				.catch(err => <Error />)	
+				.catch(err => <Error />)
 		})
 	}
 
 	rebuildConfig = () => {
-		
+
 		this.setState({ loadingConfig : true }, () => {
-		
+
 			axios.get('/api/rebuildConfig',
 				params : {
-					configId : props.configId	
+					configId : props.configId
 				}).then(res => {
-					
+
 					this.setState({ loadingConfig : false }, this.getChoices)
 				})
-				.catch(err => <Error />)	
+				.catch(err => <Error />)
 		})
 	}
 
 	checkBuild = () => {
-	
+
 		axios.get('/api/checkBuild'
 			params : {
 				conigId : props.configId
 			}).then(res => {
-				
+
 				this.setState({ build : res.data })
 			})
 		})
 		.catch(err => <Error />)
 	}
 
-	getChoices = () => {	
-		
+	getChoices = () => {
+
 		axios.get('/api/choices', params : { configId }).then(res => {
-		
+
 			this.setState({
 				loadingChoices : false,
-				options: res.data		
+				options: res.data
 			})
 
 		})
-		.catch(err => <Error />)	
+		.catch(err => <Error />)
 	}
 
 

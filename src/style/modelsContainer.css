@@ -1,0 +1,7 @@
+.type-elem{
+
+}
+
+.type-elem.selected{
+	background-color: lightblue;
+}
