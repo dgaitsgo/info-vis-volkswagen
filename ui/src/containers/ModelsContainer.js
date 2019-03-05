@@ -32,8 +32,8 @@ class ModelsContainer extends Component {
 
         axios.get('/api/models', {
             params : {
-                countryCode: urlData[1],
-                brand_id : urlData[2]
+                countryCode: urlData[2],
+                brand_id : urlData[3]
             }
         })
         .then( res => {
@@ -41,7 +41,6 @@ class ModelsContainer extends Component {
 			const models = res.data.models.data
 
 			this.setState({ models, modelsLoading: false })
-		
 		}).catch(err => {
 			const to = {
 				pathname : '/server-error',
@@ -52,8 +51,26 @@ class ModelsContainer extends Component {
 		})
     }
 
-	onClickModel = ({ name, id }) => {
+	setConfigurations = () => {
 
+		const { selectedModels } = this.state
+		const _selectedModels = Object.keys(selectedModels).map(key => ({ id : key, name : selectedModels[key] }))
+
+		this.setState({ loadingConfigurations : true }, () => {
+
+			axios.get('/api/configureModels', {
+				params : {
+					models : _selectedModels
+				}
+			}).then( res => {
+				this.setState({ loadingConfigurations : false, configurationIds : res.data, redirectTo : true })
+			})
+
+		})
+
+	}
+
+	onClickModel = ({ name, id }) => {
 		let { selectedModels } = this.state
 
 		id in selectedModels
@@ -73,9 +90,25 @@ class ModelsContainer extends Component {
         } = this.state
 
         if (modelsLoading)
-            return <Loader message={'Getting models...'} />		
-		
-		if (redirect) {
+			return (
+				<div className="loaders">
+					<Loader
+					style={{
+						position:'fixed',
+						width:300,
+						height:300,
+						border: '4px solid #01579b',
+						borderTopColor: 'transparent',
+						boderRightColor: 'transparent',
+						margin: 'auto',
+						top: '-50px',
+						left: 0,
+						bottom: 0,
+						right: 0
+					}}
+				message={'Getting models...'} /></div>)
+
+		if (configurationIds) {
 			return <Redirect to={{
 				pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`,
 				params : {  selectedModels }
@@ -95,22 +128,22 @@ class ModelsContainer extends Component {
 				</Heading>
 				<div className='models-body'>
 					<Columns>
-					{/* {loadingConfigurations && <Loader />} */}
-					{models.map(({ id, name }, i) => {
-						return (
-							<Model key= { id }
-								id={ id }
-								name={ name }
-								onClick= {this.onClickModel}
-								selected={selectedModels[id]}
-							/>
-						)
-					})}
+						{loadingConfigurations && <Loader />}
+						{models.map(({ id, name }, i) => {
+							return (
+								<Model key= { id }
+									id={ id }
+									name={ name }
+									onClick= {this.onClickModel}
+									selected={selectedModels[id]}
+								/>
+							)
+						})}
 					</Columns>
 				</div>
 				<br />
 				<div className={compareButtonClassName}>
-					<Button onClick={() => this.setState({ redirect : true })} >
+					<Button onClick={this.setConfigurations}>
 						Done
 					</Button>
 				</div>

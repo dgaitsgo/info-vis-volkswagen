@@ -25,11 +25,11 @@
     background-position: center;
     background-color:white;
     background-attachment: fixed;
-    height: 100vh;
+    /* height: 100vh; */
     animation-name: fadeInOpacity;
 	animation-iteration-count: 1;
 	animation-timing-function: ease-in;
-	animation-duration: 1s;
+	animation-duration: 0.5s;
 }
 @keyframes fadeInOpacity {
 	0% {
@@ -54,7 +54,9 @@
 .hero-body{
     padding: 0rem;
 }
-
+.loaders{
+    flex: 1;
+}
 @media only screen and (max-width : 760px) {
     /* Styles */
     .ReactModal__Content.ReactModal__Content--after-open

@@ -5,7 +5,7 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import logo from '../res/nav-vw-logo.png'
-// import { Breadcrumb, BreadcrumbItem } from 'reactstrap'
+import { Breadcrumb, BreadcrumbItem } from 'reactstrap'
 import { Button } from 'react-bulma-components/full'
 import { Navbar } from 'react-bulma-components/full'
 import { withRouter } from 'react-router-dom'
@@ -18,8 +18,12 @@ class Navigation extends Component {
             open: true
         }
     }
-    render(){
-        const urlData = this.props.location.pathname.split('/')
+    render() {
+		const urlData = this.props.location.pathname.split('/')
+		console.log(urlData.length)
+
+		const navLabels = ['Brands', 'Models', 'Configure']
+
 		const open = this.state.open;
 
         return (
@@ -29,7 +33,7 @@ class Navigation extends Component {
 				active={!open}
 				transparent={false}
 			>
-				<Navbar.Brand className='unordered-nav'>	
+				<Navbar.Brand className='unordered-nav'>
 					<Navbar.Item renderAs="a" href="/">
 						<img
 							src={logo}
@@ -37,6 +41,32 @@ class Navigation extends Component {
 							width = "112"
 							height = "31"
 						/>
+					</Navbar.Item>
+					<Navbar.Item>
+						<Breadcrumb>
+							<ul>
+							{urlData.length > 1 &&
+								<BreadcrumbItem>
+									{urlData.length > 1 && <li> <NavLink to={'/explore'}>{ urlData[2] }</NavLink> </li>}
+								</BreadcrumbItem>
+							}
+							{urlData.length > 3 &&
+								<BreadcrumbItem>
+									{urlData.length > 3 && <li> <NavLink to={`/explore/${urlData[2]}`}>Brands</NavLink> </li>}
+								</BreadcrumbItem>
+							}
+							{urlData.length > 4 &&
+								<BreadcrumbItem>
+									{urlData.length > 4 && <li> <NavLink to={`/explore/${urlData[2]}/${urlData[3]}`}>Models</NavLink> </li>}
+								</BreadcrumbItem>
+							}
+							{urlData.length > 2 &&
+								<BreadcrumbItem>
+									{ navLabels[urlData.length - 3] }
+								</BreadcrumbItem>
+							}
+							</ul>
+						</Breadcrumb>
 					</Navbar.Item>
 					<Navbar.Burger
 						active={open}
@@ -47,23 +77,7 @@ class Navigation extends Component {
 						}
 					/>
 				</Navbar.Brand>
-
 				<Navbar.Menu active={open}>
-					{urlData.map(( name, i ) => {
-							return (
-								<Navbar.Container position="left">
-									<Navbar.Item href={urlData[i]}>{ name }</Navbar.Item>
-								</Navbar.Container> 
-							)
-					})}	
-									{/* {urlData[2] && <li> <NavLink to={`/${ urlData[1] }`}>Brands</NavLink> </li>} */}
-									{/* {urlData[3] && <li> <NavLink to={`/${ urlData[1] }/${ urlData[2] }`}>Models</NavLink> </li>} */}
-					{/* <Navbar.Container> */}
-						{/* <Navbar.Item href={ urlData[1] }>
-								{urlData[1] && <li> <NavLink to='/'></NavLink> </li>}	
-									Countries
-						</Navbar.Item> 
-					</Navbar.Container>*/}
 				</Navbar.Menu>
 		</Navbar>
 		)

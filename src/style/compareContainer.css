@@ -1,0 +1,28 @@
+.compare-container-wrapper {
+	/* width: 100%; */
+	margin: 0 auto;
+	/* text-align: center; */
+}
+
+
+.compare-model-name {
+	position: relative;
+}
+
+.icon.ranking {
+	position: absolute;
+	right: 100%;
+	margin-right: 0.5rem;
+}
+
+.icon.ranking.gold > i {
+	color:#FEE101;
+}
+
+.icon.ranking.silver > i {
+	color : #A7A7AD;
+}
+
+.icon.ranking.bronze > i {
+	color : #A77044;
+}

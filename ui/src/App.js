@@ -22,7 +22,6 @@ class App extends Component {
 	constructor(props) {
 
 		super(props)
-
 		this.state = {
 			modalIsOpen: true,
 			selectedCountry: {
@@ -43,9 +42,9 @@ class App extends Component {
 				<Switch>
 					<Route exact path='/' component={ GraphContainer } />
 					<Route exact path='/explore' component= { LandingContainer } />
-					<Route exact path={`/:countryCode`} component={ BrandsContainer} />
-					<Route exact path={`/:countryCode/:brand_id`} component= { ModelsContainer } />
-					<Route exact path={`/:countryCode/:brand_id/:model_string`} component= { CompareContainer } />
+					<Route exact path={`/explore/:countryCode`} component={ BrandsContainer} />
+					<Route exact path={`/explore/:countryCode/:brand_id`} component= { ModelsContainer } />
+					<Route exact path={`/explore/:countryCode/:brand_id/:model_string`} component= { CompareContainer } />
 					<Route component={ NotFound }/>
 				</Switch>
 				<Hero>
@@ -56,9 +55,13 @@ class App extends Component {
 								<Container>
 									<Content className='has-text-centered'>
 											<p>
-												<strong>this made</strong> by David, Sebastian, <a href="#">Jessica</a>. The source code is licensed
-												<a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content is licensed{' '}
-												<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+												<strong>Developed by</strong>
+												<a href="#"> David Gaitsgory</a>,
+												<a href="#"> Sebastian Kunz</a> and
+												<a href="#"> Jessica Liu</a>.
+												The source code is <a href='https://bit.ly/1JWRKa9'>MIT</a> licensed.
+												 The website's content is{' '}
+												<a href='https://bit.ly/OIgYRT'>CC BY NC SA 4.0</a> licensed.
 											</p>
 									</Content>
 								</Container>
