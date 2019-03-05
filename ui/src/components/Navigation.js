@@ -20,12 +20,8 @@ class Navigation extends Component {
     }
     render() {
 		const urlData = this.props.location.pathname.split('/')
-		console.log(urlData.length)
-
-		const navLabels = ['Brands', 'Models', 'Configure']
-
+		const navLabels = ['Brands', 'Models', 'Compare']
 		const open = this.state.open;
-
         return (
 			<Navbar
 				color="light"

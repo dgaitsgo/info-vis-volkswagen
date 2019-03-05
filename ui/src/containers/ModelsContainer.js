@@ -4,13 +4,12 @@ import { Loader } from 'react-bulma-components/full'
 import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
 import Model from '../components/Model'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import Modal from 'react-modal'
 import { NavLink } from 'react-router-dom'
-import { Heading } from "react-bulma-components/full"
-import { Section } from "react-bulma-components/full"
-import { Container } from "react-bulma-components/full"
-import { Button } from "react-bulma-components/full"
-import { Columns } from "react-bulma-components/full"
+import { Heading, Box, Section, Container, Button, Columns } from "react-bulma-components/full"
 import '../style/model.css'
+import '../style/modelsContainer.css'
 
 class ModelsContainer extends Component {
 
@@ -21,8 +20,11 @@ class ModelsContainer extends Component {
         this.state = {
 			models: null,
 			selectedModels: {},
+			modalIsOpen: false,
+			modalContent: null,
 			modelImages: null,
-			modelsLoading: true
+			loadingConfigurations : false,
+			modelsLoading: true,
         }
 	}
 
@@ -70,24 +72,61 @@ class ModelsContainer extends Component {
 
 	}
 
-	onClickModel = ({ name, id }) => {
+	onTypeClick = ({modelName, modelId, typeName, typeId}) => {
 		let { selectedModels } = this.state
 
-		id in selectedModels
-			? delete selectedModels[id]
-			: selectedModels[id] = name
+		if (modelId in selectedModels && selectedModels[modelId].type.id === typeId)
+			delete selectedModels[modelId]
+		else {
+			selectedModels[modelId] = {
+				modelName,
+				type: {
+					name: typeName,
+					id: typeId
+				}
+			}
+		}
 
-		this.setState({ selectedModels })
+		this.setState({ modalIsOpen: false, selectedModels })
 	}
 
+	onClickModel = ({ name, id }) => {
+		axios.get('/api/modelTypes', {
+			params: {
+				countryCode: this.props.location.pathname.split('/')[2],
+				model_id: id
+			}
+		}).then( res => {
+			this.setState({ modalIsOpen: true,
+				modalContent:{
+					model_id: id,
+					model_name: name,
+					allTypes: res.data.modelTypes.data
+				}
+			})
+		})
+
+
+	}
+
+	closeModal = () => this.setState({ modalIsOpen: false })
+
+
     render() {
+
+		const urlData = this.props.location.pathname.split('/')
+
+
 
 		const {
 			models,
 			selectedModels,
 			modelsLoading,
-			redirect
-        } = this.state
+			loadingConfigurations,
+			configurationIds,
+			modalIsOpen,
+			modalContent
+		} = this.state
 
         if (modelsLoading)
 			return (
@@ -119,12 +158,14 @@ class ModelsContainer extends Component {
 			? 'compare-button has-text-centered active'
 			: 'compare-button has-text-centered'
 
+		console.log(selectedModels)
+
         return (
 			<div className='models-wrapper'>
 			<Section>
 			<Container>
 				<Heading size={4} className='models-header has-text-centered'>
-					Select Models:
+					Select Models
 				</Heading>
 				<div className='models-body'>
 					<Columns>
@@ -149,6 +190,37 @@ class ModelsContainer extends Component {
 				</div>
 				</Container>
 				</Section>
+				<Modal
+						isOpen={modalIsOpen}
+						onRequestClose={this.closeModal}
+					>
+					{modalContent &&
+						<div className='modal-compare-content-wrapper'>
+						<Heading size={4} className='has-text-centered'>
+							Pick A Model Type
+						</Heading>
+							{
+								modalContent.allTypes.map( (type, i) => {
+									const modelTypeClassName = selectedModels[modalContent.model_id] && selectedModels[modalContent.model_id].type.name === type.name
+										? 'type-elem selected'
+										: 'type-elem'
+
+									return (
+										<Box
+											className={modelTypeClassName}onClick={
+												() => this.onTypeClick({
+													modelName: modalContent.model_name,
+													modelId: modalContent.model_id,
+													typeName: type.name,
+													typeId: type.id})}
+											key={i}> {type.name}
+										</Box>
+									)
+								})
+							}
+						</div>
+					}
+					</Modal>
 			</div>
         )
     }

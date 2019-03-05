@@ -26,3 +26,7 @@
 .icon.ranking.bronze > i {
 	color : #A77044;
 }
+
+.tree-wrapper{
+	display: flex;
+}

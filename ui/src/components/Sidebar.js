@@ -33,12 +33,12 @@ const rankModels = (props) => {
 	return (_.sortBy(averageModelMap, elem => elem.average).reverse())
 }
 
-
 const Sidebar = (props) => {
 
 	const {
 		fullModels,
-		compareMode
+		compareMode,
+		openModal
 	} = props
 
 	const rankedModels = rankModels(props)
@@ -55,7 +55,12 @@ const Sidebar = (props) => {
 						{ i === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 						{ i === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
 						<span>{`${i + 1}. ${currModel.model.name } `}</span>
-						<span className='options-plus' style={{ color : 'blue' }}> +</span>
+						<span className='options-plus' style={{ color : 'blue' }} onClick={ () =>
+							openModal({
+								model_id: currModel.model.id,
+								model_name: currModel.model.name,
+								})}>
+							+</span>
 					</div>
 
 					<span className='compare-model-value'>

@@ -188,10 +188,9 @@ class CompareContainer extends Component {
 			modelOptions
 		} = this.state
 
+		// const categories = modelOptions.data.filter( (option, i) => modelOptions.data.indexOf(option) === i)
 		const categoriesWithDups = modelOptions.data.map( option => option.category)
 		const onlyCategories = [...new Set(categoriesWithDups)]
-
-		const
 
 		if (!fullModels)
 			return <Loader message={'Getting configurations...'} />
