@@ -18,7 +18,6 @@ class Navigation extends Component {
     }
     render() {
 		const urlData = this.props.location.pathname.split('/')
-		// console.log(urlData)
 		const open = this.state.open;
         return (
 			<Navbar
@@ -47,7 +46,7 @@ class Navigation extends Component {
 				</Navbar.Brand>
 				<Navbar.Menu active={open}>
 								{urlData[1] == "explore" && <Navbar.Item href={`/${urlData[1]}`}>Country</Navbar.Item>}
-								{urlData.length > 2 && <Navbar.Item href={`/${urlData[1]}/${urlData[2]}`}>Brands</Navbar.Item>}	
+								{urlData.length > 2 && <Navbar.Item href={`/${urlData[1]}/${urlData[2]}`}>Brands</Navbar.Item>}
 								{urlData.length > 3 && <Navbar.Item href={`/${urlData[1]}/${urlData[2]}/${urlData[3]}`}>Models</Navbar.Item>}
 								{urlData.length > 4 && <Navbar.Item href={`/${urlData[1]}/${urlData[2]}/${urlData[3]}/${urlData[4]}`}>Configure</Navbar.Item>}
 				</Navbar.Menu>

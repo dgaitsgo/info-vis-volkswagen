@@ -62,7 +62,7 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 				ariaHideApp={true}
 			>
 			<Section>
-				{/* To impliment : Markdown 'About' */}
+				{/* To implement : Markdown 'About' */}
 				<Heading size={2} className='modal-heaer has-text-centered'> Welcome To Our Website. </Heading>
 				<p className='modal-body'> Please choose your country first, then pick your favorite models and compare them. </p>
 				<br />

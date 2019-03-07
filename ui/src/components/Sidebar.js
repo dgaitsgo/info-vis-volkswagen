@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import _ from 'lodash'
-import { Loader, Button, Icon } from 'react-bulma-components/full'
+import {  Button, Icon } from 'react-bulma-components/full'
 
 const sum = (accumulator, currentValue) => accumulator + currentValue
 
@@ -8,7 +8,7 @@ const average = array => array.reduce(sum) / array.length
 
 const rankModels = (props) => {
 
-	const { fullModels, compareMode } = props
+	const { defaultModels, compareMode } = props
 
 	const averageModelMap = Object.keys(fullModels.data).map( (modelId, i) => {
 
@@ -33,19 +33,19 @@ const rankModels = (props) => {
 	return (_.sortBy(averageModelMap, elem => elem.average).reverse())
 }
 
-
 const Sidebar = (props) => {
 
 	const {
 		fullModels,
-		compareMode
+		compareMode,
+		openModal
 	} = props
 
 	const rankedModels = rankModels(props)
 
 	const modelElems = rankedModels.map( (rankedModel, i) => {
 
-		const currModel = fullModels.data[rankedModel.modelId]
+		const currModel = defaultModels[rankedModel.modelId]
 
 		return (
 			<div className='compare-model-wrapper' key={i}>
@@ -55,7 +55,12 @@ const Sidebar = (props) => {
 						{ i === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 						{ i === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
 						<span>{`${i + 1}. ${currModel.model.name } `}</span>
-						<span className='options-plus' style={{ color : 'blue' }}> +</span>
+						<span className='options-plus' style={{ color : 'blue' }} onClick={ () =>
+							openModal({
+								model_id: currModel.model.id,
+								model_name: currModel.model.name,
+								})}>
+							+</span>
 					</div>
 
 					<span className='compare-model-value'>

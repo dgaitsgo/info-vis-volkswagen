@@ -1,8 +1,9 @@
 const axios = require('axios')
 const addSeconds = require('date-fns/add_seconds')
+const isAfter = require('date-fns/is_after')
 const app = require('./app')
 const baseUrl = 'https://identity.vwgroup.io/oidc/v1/token'
-let globalToken = null
+const Identity = require('./db/models/Identity.model')
 
 const refreshAccessToken = () =>
 	axios({
@@ -22,19 +23,27 @@ const refreshAccessToken = () =>
 //middleware to refresh token and get one on initial load
 app.use( async (req, res, next) => {
 
-	globalToken  = globalToken || req.query.token
 	const now = new Date()
-	const nowString = now.toISOString()
 
-	if (!globalToken || nowString > globalToken.expirationDate) {
+    //find latest token
+    let token = await Identity.findOne().sort({ createdAt : -1 })
+
+	if (!token || !token.access_token || isAfter(now, token.expirationDate)) {
 
 		try {
+	
+            const nextTokenRes = await refreshAccessToken()
+            const nextToken = nextTokenRes.data 
+			
+            token = await new Identity ({
+				access_token : nextToken.access_token,				
+                expirationDate : addSeconds(now, nextToken.expires_in),
+                createdAt : now 
+            }).save()
 
-			const nextTokenRes = await refreshAccessToken()
-			let nextToken = nextTokenRes.data
+			req.query.token = token
 
-			nextToken.expirationDate = addSeconds(nowString, nextToken.expires_in).toISOString()
-			globalToken = nextToken
+			next()
 
 		} catch(err) {
 
@@ -48,9 +57,8 @@ app.use( async (req, res, next) => {
 				userMessage : 'Could not get access'
 			}))
 		}
+	} else {
+		req.query.token = token
+		next()
 	}
-
-	req.query.token = globalToken
-
-	next()
 })

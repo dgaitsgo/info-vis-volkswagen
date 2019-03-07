@@ -1,9 +1,9 @@
 .compare-container-wrapper {
 	/* width: 100%; */
 	margin: 0 auto;
+	display: flex;
 	/* text-align: center; */
 }
-
 
 .compare-model-name {
 	position: relative;
@@ -25,4 +25,13 @@
 
 .icon.ranking.bronze > i {
 	color : #A77044;
+}
+
+.tree-wrapper{
+	display: flex;
+}
+
+
+.selected{
+	background-color: #64b5f6
 }

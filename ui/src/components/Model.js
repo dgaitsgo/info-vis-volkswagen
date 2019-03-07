@@ -12,23 +12,17 @@ const Model = ({
 		: 'model'
 
 	const imgSrc = 'https://bit.ly/2SBDH3b'
-
     return (
-
-
-		<div>
+		<div className='model-wrapper'>
         <Columns.Column>
-			{/* <Box className={className} onClick={ () => onClick({ id, name }) }>
-				<div className="model-name has-text-centered">
-					{ name }
-				</div>
-			</Box> */}
 			<Card className={modelClassName} onClick={ () => onClick({ id, name }) }>
+				{/* When selected the model faces you -> see audi website */}
 				{imgSrc
 					? <Card.Image src={imgSrc}/>
 					: <div> <span><i className="fas fa-car"></i></span> </div>}
 				<Card.Content>
 					<Heading size={4}>{ name }</Heading>
+					{ selected && selected.type && selected.type.name }
 				</Card.Content>
 			</Card>
 		</Columns.Column>

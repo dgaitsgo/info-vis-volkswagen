@@ -16,16 +16,16 @@ const apiSchema = {
 	'countries' : [],
 	'brands' : ['countryCode'],
 	'models' : ['countryCode', 'brand_id'],
-    'types' : ['countryCode', 'brand_id'],
+    'brandTypes' : ['countryCode', 'brand_id'],
     'modelTypes' : ['countryCode', 'model_id'],
-    'options' : ['countryCode', 'type_id'],
+	'options' : ['countryCode', 'type_id'],
 }
 
 const apiEndpoints = {
 	'countries' : () => `${apiURL}/countries`,
 	'brands' : (country_code) => `${apiURL}/catalog/${country_code}/brands`,
 	'models' : (country_code, brand_id) => `${apiURL}/catalog/${country_code}/brands/${brand_id}/models`,
-	'types' : (country_code, model_id) => `${apiURL}/catalog/${country_code}/models/${model_id}/types`,
+	'brandTypes' : (country_code, brand_id) => `${apiURL}/catalog/${country_code}/models/${brand_id}/types`,
 	'modelTypes' : (country_code, model_id) => `${apiURL}/catalog/${country_code}/models/${model_id}/types`,
 	'options' : (country_code, type_id) => `${apiURL}/catalog/${country_code}/types/${type_id}/options`
 }
@@ -48,6 +48,7 @@ Object.keys(apiSchema).forEach(key => {
 const reqProductData = async (req, res, url, key) => {
 
 	const _token = req.query.token
+	console.log('token in countries', _token)
 	const token = typeof(_token) === 'string' ? JSON.parse(_token) : _token
 
 	try {

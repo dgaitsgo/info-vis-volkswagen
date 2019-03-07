@@ -22,7 +22,8 @@ class LandingContainer extends Component {
 		const { token } = this.props
 
 		axios.get('/api/countries').then(res => {
-			const countries = res.data.countries.data
+			let countries = res.data.countries.data
+			countries.sort( (a, b) => a.name > b.name ? 1 : -1 )
 			this.setState({ countries })
 		})
 		.catch(err => {
