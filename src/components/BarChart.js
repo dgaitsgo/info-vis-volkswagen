@@ -74,7 +74,7 @@ class BarChart extends Component{
 
 		return (
 			<div className='bar-chart-wrapper'>
-				<XYPlot xType="ordinal" width={500} height={300} xDistance={500}>
+				<XYPlot xType="ordinal" width={800} height={300} xDistance={800}>
 					<VerticalGridLines />
 					<HorizontalGridLines />
 					<XAxis />

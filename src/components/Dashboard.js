@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import { Loader, Button, Icon } from 'react-bulma-components/full'
+import { Loader, Button, Icon, Box, Heading } from 'react-bulma-components/full'
 
 const sum = (accumulator, currentValue) => accumulator + currentValue
 
@@ -33,7 +33,7 @@ const rankModels = (props) => {
 	return (_.sortBy(averageModelMap, elem => elem.average).reverse())
 }
 
-const Sidebar = (props) => {
+const Dashboard = (props) => {
 
 	const {
 		fullModels,
@@ -42,40 +42,44 @@ const Sidebar = (props) => {
 	} = props
 
 	const rankedModels = rankModels(props)
+	const typeData = Object.keys(fullModels.typeData).map( wholeModel => fullModels.typeData[wholeModel])
 
 	const modelElems = rankedModels.map( (rankedModel, i) => {
 
 		const currModel = fullModels.data[rankedModel.modelId]
-		console.log(currModel)
 
 		return (
 			<div className='compare-model-wrapper' key={i}>
-				<div className='compare-model-name-wrapper'>
+				<Box className='compare-model-name-wrapper'>
 					<div className='compare-model-name'>
-						{ i === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
-						{ i === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
-						{ i === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-						<span>{`${i + 1}. ${currModel.model.name } `}</span>
-						<span className='options-plus' style={{ color : 'blue' }} onClick={ () =>
-							openModal({
-								model_id: currModel.model.id,
-								model_name: currModel.model.name,
-								})}>
-							+</span>
+						<Heading size={6}>
+							{ i === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
+							{ i === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
+							{ i === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
+						{`${i + 1}. ${currModel.model.name } `}
+							<span className='options-plus' style={{ color : 'blue' }} onClick={ () =>
+								openModal({
+									model_id: currModel.model.id,
+									model_name: currModel.model.name,
+									typeName: typeData[i].type.name,
+									typeId: typeData[i].type.name
+									})}>
+									+
+							</span>
+						</Heading>
 					</div>
-
 					<span className='compare-model-value'>
 						{ rankedModel.average.toFixed(2) }
 					</span>
-				</div>
+				</Box>
 
 			</div>
 		)
 	})
 
 	return (
-		<div className='sidebar-wrapper'> {modelElems} </div>
+		<div className='dashboard-wrapper'> {modelElems} </div>
 	)
 }
 
-export default Sidebar
+export default Dashboard

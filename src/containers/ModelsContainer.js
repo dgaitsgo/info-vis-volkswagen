@@ -40,7 +40,8 @@ class ModelsContainer extends Component {
         })
         .then( res => {
 
-			const models = res.data.models.data
+			let models = res.data.models.data
+			models.sort( (a, b) => a.name > b.name ? 1 : -1)
 
 			this.setState({ models, modelsLoading: false })
 		}).catch(err => {
@@ -97,26 +98,23 @@ class ModelsContainer extends Component {
 				model_id: id
 			}
 		}).then( res => {
+			let allTypes = res.data.modelTypes.data
+			allTypes.sort( (a, b) => a.name > b.name ? 1 : -1)
 			this.setState({ modalIsOpen: true,
 				modalContent:{
 					model_id: id,
 					model_name: name,
-					allTypes: res.data.modelTypes.data
+					allTypes
 				}
 			})
 		})
-
-
 	}
 
 	closeModal = () => this.setState({ modalIsOpen: false })
 
-
     render() {
 
 		const urlData = this.props.location.pathname.split('/')
-
-
 
 		const {
 			models,
@@ -149,8 +147,9 @@ class ModelsContainer extends Component {
 				message={'Getting models...'} /></div>)
 
 		if (configurationIds) {
+			const encodedURL = escape((JSON.stringify(selectedModels)))
 			return <Redirect to={{
-				pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`,
+				pathname : `${this.props.location.pathname}/${encodedURL}`,
 				params : {
 					configurationIds
 				}
@@ -160,8 +159,6 @@ class ModelsContainer extends Component {
 		const compareButtonClassName = selectedModels
 			? 'compare-button has-text-centered active'
 			: 'compare-button has-text-centered'
-
-		console.log(selectedModels)
 
         return (
 			<div className='models-wrapper'>
