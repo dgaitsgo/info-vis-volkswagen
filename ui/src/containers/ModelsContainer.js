@@ -119,7 +119,6 @@ class ModelsContainer extends Component {
 		const {
 			models,
 			selectedModels,
-			fullModels,
 			modelsLoading,
 			loadingConfigurations,
 			configurationIds,
@@ -149,10 +148,15 @@ class ModelsContainer extends Component {
 		if (configurationIds) {
 			const encodedURL = escape((JSON.stringify(selectedModels)))
 			return <Redirect to={{
+<<<<<<< HEAD:src/containers/ModelsContainer.js
 				pathname : `${this.props.location.pathname}/${encodedURL}`,
 				params : {
 					configurationIds
 				}
+=======
+				pathname : `${this.props.location.pathname}/${JSON.stringify(selectedModels)}`,
+				params : {  selectedModels }
+>>>>>>> master:ui/src/containers/ModelsContainer.js
 			}} />
 		}
 

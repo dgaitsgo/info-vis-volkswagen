@@ -48,6 +48,7 @@ Object.keys(apiSchema).forEach(key => {
 const reqProductData = async (req, res, url, key) => {
 
 	const _token = req.query.token
+	console.log('token in countries', _token)
 	const token = typeof(_token) === 'string' ? JSON.parse(_token) : _token
 
 	try {
