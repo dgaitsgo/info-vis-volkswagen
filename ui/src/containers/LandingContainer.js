@@ -15,11 +15,8 @@ class LandingContainer extends Component {
             countries : null
         }
     }
-
 	openModal = () => this.setState({ modalIsOpen: true })
-
 	closeModal = () => this.setState({ modalIsOpen: false })
-
     componentDidMount() {
 
 		const { token } = this.props
@@ -56,7 +53,7 @@ class LandingContainer extends Component {
                     position:'fixed',
                     width:300,
                     height:300,
-                    border: '4px solid #01579b',
+                    border: '4px solid #000000',
                     borderTopColor: 'transparent',
                     boderRightColor: 'transparent',
                     margin: 'auto',

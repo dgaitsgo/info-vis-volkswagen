@@ -18,14 +18,13 @@
 .country{
     width: 150px;
 }
-.app{
+.landing-wrapper{
     flex: 1;
     background-image: url(../res/bg.png);
     background-repeat: no-repeat;
     background-position: center;
     background-color:white;
     background-attachment: fixed;
-    /* height: 100vh; */
     animation-name: fadeInOpacity;
 	animation-iteration-count: 1;
 	animation-timing-function: ease-in;
@@ -39,7 +38,7 @@
 		opacity: 1;
 	}
 }
-.app section.section div.container{
+.landing-wrapper section.section div.container{
     width: 50%;
 }
 .country-flag{
@@ -67,7 +66,7 @@
     bottom: 50px !important;
 
 }
-    .app section.section div.container{
+    .landing-wrapper section.section div.container{
         width: 80%;
     }
     .country{

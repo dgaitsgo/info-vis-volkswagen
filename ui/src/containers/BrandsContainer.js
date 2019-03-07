@@ -22,9 +22,7 @@ class BrandsContainer extends Component {
 	}
 
     componentDidMount() {
-
 		const countryCode = this.props.location.pathname.split('/')[2]
-
         axios.get('/api/brands', {
 			params : {
 				countryCode
@@ -59,7 +57,7 @@ class BrandsContainer extends Component {
 						position:'fixed',
 						width:300,
 						height:300,
-						border: '4px solid #01579b',
+						border: '4px solid #000000',
 						borderTopColor: 'transparent',
 						boderRightColor: 'transparent',
 						margin: 'auto',
@@ -76,6 +74,8 @@ class BrandsContainer extends Component {
 			<div className='brands-wrapper'>
 				<Section>
 					<Container>
+					<p className='brands-paragraph'>Under {urlData[2]} Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+						<br />
 						<Heading className='brands-headline has-text-centered' size={4}>
 							Choose A Brand:
 						</Heading>

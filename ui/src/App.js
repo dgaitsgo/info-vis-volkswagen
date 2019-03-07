@@ -33,10 +33,9 @@ class App extends Component {
 			nav: null
 		}
 	}
-
+	
 	render() {
-
-		return (
+			return (
 			<div className="main">
 				<Navigation />
 				<Switch>
@@ -55,7 +54,7 @@ class App extends Component {
 								<Container>
 									<Content className='has-text-centered'>
 											<p>
-												<strong>Developed by</strong>
+												Developed by
 												<a href="#"> David Gaitsgory</a>,
 												<a href="#"> Sebastian Kunz</a> and
 												<a href="#"> Jessica Liu</a>.

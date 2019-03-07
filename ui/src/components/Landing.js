@@ -37,6 +37,8 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 		<div className='landing-wrapper'>
 			<Section>
 				<Container>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+					<br />
 					<Heading size={4} className='has-text-centered'>
 						Choose Your Country:
 					</Heading>

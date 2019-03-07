@@ -1,7 +1,6 @@
 /*
  * Component by Sebastian Kunz
 */
-
 import React, { Component } from 'react'
 import ForceGraph3D from 'react-force-graph-3d'
 import data from './data.js'
