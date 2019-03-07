@@ -1,0 +1,24 @@
+.main {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+.footer{
+    background-color: black;
+    padding: 2rem 1.5rem 5rem;
+    color: white;
+  }
+a {
+    color: #90caf9;
+    cursor: pointer;
+    text-decoration: none;
+}
+a:hover{
+  color: #2196f3;
+}
+/* .hero-foot {
+	position : fixed;
+	left : 0;
+	bottom: 0;
+	width: 100%;
+} */
