@@ -14,7 +14,6 @@ import '../style/brand.css'
 class BrandsContainer extends Component {
 
     constructor(props) {
-
 		super(props)
 
         this.state = {
@@ -24,18 +23,13 @@ class BrandsContainer extends Component {
 
     componentDidMount() {
 
-		const countryCode = this.props.location.pathname.split('/')[1]
+		const countryCode = this.props.location.pathname.split('/')[2]
 
         axios.get('/api/brands', {
 			params : {
 				countryCode
 			}
-		}).then(res => {
-
-			const brands = res.data.brands.data
-
-			this.setState({ brands })
-		})
+		}).then(res => this.setState({ brands: res.data.brands.data }))
 		.catch(err => {
 			const to = {
 				pathname : '/server-error',
@@ -59,36 +53,52 @@ class BrandsContainer extends Component {
 
         if (!brands) {
             return (
-                <Loader message={'Getting brands...'} />
+				<div className="loaders">
+					<Loader
+					style={{
+						position:'fixed',
+						width:300,
+						height:300,
+						border: '4px solid #01579b',
+						borderTopColor: 'transparent',
+						boderRightColor: 'transparent',
+						margin: 'auto',
+						top: '-50px',
+						left: 0,
+						bottom: 0,
+						right: 0
+					}}
+					message={'Getting brands...'} />
+				</div>
             )
 		}
 		return (
 			<div className='brands-wrapper'>
-			<Section>
-			<Container>
-				<Heading className='brands-headline has-text-centered' size={4}>
-					Choose A Brand:
-				</Heading>
-				<Columns className="is-centered">
-				{brands.map(({ brand_id, name }, i) => {
-					const to = {
-						pathname : `/${urlData[1]}/${brand_id}`,
-						query : {
-							brand_id,
-							name
-						}
-					}
-					return (
-						<NavLink to={to} key={i}>
-							<Brands
-								name={ name }
-								brand_id={ brand_id }
-							/>
-						</NavLink>
-					)
-				})}
-				</Columns>
-				</Container>
+				<Section>
+					<Container>
+						<Heading className='brands-headline has-text-centered' size={4}>
+							Choose A Brand:
+						</Heading>
+						<Columns className="is-centered">
+							{brands.map(({ brand_id, name }, i) => {
+								const to = {
+									pathname: `${urlData[2]}/${brand_id}`,
+									query: {
+										brand_id,
+										name
+									}
+								}
+								return (
+									<NavLink to={to} key={i}>
+										<Brands
+											name={ name }
+											brand_id={ brand_id }
+										/>
+									</NavLink>
+								)
+							})}
+						</Columns>
+					</Container>
 				</Section>
 			</div>
 		)

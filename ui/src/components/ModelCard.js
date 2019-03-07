@@ -1,7 +1,6 @@
 import React from 'react'
 
 const ModelCard = ({ options, name }) => {
-	console.log(name)
 	return (
 		<div className='modelcard-wrapper'>
 			<div className='modelcard-name'>

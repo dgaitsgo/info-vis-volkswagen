@@ -10,16 +10,13 @@ const rankModels = (props) => {
 
 	const { defaultModels, compareMode } = props
 
-	const averageModelMap = Object.keys(defaultModels).map( (modelId, i) => {
+	const averageModelMap = Object.keys(fullModels.data).map( (modelId, i) => {
 
-		const model = defaultModels[modelId]
+		const model = fullModels.data[modelId]
 
-		console.log('current model ', model)
+		if (model.wltp.data.length) {
 
-		if (model.wltp.length) {
-
-			const currentInterps = model.wltp[0].interpolations.filter(interp => interp.value_type === compareMode)
-			// console.log('current interps', currentInterps)
+			const currentInterps = model.wltp.data[0].interpolations.filter(interp => interp.value_type === compareMode)
 			if (currentInterps.length) {
 				const interpAverage = average(currentInterps.map( item => item.value ))
 
@@ -33,34 +30,37 @@ const rankModels = (props) => {
 		return null
 	}).filter(val => val)
 
-	_.sortBy(averageModelMap, 'average').reverse()
-
-	return (averageModelMap)
+	return (_.sortBy(averageModelMap, elem => elem.average).reverse())
 }
 
 
 const Sidebar = (props) => {
-	
+
 	const {
-		defaultModels,
+		fullModels,
+		compareMode
 	} = props
+
 	const rankedModels = rankModels(props)
+
 	const modelElems = rankedModels.map( (rankedModel, i) => {
 
 		const currModel = defaultModels[rankedModel.modelId]
 
-		console.log('fucking side bar', currModel)
-
 		return (
 			<div className='compare-model-wrapper' key={i}>
 				<div className='compare-model-name-wrapper'>
-					<span className='compare-model-name'>
-						{`${i + 1}. ${currModel.name } `}
-					</span>
+					<div className='compare-model-name'>
+						{ i === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
+						{ i === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
+						{ i === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
+						<span>{`${i + 1}. ${currModel.model.name } `}</span>
+						<span className='options-plus' style={{ color : 'blue' }}> +</span>
+					</div>
+
 					<span className='compare-model-value'>
-						{ rankedModel.average }
+						{ rankedModel.average.toFixed(2) }
 					</span>
-					<Button><Icon icon="bars" color="info" /></Button>
 				</div>
 
 			</div>
