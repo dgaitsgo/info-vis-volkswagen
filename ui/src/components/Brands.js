@@ -8,7 +8,7 @@ import React from 'react'
 import audi from '../res/audi-logo.png'
 import vw_nutz from '../res/VW_Nutzfahrzeuge-logo.png'
 import seat from '../res/Seat-logo.png'
-import vw_pkw from '../res/vw-logo.png'
+//import vw_pkw from '../res/VW-logo.png'
 import skoda from '../res/Skoda-logo.png'
 
 import { Columns } from "react-bulma-components/full"
