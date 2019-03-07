@@ -9,7 +9,7 @@ import "react-tabs/style/react-tabs.css"
 import Description from '../components/Description'
 import data from './compareData.js'
 import optionsData from './compareOptionsData.js'
-import Sidebar from '../components/Sidebar'
+import Dashboard from '../components/Dashboard'
 import BarChart from '../components/BarChart'
 import Option from '../components/Option'
 import ModelCard from '../components/ModelCard'
@@ -31,7 +31,7 @@ class CompareContainer extends Component {
 			compareMode : 'CO2',
 			modalIsOpen: false,
 			modalContent: {},
-			modelOptions: optionsData
+			modelOptions: optionsData,
 		}
 	}
 
@@ -91,8 +91,8 @@ class CompareContainer extends Component {
 
 	async componentDidMount() {
 
-		// const urlData = this.props.location.pathname.split('/')
-		// const _models = JSON.parse(urlData[3])
+		const urlData = this.props.location.pathname.split('/')
+		const typeData = JSON.parse(unescape(urlData[4]))
 		// let models = Object.keys(_models).map(modelId => ({ id : modelId, name : _models[modelId] }))
 
 		// const fullModelsRes = await axios.get('/api/configureModels', {
@@ -105,7 +105,8 @@ class CompareContainer extends Component {
 		// 	data : fullModelsRes.data
 		// }
 		const fullModels = {
-			data : data
+			data : data,
+			typeData
 		}
 		const allTypes = []
 
@@ -174,8 +175,19 @@ class CompareContainer extends Component {
 				type: {
 					name: typeName,
 					id: typeId
-				}
+				},
+				selectedCategory: null
 			} })
+	}
+
+	onCategoryClick = ({ category }) => {
+		const {
+			modalContent
+		} = this.state
+
+		modalContent.selectedCategory = category
+
+		this.setState({ modalContent })
 	}
 
 	render() {
@@ -222,7 +234,7 @@ class CompareContainer extends Component {
 							<label for="exampleRadioInline2">Consumption</label>
 						</div>
 					</div>
-					<Sidebar
+					<Dashboard
 						fullModels={ fullModels }
 						compareMode={ compareMode }
 						openModal= { this.openModal }
@@ -238,20 +250,47 @@ class CompareContainer extends Component {
 						<Heading size={4} className='has-text-centered'>
 							Configure Your {modalContent.model_name}
 						</Heading>
-						<Heading size={4} className='has-text-centered'>
-							{/* {modalContent.type.name} */}
+						<Heading size={6} className='has-text-centered'>
+							{modalContent.type && modalContent.type.name}
 						</Heading>
 							<div className='tree-wrapper'>
 								<div className='tree-category-wrapper'>
-									{onlyCategories.map( (category, i) => <Box key={i}>{category} </Box> ) }
+									{onlyCategories.map( (category, i) => {
+										const treeCategoryClassName = category === modalContent.selectedCategory
+											? 'tree-category selected'
+											: 'tree-catehory'
+										return (
+											<Box
+												className={ treeCategoryClassName }
+												key={i}
+												onClick={() => {
+													this.onCategoryClick({ category })
+												}}
+												>{category}
+											</Box>
+										)})}
 								</div>
 								<div className='tree-options-wrapper'>
-									this is my option
+									{ modelOptions.data.filter( option => option.category == modalContent.selectedCategory)
+										.map( option => {
+											return (
+												<Box>
+													{option.description}
+												</Box>
+											)
+										} )	}
 								</div>
+								<Button className='configure-cancel-button'>
+									cancel
+								</Button>
+								<Button className='configure-restore-button'>
+									restore
+								</Button>
+								<Button>
+									rebuilt
+								</Button>
 							</div>
-
 					</Modal>
-
 				</div>
 			</div>
 		)
