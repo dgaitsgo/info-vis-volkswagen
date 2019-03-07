@@ -28,15 +28,15 @@ class BarChart extends Component{
 			{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' }
 		]
 	}
-	getInterpolations = ({ fullModels, phase, compareMode}) => {
+	getInterpolations = ({ defaultModels, phase, compareMode}) => {
 
-		return Object.keys(fullModels.data).map( (modelId, i) => {
+		return Object.keys(defaultModels).map( (modelId, i) => {
 
-			const model = fullModels.data[modelId]
+			const model = defaultModels[modelId]
 
-			if (model.wltp.data.length) {
+			if (model.model.wltp.length) {
 
-				const currentInterps = model.wltp.data[0].interpolations
+				const currentInterps = model.model.wltp[0].interpolations
 					.filter(interp => interp.value_type === compareMode && interp.phase == phase)
 					.map( interp => interp.value)
 
@@ -65,9 +65,9 @@ class BarChart extends Component{
 
 	render() {
 
-		const { fullModels, compareMode } = this.props
+		const { defaultModels, compareMode } = this.props
 
-		const dataSets = this.phases.map(phase => this.getInterpolations( { fullModels, compareMode, phase: phase.key}))
+		const dataSets = this.phases.map(phase => this.getInterpolations( { defaultModels, compareMode, phase: phase.key}))
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
 
 		const { value } = this.state

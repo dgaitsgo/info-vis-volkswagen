@@ -1,6 +1,5 @@
 import React from 'react'
 import Redirect from 'react-router-dom/Redirect'
-import { Redirect } from 
 
 const Error = (err) => {
 

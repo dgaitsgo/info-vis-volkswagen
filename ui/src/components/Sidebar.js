@@ -9,14 +9,17 @@ const average = array => array.reduce(sum) / array.length
 const rankModels = (props) => {
 
 	const { defaultModels, compareMode } = props
+	console.log('default Models', defaultModels)
 
-	const averageModelMap = Object.keys(fullModels.data).map( (modelId, i) => {
+	const averageModelMap = Object.keys(defaultModels).map( (modelId, i) => {
 
-		const model = fullModels.data[modelId]
+		const model = defaultModels[modelId]
+		console.log('model', model)
 
-		if (model.wltp.data.length) {
+		if (model.model.wltp.length) {
 
-			const currentInterps = model.wltp.data[0].interpolations.filter(interp => interp.value_type === compareMode)
+			const currentInterps = model.model.wltp[0].interpolations.filter(interp => interp.value_type === compareMode)
+			console.log('currentInterps', currentInterps)
 			if (currentInterps.length) {
 				const interpAverage = average(currentInterps.map( item => item.value ))
 
@@ -36,7 +39,7 @@ const rankModels = (props) => {
 const Sidebar = (props) => {
 
 	const {
-		fullModels,
+		defaultModels,
 		compareMode,
 		openModal
 	} = props

@@ -82,7 +82,7 @@ class BrandsContainer extends Component {
 						<Columns className="is-centered">
 							{brands.map(({ brand_id, name }, i) => {
 								const to = {
-									pathname: `${urlData[2]}/${brand_id}`,
+									pathname: `/explore/${urlData[2]}/${brand_id}`,
 									query: {
 										brand_id,
 										name

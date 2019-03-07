@@ -10,6 +10,7 @@ import { NavLink } from 'react-router-dom'
 import { Heading, Box, Section, Container, Button, Columns } from "react-bulma-components/full"
 import '../style/model.css'
 import '../style/modelsContainer.css'
+import isEmtpty from 'lodash/isEmpty'
 
 class ModelsContainer extends Component {
 
@@ -25,12 +26,14 @@ class ModelsContainer extends Component {
 			modelImages: null,
 			loadingConfigurations : false,
 			modelsLoading: true,
+			redirectToCompare: false
         }
 	}
 
     componentDidMount() {
 
 		const urlData = this.props.location.pathname.split('/')
+		console.log(urlData)
 
         axios.get('/api/models', {
             params : {
@@ -42,8 +45,9 @@ class ModelsContainer extends Component {
 
 			let models = res.data.models.data
 			models.sort( (a, b) => a.name > b.name ? 1 : -1)
-
+			console.log('my models', models)
 			this.setState({ models, modelsLoading: false })
+
 		}).catch(err => {
 			const to = {
 				pathname : '/server-error',
@@ -53,25 +57,6 @@ class ModelsContainer extends Component {
 			}
 		})
     }
-
-	setConfigurations = () => {
-
-		const { selectedModels } = this.state
-		const _selectedModels = Object.keys(selectedModels).map(key => ({ id : key, name : selectedModels[key] }))
-
-		this.setState({ loadingConfigurations : true }, () => {
-
-			axios.get('/api/configureModels', {
-				params : {
-					models : _selectedModels
-				}
-			}).then( res => {
-				this.setState({ loadingConfigurations : false, configurationIds : res.data, redirectTo : true })
-			})
-
-		})
-
-	}
 
 	onTypeClick = ({modelName, modelId, typeName, typeId}) => {
 		let { selectedModels } = this.state
@@ -112,6 +97,18 @@ class ModelsContainer extends Component {
 
 	closeModal = () => this.setState({ modalIsOpen: false })
 
+	toModelsCompare = () => {
+
+		const escapedURL = escape((JSON.stringify(selectedModels)))
+		const urlData = this.props.location.pathname.split('/')
+		const {
+			selectedModels
+		} = this.state
+
+		if (!isEmtpty(selectedModels))
+			this.setState({ redirectToCompare: true })
+	}
+
     render() {
 
 		const urlData = this.props.location.pathname.split('/')
@@ -121,10 +118,19 @@ class ModelsContainer extends Component {
 			selectedModels,
 			modelsLoading,
 			loadingConfigurations,
-			configurationIds,
 			modalIsOpen,
-			modalContent
+			modalContent,
+			redirectToCompare
 		} = this.state
+
+		if (redirectToCompare){
+			const encodedURL = escape((JSON.stringify(selectedModels)))
+
+			return <Redirect to={{
+				pathname : `${this.props.location.pathname}/${encodedURL}`,
+				params : {  selectedModels }
+			}} />
+		}
 
         if (modelsLoading)
 			return (
@@ -143,14 +149,6 @@ class ModelsContainer extends Component {
 					<rect x="280" y="105" rx="0" ry="0" width="90" height="70" />
 				</ContentLoader>
 			)
-
-		if (selectedModels) {
-			const encodedURL = escape((JSON.stringify(selectedModels)))
-			return <Redirect to={{
-				pathname : `${this.props.location.pathname}/${encodedURL}`,
-				params : {  selectedModels }
-			}} />
-		}
 
 		const compareButtonClassName = selectedModels
 			? 'compare-button has-text-centered active'
@@ -180,7 +178,7 @@ class ModelsContainer extends Component {
 				</div>
 				<br />
 				<div className={compareButtonClassName}>
-					<Button onClick={this.setConfigurations}>
+					<Button onClick={ this.toModelsCompare }>
 						Done
 					</Button>
 				</div>

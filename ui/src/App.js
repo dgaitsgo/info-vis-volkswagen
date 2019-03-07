@@ -33,7 +33,7 @@ class App extends Component {
 			nav: null
 		}
 	}
-	
+
 	render() {
 			return (
 			<div className="main">
