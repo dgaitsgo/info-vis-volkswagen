@@ -29,6 +29,10 @@ const Country = ({ name, countryCode }) => {
 
 const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries }) => {
 
+	// if (!countries) {
+	// 	return null
+	// }
+
 	return (
 		<div className='landing-wrapper'>
 			<Section>
@@ -70,3 +74,4 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 }
 
 export default Landing
+
