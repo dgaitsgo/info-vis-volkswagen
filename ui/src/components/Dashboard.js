@@ -3,6 +3,7 @@ import _ from 'lodash'
 import { Box, Button, Icon, Card, Heading, Media, Image } from 'react-bulma-components/full'
 
 import '../style/dashboard.css'
+import InfoCard from './InfoCard';
 
 const sum = (accumulator, currentValue) => accumulator + currentValue
 
@@ -59,21 +60,6 @@ const rankModels = ({ defaultModels, compareMode }) => {
 	return (_.sortBy(averageModelMap, elem => elem.average).reverse())
 }
 
-const Interpolation = ({ data, compareMode}) => {
-	return (
-		<div>
-			{data.map( entry => {
-
-				return (
-					<div>
-						{entry.phase + ' ' + entry.value}
-					</div>
-				)
-			})}
-		</div>
-	)
-}
-
 class Dashboard extends Component {
 
 	constructor(props)
@@ -90,9 +76,6 @@ class Dashboard extends Component {
 		]
 	}
 
-	showMore = () => {
-		this.setState( { shouldShowMore: !this.state.shouldShowMore})
-	}
 
 	getInterpolations = ({ model, phase, compareMode}) => {
 
@@ -114,7 +97,6 @@ class Dashboard extends Component {
 			}
 	}
 
-
 	render () {
 		const {
 			shouldShowMore,
@@ -128,68 +110,30 @@ class Dashboard extends Component {
 
 		const rankedModels = rankModels(this.props)
 
-		const modelElems = rankedModels.map( (rankedModel, i) => {
-
-			const currModel = defaultModels[rankedModel.modelId]
-			const shouldDisplayRank = rankedModel.average === 0
-				? false
-				: true
-
-			return (
-				<Card className='compare-model-wrapper' key={i}>
-					<Card.Header>
-						{ i === 0 && shouldDisplayRank && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
-						{ i === 1 && shouldDisplayRank && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
-						{ i === 2 && shouldDisplayRank && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-						<Heading size={4}> {`${i + 1}. ${currModel.model.name } `} </Heading>
-						<Heading size={6}> {currModel.type.name} </Heading>
-					</Card.Header>
-					<Card.Content>
-						<Media>
-							<Media.Item>
-							</Media.Item>
-						</Media>
-						<div>
-							<div className='compare-model-value'>
-								<span
-									onClick={ this.showMore }
-								> + </span>
-								{	shouldDisplayRank
-										? 'average ' + compareMode + ' ' + rankedModel.average.toFixed(2)
-										: 'No data found'
-								}
-							</div>
-							{ shouldShowMore
-								? <Interpolation
-									data={ this.phases.map( phase=> this.getInterpolations({ model: currModel, compareMode, phase}))}
-									compareMode={ compareMode }
-								/>
-								: null
-							}
-							<div>
-								consumption
-							</div>
-							<div>
-								show more
-							</div>
-						</div>
-						<Button
-							className='configure-button'
-							onClick= { () =>
-								openConfiguration({
-									modelId: currModel.model.model_id,
-									modelName: currModel.model.name,
-									typeName: currModel.type.name,
-									typeId: currModel.type.id
-								})}
-						> configure </Button>
-					</Card.Content>
-				</Card>
-			)
-		})
 
 		return (
-			<div className='sidebar-wrapper'> {modelElems} </div>
+
+			rankedModels.map( (rankedModel, i) => {
+
+				const currModel = defaultModels[rankedModel.modelId]
+				const shouldDisplayRank = rankedModel.average === 0
+					? false
+					: true
+
+				return (
+					<InfoCard
+						key={i}
+						ranking={i}
+						model={ currModel }
+						shouldDisplayRank={ shouldDisplayRank }
+						compareMode={ compareMode }
+						openConfiguration={ openConfiguration }
+						getInterpolations={ this.getInterpolations }
+						phases={this.phases }
+						average={ rankedModel.average.toFixed(2) }
+					/>
+				)
+			})
 		)
 	}
 }
