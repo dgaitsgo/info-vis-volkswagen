@@ -33,7 +33,6 @@ class ModelsContainer extends Component {
     componentDidMount() {
 
 		const urlData = this.props.location.pathname.split('/')
-		console.log(urlData)
 
         axios.get('/api/models', {
             params : {
@@ -45,7 +44,6 @@ class ModelsContainer extends Component {
 
 			let models = res.data.models.data
 			models.sort( (a, b) => a.name > b.name ? 1 : -1)
-			console.log('my models', models)
 			this.setState({ models, modelsLoading: false })
 
 		}).catch(err => {
@@ -124,11 +122,11 @@ class ModelsContainer extends Component {
 		} = this.state
 
 		if (redirectToCompare){
-			const encodedURL = escape((JSON.stringify(selectedModels)))
+			const encodedURL = encodeURIComponent(JSON.stringify(selectedModels))
 
 			return <Redirect to={{
 				pathname : `${this.props.location.pathname}/${encodedURL}`,
-				params : {  selectedModels }
+				params : {  encodedURL }
 			}} />
 		}
 
@@ -195,7 +193,7 @@ class ModelsContainer extends Component {
 						</Heading>
 							{
 								modalContent.allTypes.map( (type, i) => {
-									const modelTypeClassName = selectedModels[modalContent.model_id] && selectedModels[modalContent.model_id].type.name === type.name
+									const modelTypeClassName = selectedModels[modalContent.model_id] && selectedModels[modalContent.model_id].type.id === type.id
 										? 'type-elem selected'
 										: 'type-elem'
 
