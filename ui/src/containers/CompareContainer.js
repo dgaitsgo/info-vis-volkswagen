@@ -37,7 +37,6 @@ class CompareContainer extends Component {
 	async componentDidMount() {
 
 		const urlData = this.props.location.pathname.split('/')
-
 		const selectedModels = JSON.parse(decodeURIComponent(urlData[4]))
 		const selectedModelsIds = Object.keys(selectedModels).map( key => ({ id: key, name: selectedModels[key].modelName }))
 
@@ -47,9 +46,9 @@ class CompareContainer extends Component {
 			}
 		})
 
+
 		let defaultModelsArr = defaultModelsRes.data
 		let defaultModels = {}
-
 		//reassociate types and models
 		defaultModelsArr.forEach( (model, i) =>
 			defaultModels[model.model_id] =  {
@@ -137,11 +136,11 @@ class CompareContainer extends Component {
 							closeModal={ this.closeModal }
 							model={model}
 							countryCode={ urlData[2] }
-
-						/>
-					}
+							selectedOptions={ defaultModels[model.id].model.defaultOptions.map( option => option.id) }
+						/>}
+				</div>
 			</div>
-		</div>)
+		)
 	}
 }
 

@@ -11,6 +11,11 @@ class OptionsContainer extends Component {
 	constructor(props) {
 
 		super(props)
+
+		const {
+			selectedOptions
+		} = this.props
+
 		this.state = {
 
 			// initially loading all othe choices
@@ -31,6 +36,8 @@ class OptionsContainer extends Component {
 			//all the options a user can choose for a type
 			options: [],
 
+			selectedOptions,
+
 			//indicading if the options are currently beeing loaded
 			loadingOptions: true,
 
@@ -42,91 +49,93 @@ class OptionsContainer extends Component {
 
 	addOption = (optionId) => {
 
-		const { configId } = this.props
+		console.log('toDo: add option')
 
-		this.setState({ loadingConfig : true }, () => {
+		// const { configId } = this.props
 
-			axios.get('/api/addOption', {
-				params : {
-					configId,
-					optionId
-				}}).then(res => {
+		// this.setState({ loadingConfig : true }, () => {
 
-					this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
-						this.checkBuild()
-					})
-			})
-		})
-		.catch(err => <Error message={`Could not add option ${optionId}`} />)
+		// 	axios.get('/api/addOption', {
+		// 		params : {
+		// 			configId,
+		// 			optionId
+		// 		}}).then(res => {
+
+		// 			this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
+		// 				this.checkBuild()
+		// 			})
+		// 	})
+		// })
+		// .catch(err => <Error message={`Could not add option ${optionId}`} />)
 	}
 
-	removeOption = (optionId) => {
+	// removeOption = (optionId) => {
 
-		const { configId } = this.props
+	// 	const { configId } = this.props
 
-		this.setState({ loadingConfig : true }, () => {
+	// 	this.setState({ loadingConfig : true }, () => {
 
-			axios.get('/api/removeOption', {
-				params : {
-					configId,
-					optionId
-				}}).then(res => {
+	// 		axios.get('/api/removeOption', {
+	// 			params : {
+	// 				configId,
+	// 				optionId
+	// 			}}).then(res => {
 
-					this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
-						this.checkBuild()
-					})
-				})
-				.catch(err => <Error message={`Could not remove option ${optionId}`} />)
-		})
-	}
+	// 				this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
+	// 					this.checkBuild()
+	// 				})
+	// 			})
+	// 			.catch(err => <Error message={`Could not remove option ${optionId}`} />)
+	// 	})
+	// }
 
-	rebuildConfig = () => {
+	// rebuildConfig = () => {
 
-		const { configId } = this.props
+	// 	const { configId } = this.props
 
-		this.setState({ loadingConfig : true }, () => {
+	// 	this.setState({ loadingConfig : true }, () => {
 
-			axios.get('/api/rebuildConfig', {
-				params : {
-					configId,
-				}}).then(res => {
+	// 		axios.get('/api/rebuildConfig', {
+	// 			params : {
+	// 				configId,
+	// 			}}).then(res => {
 
-					this.setState({ loadingConfig : false }, this.getChoices)
-				})
-				.catch(err => <Error message={`Could not rebuild configuration ${configId}`} />)
-		})
-	}
+	// 				this.setState({ loadingConfig : false }, this.getChoices)
+	// 			})
+	// 			.catch(err => <Error message={`Could not rebuild configuration ${configId}`} />)
+	// 	})
+	// }
 
-	checkBuild = () => {
+	// checkBuild = () => {
 
-		const { configId } = this.props
+	// 	const { configId } = this.props
 
-		axios.get('/api/checkBuild', {
-			params : {
-				configId
-			}}).then(res => {
+	// 	axios.get('/api/checkBuild', {
+	// 		params : {
+	// 			configId
+	// 		}}).then(res => {
 
-				this.setState({ build : res.data })
-			})
-			.catch(err => <Error message={`Could not rebuild configuration ${configId}`} />)
-	}
+	// 			this.setState({ build : res.data })
+	// 		})
+	// 		.catch(err => <Error message={`Could not rebuild configuration ${configId}`} />)
+	// }
 
-	getChoices = () => {
+	// getChoices = () => {
 
-		const { configId } = this.props
+	// 	const { configId } = this.props
 
-		axios.get('/api/choices', {
-			params : { configId }
-		}).then(res => {
+	// 	axios.get('/api/choices', {
+	// 		params : { configId }
+	// 	}).then(res => {
 
-			this.setState({
-				loadingChoices : false,
-				options: res.data
-			})
+	// 		this.setState({
+	// 			loadingChoices : false,
+	// 			options: res.data
+	// 		})
 
-		})
-		.catch(err => <Error message={`Could not get choices for ${configId}`}/>)
-	}
+	// 	})
+	// 	.catch(err => <Error message={`Could not get choices for ${configId}`}/>)
+	// }
 
 	getOptions = () => {
 
@@ -151,6 +160,7 @@ class OptionsContainer extends Component {
 
 
 	async componentDidMount() {
+
 		this.getOptions()
 	}
 
@@ -172,10 +182,13 @@ class OptionsContainer extends Component {
 			onRequestClose,
 			model,
 			closeModal,
+			selectedOptions,
 		} = this.props
+
 
 		const categoriesWithDups = options.map( option => option.category)
 		const uniqueCategories = [...new Set(categoriesWithDups)].sort()
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -212,9 +225,16 @@ class OptionsContainer extends Component {
 					<div className='tree-options-wrapper'>
 						{ options.filter( option => option.category == selectedCategory)
 							.map( (option, i) => {
+								const treeOptionClassName = selectedOptions.indexOf(option.id) === -1
+									? 'tree-option'
+									: 'tree-option selected'
 								return (
-									<Box key={i}>
-										{option.description}
+									<Box
+										className={treeOptionClassName}
+										key={i}
+										onClick={ this.addOption }
+										>
+											{option.description}
 									</Box>
 								)
 							} )	}

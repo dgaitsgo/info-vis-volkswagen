@@ -59,7 +59,8 @@ const Dashboard = (props) => {
 					{ i === 0 && shouldDisplayRank && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
 					{ i === 1 && shouldDisplayRank && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 					{ i === 2 && shouldDisplayRank && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-					<Heading> {`${i + 1}. ${currModel.model.name } `} </Heading>
+					<Heading size={4}> {`${i + 1}. ${currModel.model.name } `} </Heading>
+					<Heading size={6}> {currModel.type.name} </Heading>
 				</Card.Header>
 				<Card.Content>
 					<Media>
@@ -69,7 +70,7 @@ const Dashboard = (props) => {
 					<span className='compare-model-value'>
 						{	shouldDisplayRank
 								? 'average ' + compareMode + ' ' + rankedModel.average.toFixed(2)
-								: 'No WLTP Data found :('
+								: 'No data found'
 						}
 					</span>
 					<Button
@@ -84,7 +85,6 @@ const Dashboard = (props) => {
 					> configure </Button>
 				</Card.Content>
 			</Card>
-
 		)
 	})
 
