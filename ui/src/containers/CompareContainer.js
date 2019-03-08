@@ -6,7 +6,6 @@ import { Loader, Button, Icon, Columns, Section, Heading, Box } from 'react-bulm
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs'
 import "react-tabs/style/react-tabs.css"
 
-import Description from '../components/Description'
 import Dashboard from '../components/Dashboard'
 import BarChart from '../components/BarChart'
 import Option from '../components/Option'
@@ -125,6 +124,7 @@ class CompareContainer extends Component {
 						defaultModels={ defaultModels }
 						compareMode={ compareMode }
 					/>
+					<hr class='divider'/>
 					<Dashboard
 						defaultModels={ defaultModels }
 						compareMode={ compareMode }

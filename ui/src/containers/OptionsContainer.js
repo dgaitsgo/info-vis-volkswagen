@@ -3,7 +3,7 @@ import axios from 'axios'
 import Redirect from 'react-router-dom/Redirect'
 import Options from '../components/Options'
 import Error from '../components/Error'
-import { Loader, Button, Heading, Box } from 'react-bulma-components/full'
+import { Loader, Button, Heading, Box, Footer } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 
 class OptionsContainer extends Component {
@@ -205,7 +205,7 @@ class OptionsContainer extends Component {
 				? <Loader message='loading options'/>
 				:
 				<div>
-				<div className='tree-wrapper'>
+				<div className='tree-wrapper has-text-centered'>
 					<div className='tree-category-wrapper'>
 						{uniqueCategories.map( (category, i) => {
 							const treeCategoryClassName = category === selectedCategory
@@ -218,7 +218,7 @@ class OptionsContainer extends Component {
 									onClick={() => {
 										this.onCategoryClick({ selectedCategory: category })
 									}}
-									>{category}
+									><h1>{category}</h1>
 								</Box>
 							)})}
 					</div>
