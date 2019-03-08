@@ -72,7 +72,11 @@ class Dashboard extends Component {
 			shouldShowMore: false,
 		}
 		this.phases = [
-			'LOW', 'MEDIUM', 'HIGH', 'EXTRA_HIGH', 'COMBINED'
+			{ key : 'LOW', color : '#4caf50', label : 'Low' },
+			{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
+			{ key : 'HIGH', color : '#ff9800', label : 'High' },
+			{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' },
+			{ key : 'COMBINED', color : '#f44336', label : 'Combined' }
 		]
 	}
 
@@ -82,17 +86,24 @@ class Dashboard extends Component {
 			if (model.model.wltp.length) {
 
 				const currentInterps = model.model.wltp[0].interpolations
-					.filter(interp => interp.value_type === compareMode && interp.phase == phase)
+					.filter(interp => interp.value_type === compareMode && interp.phase == phase.key)
 					.map( interp => interp.value)
 
 					return ({
 						value: currentInterps[0],
-						phase: phase
+						phase: {
+							label: phase.label,
+							color: phase.color
+						}
+
 					})
 			} else {
 				return ({
 					value: null,
-					name: phase
+					phase: {
+						label: phase.label,
+						color: phase.color
+					}
 				})
 			}
 	}

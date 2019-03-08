@@ -5,14 +5,15 @@ import { Box, Button, Icon, Card, Heading, Media, Image } from 'react-bulma-comp
 import '../style/dashboard.css'
 import { compare } from 'ltgt';
 
-const Interpolation = ({ data, compareMode}) => {
+const Interpolation = ({ data }) => {
+	console.log(data)
 	return (
 		<div>
 			{data.map( entry => {
 
 				return (
 					<div>
-						{entry.phase + ' ' + entry.value}
+						<span> <font color={`${entry.phase.color}`}> {entry.phase.label} </font> {entry.value} </span>
 					</div>
 				)
 			})}
