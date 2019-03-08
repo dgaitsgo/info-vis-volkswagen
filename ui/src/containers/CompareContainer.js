@@ -31,6 +31,13 @@ class CompareContainer extends Component {
 			isTyping: true,
 			modalContent: {},
 		}
+		this.phases = [
+			{ key : 'LOW', color : '#4caf50', label : 'Low' },
+			{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
+			{ key : 'HIGH', color : '#ff9800', label : 'High' },
+			{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' },
+			{ key : 'COMBINED', color : '#1565c0', label : 'Combined' }
+		]
 	}
 
 	async componentDidMount() {
@@ -123,12 +130,14 @@ class CompareContainer extends Component {
 					<BarChart
 						defaultModels={ defaultModels }
 						compareMode={ compareMode }
+						phases={ this.phases }
 					/>
 					<hr class='divider'/>
 					<Dashboard
 						defaultModels={ defaultModels }
 						compareMode={ compareMode }
 						openConfiguration= { this.openConfiguration }
+						phases={ this.phases }
 					/>
 					{modalIsOpen &&
 						<OptionsContainer

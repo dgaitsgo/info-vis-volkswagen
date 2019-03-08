@@ -71,13 +71,6 @@ class Dashboard extends Component {
 			//when true displays more information about this config
 			shouldShowMore: false,
 		}
-		this.phases = [
-			{ key : 'LOW', color : '#4caf50', label : 'Low' },
-			{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
-			{ key : 'HIGH', color : '#ff9800', label : 'High' },
-			{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' },
-			{ key : 'COMBINED', color : '#f44336', label : 'Combined' }
-		]
 	}
 
 
@@ -116,6 +109,7 @@ class Dashboard extends Component {
 		const {
 			defaultModels,
 			compareMode,
+			phases,
 			openConfiguration,
 		} = this.props
 
@@ -140,7 +134,7 @@ class Dashboard extends Component {
 						compareMode={ compareMode }
 						openConfiguration={ openConfiguration }
 						getInterpolations={ this.getInterpolations }
-						phases={this.phases }
+						phases={ phases }
 						average={ rankedModel.average.toFixed(2) }
 					/>
 				)

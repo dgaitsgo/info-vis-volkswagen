@@ -6,11 +6,9 @@ import '../style/dashboard.css'
 import { compare } from 'ltgt';
 
 const Interpolation = ({ data }) => {
-	console.log(data)
 	return (
 		<div>
 			{data.map( entry => {
-
 				return (
 					<div>
 						<span> <font color={`${entry.phase.color}`}> {entry.phase.label} </font> {entry.value} </span>
@@ -70,11 +68,9 @@ class InfoCard extends Component {
 						</Media>
 						<div>
 							<div className='compare-model-value'>
-								<span
-									onClick={ this.showMore }
-								> + </span>
+								<span onClick={ this.showMore }> Expand </span>
 								{	shouldDisplayRank
-										? 'average ' + compareMode + ' ' + average
+										? null
 										: 'No data found'
 								}
 							</div>
