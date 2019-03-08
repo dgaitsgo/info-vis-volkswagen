@@ -74,8 +74,10 @@ class BrandsContainer extends Component {
 			<div className='brands-wrapper'>
 				<Section>
 					<Container>
+					<p className='brands-paragraph'>Under {urlData[2]} Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+						<br />
 						<Heading className='brands-headline has-text-centered' size={4}>
-							Choose A Brand
+							Choose A Brand:
 						</Heading>
 						<Columns className="is-centered">
 							{brands.map(({ brand_id, name }, i) => {
