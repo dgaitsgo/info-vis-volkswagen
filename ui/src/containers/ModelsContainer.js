@@ -9,7 +9,6 @@ import Modal from 'react-modal'
 import { NavLink } from 'react-router-dom'
 import { Heading, Box, Section, Container, Button, Columns } from "react-bulma-components/full"
 import '../style/model.css'
-import '../style/modelsContainer.css'
 import isEmtpty from 'lodash/isEmpty'
 
 class ModelsContainer extends Component {
@@ -33,7 +32,7 @@ class ModelsContainer extends Component {
     componentDidMount() {
 
 		const urlData = this.props.location.pathname.split('/')
-		console.log(urlData)
+		// console.log(urlData)
 
         axios.get('/api/models', {
             params : {
@@ -159,10 +158,10 @@ class ModelsContainer extends Component {
 			<Section>
 			<Container>
 				<Heading size={4} className='models-header has-text-centered'>
-					Select Models
+					Select Models:
 				</Heading>
 				<div className='models-body'>
-					<Columns>
+					<Columns className='is-centered'>
 						{loadingConfigurations && <ContentLoader />}
 						{models.map(({ id, name }, i) => {
 							return (

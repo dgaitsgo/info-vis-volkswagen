@@ -13,15 +13,17 @@ class Navigation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-			open: true
+			open: true,
+			color: "black"
         }
-    }
+	}
     render() {
 		const urlData = this.props.location.pathname.split('/')
 		const open = this.state.open;
+		const navColor = this.state.color;
         return (
 			<Navbar
-				color="black"
+				color={navColor}
 				fixed="top"
 				active={!open}
 				transparent={false}
