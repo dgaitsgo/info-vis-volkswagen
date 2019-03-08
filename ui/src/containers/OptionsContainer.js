@@ -27,11 +27,14 @@ class OptionsContainer extends Component {
 			// let the user know if the build they have is configurable or not
 			build : null,
 
-			//skunz added
+			//skunz added////
+			//all the options a user can choose for a type
 			options: [],
 
+			//indicading if the options are currently beeing loaded
 			loadingOptions: true,
 
+			//represents the selected Category for a type
 			selectedCategory: null
 
 		}
@@ -132,21 +135,16 @@ class OptionsContainer extends Component {
 			model
 		} = this.props
 
-		console.log('model in getOptions', model)
-
 		axios.get('/api/options', {
 			params : {
 				countryCode,
 				type_id: model.type.id
 			}
 		}).then(res => {
-
-		console.log('options', res.data.options.data)
 			this.setState({
 				loadingOptions : false,
 				options: res.data.options.data
 			})
-
 		})
 		.catch(err => <Error message={`Could not get options for ${model.type.id}`}/>)
 	}
@@ -178,7 +176,6 @@ class OptionsContainer extends Component {
 
 		const categoriesWithDups = options.map( option => option.category)
 		const uniqueCategories = [...new Set(categoriesWithDups)].sort()
-		console.log(model)
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -214,9 +211,9 @@ class OptionsContainer extends Component {
 					</div>
 					<div className='tree-options-wrapper'>
 						{ options.filter( option => option.category == selectedCategory)
-							.map( option => {
+							.map( (option, i) => {
 								return (
-									<Box>
+									<Box key={i}>
 										{option.description}
 									</Box>
 								)

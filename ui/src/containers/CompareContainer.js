@@ -39,8 +39,6 @@ class CompareContainer extends Component {
 		const urlData = this.props.location.pathname.split('/')
 
 		const selectedModels = JSON.parse(decodeURIComponent(urlData[4]))
-		// const selectedModels = JSON.parse(this.props.match.params.model_string)
-		console.log('selected models', selectedModels)
 		const selectedModelsIds = Object.keys(selectedModels).map( key => ({ id: key, name: selectedModels[key].modelName }))
 
 		const defaultModelsRes = await axios.get('/api/defaultModels', {
@@ -78,7 +76,6 @@ class CompareContainer extends Component {
 			} })
 	}
 
-
 	render() {
 
 		const {
@@ -95,18 +92,6 @@ class CompareContainer extends Component {
 			return (
 				<div>
 					<Loader message={'Getting configurations...'} />
-					{/* <Typist
-						onTypingDone={ () => {
-							this.setState({ isTyping: false })
-						}}
-						cursor= {{
-							show: false
-						}}
-					>
-						<Heading className='has-text-centered'> Loading WLTP data of selected models... </Heading>
-					</Typist>
-					{!isTyping &&
-					<Box> <Heading size={6} className='has-text-centered'> What is WLTP data? </Heading> <img src='http://wltpfacts.eu/wp-content/uploads/2017/03/1_What_is_WLTP-3.svg' alt='no img'/></Box>} */}
 				</div>
 			)
 		return (

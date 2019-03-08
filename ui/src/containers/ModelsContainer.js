@@ -195,7 +195,7 @@ class ModelsContainer extends Component {
 						</Heading>
 							{
 								modalContent.allTypes.map( (type, i) => {
-									const modelTypeClassName = selectedModels[modalContent.model_id] && selectedModels[modalContent.model_id].type.name === type.name
+									const modelTypeClassName = selectedModels[modalContent.model_id] && selectedModels[modalContent.model_id].type.id === type.id
 										? 'type-elem selected'
 										: 'type-elem'
 

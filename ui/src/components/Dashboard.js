@@ -33,8 +33,6 @@ const rankModels = (props) => {
 		})
 	}).filter(val => val)
 
-	console.log('averageModelMap', averageModelMap)
-
 	return (_.sortBy(averageModelMap, elem => elem.average).reverse())
 }
 
@@ -51,7 +49,6 @@ const Dashboard = (props) => {
 	const modelElems = rankedModels.map( (rankedModel, i) => {
 
 		const currModel = defaultModels[rankedModel.modelId]
-		console.log('currModel', currModel)
 		const shouldDisplayRank = rankedModel.average === 0
 			? false
 			: true
@@ -71,7 +68,7 @@ const Dashboard = (props) => {
 					</Media>
 					<span className='compare-model-value'>
 						{	shouldDisplayRank
-								? compareMode + rankedModel.average.toFixed(2)
+								? 'average ' + compareMode + ' ' + rankedModel.average.toFixed(2)
 								: 'No WLTP Data found :('
 						}
 					</span>
