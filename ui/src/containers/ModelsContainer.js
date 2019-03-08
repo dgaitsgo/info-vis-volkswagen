@@ -124,11 +124,11 @@ class ModelsContainer extends Component {
 		} = this.state
 
 		if (redirectToCompare){
-			const encodedURL = escape((JSON.stringify(selectedModels)))
+			const encodedURL = encodeURIComponent((JSON.stringify(selectedModels)))
 
 			return <Redirect to={{
 				pathname : `${this.props.location.pathname}/${encodedURL}`,
-				params : {  selectedModels }
+				params : {  encodedURL }
 			}} />
 		}
 
@@ -195,7 +195,7 @@ class ModelsContainer extends Component {
 						</Heading>
 							{
 								modalContent.allTypes.map( (type, i) => {
-									const modelTypeClassName = selectedModels[modalContent.model_id] && selectedModels[modalContent.model_id].type.name === type.name
+									const modelTypeClassName = selectedModels[modalContent.model_id] && selectedModels[modalContent.model_id].type.id === type.id
 										? 'type-elem selected'
 										: 'type-elem'
 

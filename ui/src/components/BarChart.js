@@ -20,13 +20,6 @@ class BarChart extends Component{
 		this.state = {
 			value: null,
 		}
-
-		this.phases = [
-			{ key : 'LOW', color : '#4caf50', label : 'Low' },
-			{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
-			{ key : 'HIGH', color : '#ff9800', label : 'High' },
-			{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' }
-		]
 	}
 	getInterpolations = ({ defaultModels, phase, compareMode}) => {
 
@@ -65,9 +58,13 @@ class BarChart extends Component{
 
 	render() {
 
-		const { defaultModels, compareMode } = this.props
+		const {
+			defaultModels,
+			compareMode,
+			phases
+		} = this.props
 
-		const dataSets = this.phases.map(phase => this.getInterpolations( { defaultModels, compareMode, phase: phase.key}))
+		const dataSets = phases.map(phase => this.getInterpolations( { defaultModels, compareMode, phase: phase.key}))
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
 
 		const { value } = this.state
@@ -82,7 +79,7 @@ class BarChart extends Component{
 					{ normalizedDataSets.map( (dataSet, i) => {
 						return <VerticalBarSeries
 							className="vertical-bar-series-example"
-							color={this.phases[i].color}
+							color={ phases[i].color}
 							data={dataSet}
 							key={i}
 							onValueMouseOver={this._rememberValue}

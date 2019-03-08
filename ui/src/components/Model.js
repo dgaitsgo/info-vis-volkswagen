@@ -11,15 +11,11 @@ const Model = ({
 		? 'model selected'
 		: 'model'
 
-	const imgSrc = 'https://bit.ly/2SBDH3b'
     return (
 		<div className='model-wrapper'>
         <Columns.Column>
 			<Card className={modelClassName} onClick={ () => onClick({ id, name }) }>
 				{/* When selected the model faces you -> see audi website */}
-				{imgSrc
-					? <Card.Image src={imgSrc}/>
-					: <div> <span><i className="fas fa-car"></i></span> </div>}
 				<Card.Content>
 					<Heading size={4}>{ name }</Heading>
 					{ selected && selected.type && selected.type.name }
