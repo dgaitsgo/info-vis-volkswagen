@@ -3,11 +3,10 @@ import axios from 'axios'
 import Redirect from 'react-router-dom/Redirect'
 import Options from '../components/Options'
 import Error from '../components/Error'
-import { Loader, Button, Heading } from 'react-bulma-components/full'
+import { Loader, Button, Heading, Box } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 
 class OptionsContainer extends Component {
-
 
 	constructor(props) {
 
@@ -26,7 +25,15 @@ class OptionsContainer extends Component {
 			choices : null,
 
 			// let the user know if the build they have is configurable or not
-			build : null
+			build : null,
+
+			//skunz added
+			options: [],
+
+			loadingOptions: true,
+
+			selectedCategory: null
+
 		}
 	}
 
@@ -66,7 +73,7 @@ class OptionsContainer extends Component {
 						this.checkBuild()
 					})
 				})
-				.catch(err => <Error message={`Could not remove option ${optionid}`} />)
+				.catch(err => <Error message={`Could not remove option ${optionId}`} />)
 		})
 	}
 
@@ -93,7 +100,7 @@ class OptionsContainer extends Component {
 
 		axios.get('/api/checkBuild', {
 			params : {
-				conigId
+				configId
 			}}).then(res => {
 
 				this.setState({ build : res.data })
@@ -118,39 +125,80 @@ class OptionsContainer extends Component {
 		.catch(err => <Error message={`Could not get choices for ${configId}`}/>)
 	}
 
+	getOptions = () => {
+
+		const {
+			countryCode,
+			model
+		} = this.props
+
+		console.log('model in getOptions', model)
+
+		axios.get('/api/options', {
+			params : {
+				countryCode,
+				type_id: model.type.id
+			}
+		}).then(res => {
+
+		console.log('options', res.data.options.data)
+			this.setState({
+				loadingOptions : false,
+				options: res.data.options.data
+			})
+
+		})
+		.catch(err => <Error message={`Could not get options for ${model.type.id}`}/>)
+	}
+
 
 	async componentDidMount() {
-		this.getChoices()
+		this.getOptions()
+	}
+
+	onCategoryClick = ({ selectedCategory }) => {
+
+		this.setState({ selectedCategory })
 	}
 
 	render() {
 
 		const {
-			options
+			options,
+			loadingOptions,
+			selectedCategory,
 		} = this.state
 
 		const {
-			modalIsOpen,
-			onRequestClose
+			isOpen,
+			onRequestClose,
+			model,
+			closeModal,
 		} = this.props
 
 		const categoriesWithDups = options.map( option => option.category)
-		const uniqueCategories = [...new Set(categoriesWithDups)]
+		const uniqueCategories = [...new Set(categoriesWithDups)].sort()
+		console.log(model)
 	return (
 		<Modal
-			isOpen={modalIsOpen}
-			onRequestClose={this.closeModal}
+			isOpen={isOpen}
+			onRequestClose={closeModal}
 		>
-			<Heading size={4} className='has-text-centered'>
-				Configure Your {modalContent.model_name}
-			</Heading>
-				<Heading size={6} className='has-text-centered'>
-					{modalContent.type && modalContent.type.name}
-				</Heading>
+		<Heading size={4} className='has-text-centered'>
+			Configure Your {model.name}
+		</Heading>
+		<Heading size={6} className='has-text-centered'>
+			{model.type.name}
+		</Heading>
+		{
+			loadingOptions
+				? <Loader message='loading options'/>
+				:
+				<div>
 				<div className='tree-wrapper'>
 					<div className='tree-category-wrapper'>
 						{uniqueCategories.map( (category, i) => {
-							const treeCategoryClassName = category === modalContent.selectedCategory
+							const treeCategoryClassName = category === selectedCategory
 								? 'tree-category selected'
 								: 'tree-catehory'
 							return (
@@ -158,14 +206,14 @@ class OptionsContainer extends Component {
 									className={ treeCategoryClassName }
 									key={i}
 									onClick={() => {
-										this.onCategoryClick({ category })
+										this.onCategoryClick({ selectedCategory: category })
 									}}
 									>{category}
 								</Box>
 							)})}
 					</div>
 					<div className='tree-options-wrapper'>
-						{ modelOptions.data.filter( option => option.category == modalContent.selectedCategory)
+						{ options.filter( option => option.category == selectedCategory)
 							.map( option => {
 								return (
 									<Box>
@@ -175,6 +223,8 @@ class OptionsContainer extends Component {
 							} )	}
 					</div>
 				</div>
+			</div>
+			}
 			<Button className='configure-button'>Cancel</Button>
 			<Button className='configure-button'>Restore</Button>
 			<Button className='configure-button'>Rebuild</Button>

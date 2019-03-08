@@ -34,6 +34,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
     "react-tabs": "^3.0.0",
+    "react-typist": "^2.0.5",
     "react-vis": "^1.11.6",
     "reactstrap": "^7.1.0"
   },

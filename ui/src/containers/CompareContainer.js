@@ -7,17 +7,17 @@ import { Tabs, TabList, Tab, TabPanel } from 'react-tabs'
 import "react-tabs/style/react-tabs.css"
 
 import Description from '../components/Description'
-import Sidebar from '../components/Sidebar'
+import Dashboard from '../components/Dashboard'
 import BarChart from '../components/BarChart'
 import Option from '../components/Option'
 import ModelCard from '../components/ModelCard'
 import Redirect from 'react-router-dom/Redirect'
 import getLocalStorage from '../modules/localStorage'
-// import OptionsContainer from './OptionsContainer'
+import OptionsContainer from './OptionsContainer'
 import _ from 'lodash'
 
 import '../style/compareContainer.css'
-import compareData from './compareData.js';
+import compareData from './compareData.js'
 
 class CompareContainer extends Component {
 
@@ -29,6 +29,7 @@ class CompareContainer extends Component {
 			defaultModels : null,
 			compareMode : 'CO2',
 			modalIsOpen: false,
+			isTyping: true,
 			modalContent: {},
 		}
 	}
@@ -37,10 +38,10 @@ class CompareContainer extends Component {
 
 		const urlData = this.props.location.pathname.split('/')
 
-		const selectedModels = JSON.parse(unescape(urlData[4]))
-		console.log('selected Models', selectedModels)
+		const selectedModels = JSON.parse(decodeURIComponent(urlData[4]))
+		// const selectedModels = JSON.parse(this.props.match.params.model_string)
+		console.log('selected models', selectedModels)
 		const selectedModelsIds = Object.keys(selectedModels).map( key => ({ id: key, name: selectedModels[key].modelName }))
-		console.log('selected ModelsIds', selectedModelsIds)
 
 		const defaultModelsRes = await axios.get('/api/defaultModels', {
 			params : {
@@ -65,28 +66,18 @@ class CompareContainer extends Component {
 
 	closeModal = () => this.setState({ modalIsOpen: false })
 
-	openModal = ({ model_id, model_name, typeName, typeId }) => {
+	openConfiguration = ({ modelId, modelName, typeName, typeId }) => {
 		this.setState({ modalIsOpen: true,
-			modalContent: {
-				model_name,
+			model: {
+				name: modelName,
+				id: modelId,
 				type: {
 					name: typeName,
 					id: typeId
 				},
-				selectedCategory: null
 			} })
 	}
 
-	onCategoryClick = ({ category }) => {
-
-		const {
-			modalContent
-		} = this.state
-
-		modalContent.selectedCategory = category
-
-		this.setState({ modalContent })
-	}
 
 	render() {
 
@@ -95,10 +86,29 @@ class CompareContainer extends Component {
 			compareMode,
 			modalIsOpen,
 			modalContent,
+			model
 		} = this.state
 
+		const urlData = this.props.location.pathname.split('/')
+
 		if (!defaultModels)
-			return <Loader message={'Getting configurations...'} />
+			return (
+				<div>
+					<Loader message={'Getting configurations...'} />
+					{/* <Typist
+						onTypingDone={ () => {
+							this.setState({ isTyping: false })
+						}}
+						cursor= {{
+							show: false
+						}}
+					>
+						<Heading className='has-text-centered'> Loading WLTP data of selected models... </Heading>
+					</Typist>
+					{!isTyping &&
+					<Box> <Heading size={6} className='has-text-centered'> What is WLTP data? </Heading> <img src='http://wltpfacts.eu/wp-content/uploads/2017/03/1_What_is_WLTP-3.svg' alt='no img'/></Box>} */}
+				</div>
+			)
 		return (
 			<div className='compare-container-wrapper'>
 				<div className='dashboard'>
@@ -127,22 +137,24 @@ class CompareContainer extends Component {
 							<label for="exampleRadioInline2">Consumption</label>
 						</div>
 					</div>
-					<Sidebar
-						defaultModels={ defaultModels }
-						compareMode={ compareMode }
-						openModal= { this.openModal }
-					/>
 					<BarChart
 						defaultModels={ defaultModels }
 						compareMode={ compareMode }
 					/>
-					{/* {modalIsOpen &&
+					<Dashboard
+						defaultModels={ defaultModels }
+						compareMode={ compareMode }
+						openConfiguration= { this.openConfiguration }
+					/>
+					{modalIsOpen &&
 						<OptionsContainer
-
 							isOpen={modalIsOpen}
-							onRequestClose={this.closeModal}
+							closeModal={ this.closeModal }
+							model={model}
+							countryCode={ urlData[2] }
+
 						/>
-					} */}
+					}
 			</div>
 		</div>)
 	}
