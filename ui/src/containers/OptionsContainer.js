@@ -3,15 +3,19 @@ import axios from 'axios'
 import Redirect from 'react-router-dom/Redirect'
 import Options from '../components/Options'
 import Error from '../components/Error'
-import { Loader, Button, Heading } from 'react-bulma-components/full'
+import { Loader, Button, Heading, Box, Footer } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 
 class OptionsContainer extends Component {
 
-
 	constructor(props) {
 
 		super(props)
+
+		const {
+			selectedOptions
+		} = this.props
+
 		this.state = {
 
 			// initially loading all othe choices
@@ -26,131 +30,185 @@ class OptionsContainer extends Component {
 			choices : null,
 
 			// let the user know if the build they have is configurable or not
-			build : null
+			build : null,
+
+			//skunz added////
+			//all the options a user can choose for a type
+			options: [],
+
+			selectedOptions,
+
+			//indicading if the options are currently beeing loaded
+			loadingOptions: true,
+
+			//represents the selected Category for a type
+			selectedCategory: null
+
 		}
 	}
 
 	addOption = (optionId) => {
 
-		const { configId } = this.props
+		console.log('toDo: add option')
 
-		this.setState({ loadingConfig : true }, () => {
+		// const { configId } = this.props
 
-			axios.get('/api/addOption', {
-				params : {
-					configId,
-					optionId
-				}}).then(res => {
+		// this.setState({ loadingConfig : true }, () => {
 
-					this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
-						this.checkBuild()
-					})
-			})
-		})
-		.catch(err => <Error message={`Could not add option ${optionId}`} />)
+		// 	axios.get('/api/addOption', {
+		// 		params : {
+		// 			configId,
+		// 			optionId
+		// 		}}).then(res => {
+
+		// 			this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
+		// 				this.checkBuild()
+		// 			})
+		// 	})
+		// })
+		// .catch(err => <Error message={`Could not add option ${optionId}`} />)
 	}
 
-	removeOption = (optionId) => {
+	// removeOption = (optionId) => {
 
-		const { configId } = this.props
+	// 	const { configId } = this.props
 
-		this.setState({ loadingConfig : true }, () => {
+	// 	this.setState({ loadingConfig : true }, () => {
 
-			axios.get('/api/removeOption', {
-				params : {
-					configId,
-					optionId
-				}}).then(res => {
+	// 		axios.get('/api/removeOption', {
+	// 			params : {
+	// 				configId,
+	// 				optionId
+	// 			}}).then(res => {
 
-					this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
-						this.checkBuild()
-					})
-				})
-				.catch(err => <Error message={`Could not remove option ${optionid}`} />)
-		})
-	}
+	// 				this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
+	// 					this.checkBuild()
+	// 				})
+	// 			})
+	// 			.catch(err => <Error message={`Could not remove option ${optionId}`} />)
+	// 	})
+	// }
 
-	rebuildConfig = () => {
+	// rebuildConfig = () => {
 
-		const { configId } = this.props
+	// 	const { configId } = this.props
 
-		this.setState({ loadingConfig : true }, () => {
+	// 	this.setState({ loadingConfig : true }, () => {
 
-			axios.get('/api/rebuildConfig', {
-				params : {
-					configId,
-				}}).then(res => {
+	// 		axios.get('/api/rebuildConfig', {
+	// 			params : {
+	// 				configId,
+	// 			}}).then(res => {
 
-					this.setState({ loadingConfig : false }, this.getChoices)
-				})
-				.catch(err => <Error message={`Could not rebuild configuration ${configId}`} />)
-		})
-	}
+	// 				this.setState({ loadingConfig : false }, this.getChoices)
+	// 			})
+	// 			.catch(err => <Error message={`Could not rebuild configuration ${configId}`} />)
+	// 	})
+	// }
 
-	checkBuild = () => {
+	// checkBuild = () => {
 
-		const { configId } = this.props
+	// 	const { configId } = this.props
 
-		axios.get('/api/checkBuild', {
+	// 	axios.get('/api/checkBuild', {
+	// 		params : {
+	// 			configId
+	// 		}}).then(res => {
+
+	// 			this.setState({ build : res.data })
+	// 		})
+	// 		.catch(err => <Error message={`Could not rebuild configuration ${configId}`} />)
+	// }
+
+	// getChoices = () => {
+
+	// 	const { configId } = this.props
+
+	// 	axios.get('/api/choices', {
+	// 		params : { configId }
+	// 	}).then(res => {
+
+	// 		this.setState({
+	// 			loadingChoices : false,
+	// 			options: res.data
+	// 		})
+
+	// 	})
+	// 	.catch(err => <Error message={`Could not get choices for ${configId}`}/>)
+	// }
+
+	getOptions = () => {
+
+		const {
+			countryCode,
+			model
+		} = this.props
+
+		axios.get('/api/options', {
 			params : {
-				conigId
-			}}).then(res => {
-
-				this.setState({ build : res.data })
-			})
-			.catch(err => <Error message={`Could not rebuild configuration ${configId}`} />)
-	}
-
-	getChoices = () => {
-
-		const { configId } = this.props
-
-		axios.get('/api/choices', {
-			params : { configId }
+				countryCode,
+				type_id: model.type.id
+			}
 		}).then(res => {
-
 			this.setState({
-				loadingChoices : false,
-				options: res.data
+				loadingOptions : false,
+				options: res.data.options.data
 			})
-
 		})
-		.catch(err => <Error message={`Could not get choices for ${configId}`}/>)
+		.catch(err => <Error message={`Could not get options for ${model.type.id}`}/>)
 	}
 
 
 	async componentDidMount() {
-		this.getChoices()
+
+		this.getOptions()
+	}
+
+	onCategoryClick = ({ selectedCategory }) => {
+
+		this.setState({ selectedCategory })
 	}
 
 	render() {
 
 		const {
-			options
+			options,
+			loadingOptions,
+			selectedCategory,
 		} = this.state
 
 		const {
-			modalIsOpen,
-			onRequestClose
+			isOpen,
+			onRequestClose,
+			model,
+			closeModal,
+			selectedOptions,
 		} = this.props
 
+
 		const categoriesWithDups = options.map( option => option.category)
-		const uniqueCategories = [...new Set(categoriesWithDups)]
+		const uniqueCategories = [...new Set(categoriesWithDups)].sort()
+
 	return (
 		<Modal
-			isOpen={modalIsOpen}
-			onRequestClose={this.closeModal}
+			isOpen={isOpen}
+			onRequestClose={closeModal}
 		>
-			<Heading size={4} className='has-text-centered'>
-				Configure Your {modalContent.model_name}
-			</Heading>
-				<Heading size={6} className='has-text-centered'>
-					{modalContent.type && modalContent.type.name}
-				</Heading>
-				<div className='tree-wrapper'>
+		<Heading size={4} className='has-text-centered'>
+			Configure Your {model.name}
+		</Heading>
+		<Heading size={6} className='has-text-centered'>
+			{model.type.name}
+		</Heading>
+		{
+			loadingOptions
+				? <Loader message='loading options'/>
+				:
+				<div>
+				<div className='tree-wrapper has-text-centered'>
 					<div className='tree-category-wrapper'>
 						{uniqueCategories.map( (category, i) => {
-							const treeCategoryClassName = category === modalContent.selectedCategory
+							const treeCategoryClassName = category === selectedCategory
 								? 'tree-category selected'
 								: 'tree-catehory'
 							return (
@@ -158,23 +216,32 @@ class OptionsContainer extends Component {
 									className={ treeCategoryClassName }
 									key={i}
 									onClick={() => {
-										this.onCategoryClick({ category })
+										this.onCategoryClick({ selectedCategory: category })
 									}}
-									>{category}
+									><h1>{category}</h1>
 								</Box>
 							)})}
 					</div>
 					<div className='tree-options-wrapper'>
-						{ modelOptions.data.filter( option => option.category == modalContent.selectedCategory)
-							.map( option => {
+						{ options.filter( option => option.category == selectedCategory)
+							.map( (option, i) => {
+								const treeOptionClassName = selectedOptions.indexOf(option.id) === -1
+									? 'tree-option'
+									: 'tree-option selected'
 								return (
-									<Box>
-										{option.description}
+									<Box
+										className={treeOptionClassName}
+										key={i}
+										onClick={ this.addOption }
+										>
+											{option.description}
 									</Box>
 								)
 							} )	}
 					</div>
 				</div>
+			</div>
+			}
 			<Button className='configure-button'>Cancel</Button>
 			<Button className='configure-button'>Restore</Button>
 			<Button className='configure-button'>Rebuild</Button>
