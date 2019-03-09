@@ -13,15 +13,18 @@ const Model = ({
 	const headingClassName = selected
 		? 'headingModel has-text-centered selected'
 		: 'headingModel has-text-centered'
+	const typeNameClassName = selected
+		? 'typeNameBlock selected'
+		: 'typeNameBlock'
     return (
 		<div className='model-wrapper'>
         <Columns.Column>
 			<Card className={modelClassName} onClick={ () => onClick({ id, name }) }>
 				<Card.Content>	
 					<div>
-					<Heading className={headingClassName} size={4}>{ name.toUpperCase() }</Heading>
+					<Heading className={headingClassName} size={5}>{ name.toUpperCase() }</Heading>
 					</div>
-					<div className="typeNameBlock">
+					<div className={typeNameClassName}>
 					{ selected && selected.type && selected.type.name }
 					</div>	
 				</Card.Content>
