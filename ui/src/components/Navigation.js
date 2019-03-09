@@ -3,6 +3,7 @@
 */
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
+import logoWhite from '../res/nav-vw-logo-white.png'
 import logo from '../res/nav-vw-logo.png'
 import { Button } from 'react-bulma-components/full'
 import { Navbar } from 'react-bulma-components/full'
@@ -14,16 +15,23 @@ class Navigation extends Component {
         super(props)
         this.state = {
 			open: true,
-			color: "black"
+			color: "black",
+			colorL: "light",
+			logo: logo,
+			logoW: logoWhite
         }
 	}
     render() {
 		const urlData = this.props.location.pathname.split('/')
+		console.log(urlData);
 		const open = this.state.open;
 		const navColor = this.state.color;
+		const navColorL = this.state.colorL;
+		const logo = this.state.logo;
+		const logoW = this.state.logoW;
         return (
 			<Navbar
-				color={navColor}
+				color={urlData.length <= 2 && urlData[1] == "" ? navColor: navColorL}
 				fixed="top"
 				active={!open}
 				transparent={false}
@@ -31,7 +39,7 @@ class Navigation extends Component {
 				<Navbar.Brand>
 					<Navbar.Item renderAs="a" href="/">
 						<img
-							src={logo}
+							src={urlData.length <= 2 && urlData[1] == "" ? logoWhite: logo}
 							alt="logo"
 							width = "112"
 							height = "31"

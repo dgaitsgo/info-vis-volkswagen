@@ -33,8 +33,11 @@ class App extends Component {
 			nav: null
 		}
 	}
-
+	
 	render() {
+		const urlData = this.props.location.pathname.split('/')
+		
+		const footerClass = urlData.length <= 2 && urlData[1] == "" ? '' : 'changed'
 			return (
 			<div className="main">
 				<Navigation />
@@ -50,7 +53,7 @@ class App extends Component {
 					<Hero.Head renderAs="header" />
 						<Hero.Body />
 						<Hero.Footer>
-							<Footer className='custom-footer'>
+							<Footer className={footerClass}>
 								<Container>
 									<Content className='has-text-centered'>
 											<p>

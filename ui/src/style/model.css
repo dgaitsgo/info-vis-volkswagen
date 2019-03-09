@@ -1,20 +1,19 @@
 .model{
     width:330px;
-    /* height: 200px;  */
+    /* height: 150px;  */
 }
-.headingModel{
-    /* position: absolute; */
-    /* width: 200px; */
-    /* color: rgb(100, 100, 100); */
-    /* font-family: initial; */
-}
-.headingModel:hover{
-    /* color:rgb(100, 100, 100); */
-}
-.headingModel.selected{
-    /* background-color: #3f51b5; */
+/* .headingModel{
+    position: absolute;
+    width: 200px;
+    color: rgb(100, 100, 100);
+} */
+/* .headingModel:hover{
+    color:rgb(100, 100, 100);
+} */
+/* .headingModel.selected{
+    background-color: #3f51b5;
     color: white;
-}
+} */
 .imgIcon{
     margin-top: 50px;
     position: relative;
@@ -31,7 +30,10 @@
     animation-name: fadeInOpacity;
 	animation-iteration-count: 1;
 	animation-timing-function: ease-in;
-	animation-duration: 1s;
+	animation-duration: 0.5s;
+}
+.loaders{
+    flex: 1;
 }
 @keyframes fadeInOpacity {
 	0% {
@@ -42,23 +44,24 @@
 	}
 }
 .typeNameBlock{
-    background-color: #1565c0;
     width: 100%;
     /* height: 68px; */
-    padding: 10px;
+    /* padding: 10px; */
 }
 .model.selected{
-    background-color: #64b5f6;
-    color: white;
-    /* color:black; */
+    border: 2px solid #64b5f6;
 }
 .model:hover{
-    background-color: #64b5f6;
-    /* color:black; */
+    background-color: #bbdefb;
+}
+.type-elem{
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid rgb(168, 168, 168); 
 }
 .type-elem:hover{
-    background-color: #64b5f6;
+    background-color: #bbdefb;
 }
 .type-elem.selected{
-	background-color: #64b5f6;
+	background-color: #bbdefb;
 }

@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Heading, Columns, Box, Card } from "react-bulma-components/full"
 import '../style/model.css'
-import carIcon from '../res/carIcon.png'
-import carIconR from '../res/carIcon-r.png'
 
 const Model = ({
     id, name, onClick, selected, src
@@ -13,8 +11,8 @@ const Model = ({
 		? 'model selected'
 		: 'model'
 	const headingClassName = selected
-		? 'headingModel selected'
-		: 'headingModel'
+		? 'headingModel has-text-centered selected'
+		: 'headingModel has-text-centered'
     return (
 		<div className='model-wrapper'>
         <Columns.Column>
@@ -22,7 +20,6 @@ const Model = ({
 				<Card.Content>	
 					<div>
 					<Heading className={headingClassName} size={4}>{ name.toUpperCase() }</Heading>
-						{/* <img className="imgIcon" src={carIcon} />  */}
 					</div>
 					<div className="typeNameBlock">
 					{ selected && selected.type && selected.type.name }

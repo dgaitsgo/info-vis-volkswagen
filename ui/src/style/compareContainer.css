@@ -1,37 +1,119 @@
 .compare-container-wrapper {
-	/* width: 100%; */
-	margin: 0 auto;
-	display: flex;
-	/* text-align: center; */
+	flex: 1;
+    opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 0.5s;
 }
-
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+.loaders{
+    flex: 1;
+}
+.bar-chart-wrapper{
+	text-align: center;
+	text-align:-webkit-center;
+}
+.button-wrapper{
+    text-align: right;
+}
 .compare-model-name {
 	position: relative;
+	/* width: 800px; */
 }
-
 .icon.ranking {
-	position: absolute;
-	right: 100%;
+	/* position: absolute;
+	right: 100%; */
 	margin-right: 0.5rem;
 }
-
 .icon.ranking.gold > i {
 	color:#FEE101;
 }
-
 .icon.ranking.silver > i {
 	color : #A7A7AD;
 }
-
 .icon.ranking.bronze > i {
 	color : #A77044;
 }
-
 .tree-wrapper{
 	display: flex;
 }
-
-
-/* .selected{
-	background-color: #64b5f6
-} */
+.headerCard{
+	padding: 20px;
+}
+.typeName, .averageNum{
+	padding-left: 30px; 
+}
+.carImg{
+	margin: 20px;
+}
+/* The container */
+.field {
+	position: relative;
+	padding-left: 30px;
+    padding-top: 4px;
+    padding-right: 15px;
+	margin-bottom: 12px;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+  }
+  
+  /* Hide the browser's default radio button */
+  .field input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+  }
+  
+  /* Create a custom radio button */
+  .checkmark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 25px;
+	width: 25px;
+	background-color: #eee;
+	border-radius: 50%;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .field:hover input ~ .checkmark {
+	background-color: #ccc;
+  }
+  
+  /* When the radio button is checked, add a blue background */
+  .field input:checked ~ .checkmark {
+	background-color: #2196F3;
+  }
+  
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+  }
+  
+  /* Show the indicator (dot/circle) when checked */
+  .field input:checked ~ .checkmark:after {
+	display: block;
+  }
+  
+  /* Style the indicator (dot/circle) */
+  .field .checkmark:after {
+	   top: 9px;
+	  left: 9px;
+	  width: 8px;
+	  height: 8px;
+	  border-radius: 50%;
+	  background: white;
+  }

@@ -41,12 +41,10 @@ class ModelsContainer extends Component {
             }
         })
         .then( res => {
-
 			let models = res.data.models.data
 			models.sort( (a, b) => a.name > b.name ? 1 : -1)
 			console.log('my models', models)
 			this.setState({ models, modelsLoading: false })
-
 		}).catch(err => {
 			const to = {
 				pathname : '/server-error',
@@ -59,7 +57,6 @@ class ModelsContainer extends Component {
 
 	onTypeClick = ({modelName, modelId, typeName, typeId}) => {
 		let { selectedModels } = this.state
-
 		if (modelId in selectedModels && selectedModels[modelId].type.id === typeId)
 			delete selectedModels[modelId]
 		else {
@@ -71,7 +68,6 @@ class ModelsContainer extends Component {
 				}
 			}
 		}
-
 		this.setState({ modalIsOpen: false, selectedModels })
 	}
 
@@ -103,7 +99,6 @@ class ModelsContainer extends Component {
 		const {
 			selectedModels
 		} = this.state
-
 		if (!isEmtpty(selectedModels))
 			this.setState({ redirectToCompare: true })
 	}
@@ -133,20 +128,22 @@ class ModelsContainer extends Component {
 
         if (modelsLoading)
 			return (
+				<div className="loaders">
 				<ContentLoader
 					height={190}
-					width={450}
-					speed={2}
+					width={500}
+					speed={1}
 					primaryColor="#f3f3f3"
 					secondaryColor="#ecebeb"
 					>
-					<rect x="80" y="30" rx="0" ry="0" width="90" height="70" />
-					<rect x="180" y="30" rx="0" ry="0" width="90" height="70" />
-					<rect x="280" y="30" rx="0" ry="0" width="90" height="70" />
-					<rect x="80" y="105" rx="0" ry="0" width="90" height="70" />
-					<rect x="180" y="105" rx="0" ry="0" width="90" height="70" />
-					<rect x="280" y="105" rx="0" ry="0" width="90" height="70" />
+					<rect x="80" y="30" rx="0" ry="0" width="90" height="30" />
+					<rect x="180" y="30" rx="0" ry="0" width="90" height="30" />
+					<rect x="280" y="30" rx="0" ry="0" width="90" height="30" />
+					<rect x="80" y="105" rx="0" ry="0" width="90" height="30" />
+					<rect x="180" y="105" rx="0" ry="0" width="90" height="30" />
+					<rect x="280" y="105" rx="0" ry="0" width="90" height="30" />
 				</ContentLoader>
+				</div>
 			)
 
 		const compareButtonClassName = selectedModels
@@ -161,8 +158,8 @@ class ModelsContainer extends Component {
 					Select Models:
 				</Heading>
 				<div className='models-body'>
+					{loadingConfigurations && <ContentLoader />}
 					<Columns className='is-centered'>
-						{loadingConfigurations && <ContentLoader />}
 						{models.map(({ id, name }, i) => {
 							return (
 								<Model key= { id }
@@ -177,7 +174,7 @@ class ModelsContainer extends Component {
 				</div>
 				<br />
 				<div className={compareButtonClassName}>
-					<Button onClick={ this.toModelsCompare }>
+					<Button className="is-medium" disabled={isEmtpty(selectedModels)} onClick={ this.toModelsCompare }>
 						Done
 					</Button>
 				</div>
@@ -195,11 +192,11 @@ class ModelsContainer extends Component {
 							{
 								modalContent.allTypes.map( (type, i) => {
 									const modelTypeClassName = selectedModels[modalContent.model_id] && selectedModels[modalContent.model_id].type.id === type.id
-										? 'type-elem selected'
-										: 'type-elem'
+										? 'type-elem has-text-centered selected'
+										: 'type-elem has-text-centered'
 
 									return (
-										<Box
+										<div
 											className={modelTypeClassName}onClick={
 												() => this.onTypeClick({
 													modelName: modalContent.model_name,
@@ -207,7 +204,7 @@ class ModelsContainer extends Component {
 													typeName: type.name,
 													typeId: type.id})}
 											key={i}> {type.name}
-										</Box>
+										</div>
 									)
 								})
 							}
