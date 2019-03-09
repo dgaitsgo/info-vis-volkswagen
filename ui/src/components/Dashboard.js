@@ -31,7 +31,6 @@ const average = array => array.reduce(sum) / array.length
 // 	return (ass.sort( (a, b) => (a, b) => a < b ? 1 : -1 ))
 // }
 
-
 const rankModels = ({ defaultModels, compareMode }) => {
 
 	const averageModelMap = Object.keys(defaultModels).map( (modelId, i) => {
@@ -115,13 +114,12 @@ class Dashboard extends Component {
 
 		const rankedModels = rankModels(this.props)
 
-
 		return (
 
 			rankedModels.map( (rankedModel, i) => {
 
 				const currModel = defaultModels[rankedModel.modelId]
-				const shouldDisplayRank = rankedModel.average === 0
+				const hasWltpData = rankedModel.average === 0
 					? false
 					: true
 
@@ -130,7 +128,7 @@ class Dashboard extends Component {
 						key={i}
 						ranking={i}
 						model={ currModel }
-						shouldDisplayRank={ shouldDisplayRank }
+						hasWltpData={ hasWltpData }
 						compareMode={ compareMode }
 						openConfiguration={ openConfiguration }
 						getInterpolations={ this.getInterpolations }
