@@ -30,3 +30,15 @@
 		opacity: 1;
 	}
 }
+@media only screen and (max-width : 760px) {
+	.graph-title{
+		top:150px;
+    	left:20px;
+	}
+	.graph-paragraph{
+		width: 100%;
+		padding: 20px;
+		top: 250px;
+		left:0px;
+	}
+}

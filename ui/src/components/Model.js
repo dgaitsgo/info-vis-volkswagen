@@ -10,16 +10,22 @@ const Model = ({
 	const modelClassName = selected
 		? 'model selected'
 		: 'model'
-
+	const headingClassName = selected
+		? 'headingModel has-text-centered selected'
+		: 'headingModel has-text-centered'
     return (
 		<div className='model-wrapper'>
         <Columns.Column>
 			<Card className={modelClassName} onClick={ () => onClick({ id, name }) }>
-				{/* When selected the model faces you -> see audi website */}
-				<Card.Content>
-					<Heading size={4}>{ name }</Heading>
+				<Card.Content>	
+					<div>
+					<Heading className={headingClassName} size={4}>{ name.toUpperCase() }</Heading>
+					</div>
+					<div className="typeNameBlock">
 					{ selected && selected.type && selected.type.name }
+					</div>	
 				</Card.Content>
+							
 			</Card>
 		</Columns.Column>
 		</div>

@@ -88,7 +88,7 @@ class BarChart extends Component{
 					}) }
 					{/* <LabelSeries data={ data[0] }  /> */}
 					{value ? <Hint value={ value } /> : null}
-					</XYPlot>
+				</XYPlot>
 			</div>
 		)
 	}

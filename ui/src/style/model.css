@@ -1,20 +1,24 @@
-.model.selected{
-    background-color: #0058a6;
+.model{
+    width:330px;
+    /* height: 150px;  */
+}
+/* .headingModel{
+    position: absolute;
+    width: 200px;
+    color: rgb(100, 100, 100);
+} */
+/* .headingModel:hover{
+    color:rgb(100, 100, 100);
+} */
+/* .headingModel.selected{
+    background-color: #3f51b5;
     color: white;
+} */
+.imgIcon{
+    margin-top: 50px;
+    position: relative;
+    z-index: 0;
 }
-.model:hover{
-    background-color: #77b0e3;
-    color:white;
-}
-.model-name{
-    width:310px;
-    height: 50px; 
-}
-.model-name{
-    margin-top:18px;
-    margin-left: 10px;
-}
-
 @media only screen and (max-width : 760px) {
     .model-name{
         width:100%; 
@@ -26,7 +30,10 @@
     animation-name: fadeInOpacity;
 	animation-iteration-count: 1;
 	animation-timing-function: ease-in;
-	animation-duration: 1s;
+	animation-duration: 0.5s;
+}
+.loaders{
+    flex: 1;
 }
 @keyframes fadeInOpacity {
 	0% {
@@ -35,4 +42,26 @@
 	100% {
 		opacity: 1;
 	}
+}
+.typeNameBlock{
+    width: 100%;
+    /* height: 68px; */
+    /* padding: 10px; */
+}
+.model.selected{
+    border: 2px solid #64b5f6;
+}
+.model:hover{
+    background-color: #bbdefb;
+}
+.type-elem{
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid rgb(168, 168, 168); 
+}
+.type-elem:hover{
+    background-color: #bbdefb;
+}
+.type-elem.selected{
+	background-color: #bbdefb;
 }

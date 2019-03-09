@@ -53,7 +53,7 @@ class LandingContainer extends Component {
                     position:'fixed',
                     width:300,
                     height:300,
-                    border: '4px solid #000000',
+                    border: '4px solid #023268',
                     borderTopColor: 'transparent',
                     boderRightColor: 'transparent',
                     margin: 'auto',
