@@ -177,8 +177,8 @@ class OptionsContainer extends Component {
 		this.setState({ searchedCategories })
 	}
 
-	getCategories = (array ) => {
-		return array.map( (category, i) => {
+	getCategories = allCategories => {
+		return allCategories.map( (category, i) => {
 			const treeCategoryClassName = category === this.state.selectedCategory
 				? 'tree-category selected'
 				: 'tree-catehory'
@@ -192,6 +192,30 @@ class OptionsContainer extends Component {
 					><h1>{ category }</h1>
 				</Box>
 			)})
+	}
+
+	getOptionsOfCategory = (allCategories) => {
+
+		const {
+			options,
+			selectedCategory,
+		} = this.state
+
+		return options.filter( option => option.category == selectedCategory && allCategories.indexOf(selectedCategory) !== -1)
+			.map( (option, i) => {
+				const treeOptionClassName = this.props.selectedOptions.indexOf(option.id) === -1
+					? 'tree-option'
+					: 'tree-option selected'
+				return (
+					<Box
+						className={treeOptionClassName}
+						key={i}
+						onClick={ this.addOption }
+						>
+							{option.description}
+					</Box>
+				)
+			})
 	}
 
 	render() {
@@ -243,21 +267,8 @@ class OptionsContainer extends Component {
 						{this.getCategories(searchedCategories === null ? uniqueCategories : searchedCategories)}
 					</div>
 					<div className='tree-options-wrapper'>
-						{ options.filter( option => option.category == selectedCategory)
-							.map( (option, i) => {
-								const treeOptionClassName = selectedOptions.indexOf(option.id) === -1
-									? 'tree-option'
-									: 'tree-option selected'
-								return (
-									<Box
-										className={treeOptionClassName}
-										key={i}
-										onClick={ this.addOption }
-										>
-											{option.description}
-									</Box>
-								)
-							} )	}
+						{this.getOptionsOfCategory(searchedCategories === null ? uniqueCategories : searchedCategories)}
+
 					</div>
 				</div>
 			</div>
