@@ -70,8 +70,6 @@ class InfoCard extends Component {
 
 		const wltpData = model.model.wltp[0]
 
-		console.log(wltpData)
-
 		const generalData = hasWltpData ? wltpData.general_data.values[0] : {}
 
 		return (

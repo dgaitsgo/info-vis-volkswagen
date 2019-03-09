@@ -38,6 +38,8 @@ class OptionsContainer extends Component {
 
 			selectedOptions,
 
+			searchedCategories: null,
+
 			//indicading if the options are currently beeing loaded
 			loadingOptions: true,
 
@@ -152,7 +154,7 @@ class OptionsContainer extends Component {
 		}).then(res => {
 			this.setState({
 				loadingOptions : false,
-				options: res.data.options.data
+				options: res.data.options.data,
 			})
 		})
 		.catch(err => <Error message={`Could not get options for ${model.type.id}`}/>)
@@ -169,12 +171,36 @@ class OptionsContainer extends Component {
 		this.setState({ selectedCategory })
 	}
 
+	handleChange = (event, uniqueCategories) => {
+		let searchedCategories = uniqueCategories.filter( category => category.includes(event.target.value.toUpperCase()))
+
+		this.setState({ searchedCategories })
+	}
+
+	getCategories = (array ) => {
+		return array.map( (category, i) => {
+			const treeCategoryClassName = category === this.state.selectedCategory
+				? 'tree-category selected'
+				: 'tree-catehory'
+			return (
+				<Box
+					className={ treeCategoryClassName }
+					key={i}
+					onClick={() => {
+						this.onCategoryClick({ selectedCategory: category })
+					}}
+					><h1>{ category }</h1>
+				</Box>
+			)})
+	}
+
 	render() {
 
 		const {
 			options,
 			loadingOptions,
 			selectedCategory,
+			searchedCategories
 		} = this.state
 
 		const {
@@ -184,7 +210,6 @@ class OptionsContainer extends Component {
 			closeModal,
 			selectedOptions,
 		} = this.props
-
 
 		const categoriesWithDups = options.map( option => option.category)
 		const uniqueCategories = [...new Set(categoriesWithDups)].sort()
@@ -200,27 +225,22 @@ class OptionsContainer extends Component {
 		<Heading size={6} className='has-text-centered'>
 			{model.type.name}
 		</Heading>
+		<input
+			type='text'
+			className='input-category-search'
+			onChange={ event => this.handleChange(event, uniqueCategories)}
+			placeholder='Look for a category'
+		/>
+
 		{
 			loadingOptions
 				? <Loader message='loading options'/>
 				:
 				<div>
 				<div className='tree-wrapper has-text-centered'>
+					{/* <Heading> Categories </Heading> */}
 					<div className='tree-category-wrapper'>
-						{uniqueCategories.map( (category, i) => {
-							const treeCategoryClassName = category === selectedCategory
-								? 'tree-category selected'
-								: 'tree-catehory'
-							return (
-								<Box
-									className={ treeCategoryClassName }
-									key={i}
-									onClick={() => {
-										this.onCategoryClick({ selectedCategory: category })
-									}}
-									><h1>{category}</h1>
-								</Box>
-							)})}
+						{this.getCategories(searchedCategories === null ? uniqueCategories : searchedCategories)}
 					</div>
 					<div className='tree-options-wrapper'>
 						{ options.filter( option => option.category == selectedCategory)
