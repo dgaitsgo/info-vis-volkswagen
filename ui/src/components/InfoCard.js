@@ -93,14 +93,14 @@ class InfoCard extends Component {
 							{	hasWltpData
 									?
 									<div className='has-wltp-data-wrapper'>
-										<div className='compare-model-value'>
-											<span onClick={ this.showMore }> <Icon icon="angle-down" /> View more </span>
-										</div>
 										<div>
 											{`Weight of Car ${generalData.value.toFixed(2)} ${generalData.unit}`}
 										</div>
 										<div>
-											{`Fuel Type`}
+											{`Fuel Type ${wltpData.fuel_types}`}
+										</div>
+										<div className='compare-model-value'>
+											<span onClick={ this.showMore }> <Icon icon="angle-down" /> Detailed Interpolation </span>
 										</div>
 									</div>
 									: <NoData/>
