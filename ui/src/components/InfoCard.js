@@ -60,7 +60,7 @@ class InfoCard extends Component {
 						{ ranking === 0 && shouldDisplayRank && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
 						{ ranking === 1 && shouldDisplayRank && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 						{ ranking === 2 && shouldDisplayRank && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-						{`NO ${ranking + 1}. ${model.model.name.toUpperCase()} `} 
+						{`${ranking + 1}. ${model.model.name.toUpperCase()} `} 
 						</Heading>
 						<p className="typeName">{model.type.name} </p>
 						<p className="averageNum">Average of LOW, MEDIUM, HIGH, and EXTRA_HIGH: {average} </p>
