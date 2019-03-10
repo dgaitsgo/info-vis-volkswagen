@@ -61,7 +61,7 @@ class OptionsContainer extends Component {
 			loadingOptions: true,
 
 			//represents the selected Category for a type
-			selectedCategory: null
+			selectedCategories: []
 
 		}
 	}
@@ -73,23 +73,6 @@ class OptionsContainer extends Component {
 		selectedOptions.push( id )
 
 		this.setState({ selectedOptions })
-
-		// const { configId } = this.props
-
-		// this.setState({ loadingConfig : true }, () => {
-
-		// 	axios.get('/api/addOption', {
-		// 		params : {
-		// 			configId,
-		// 			optionId
-		// 		}}).then(res => {
-
-		// 			this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
-		// 				this.checkBuild()
-		// 			})
-		// 	})
-		// })
-		// .catch(err => <Error message={`Could not add option ${optionId}`} />)
 	}
 
 	removeOption = ({ id }) => {
@@ -99,72 +82,7 @@ class OptionsContainer extends Component {
 		} = this.state
 
 		this.setState({ selectedOptions: selectedOptions.filter( optionId => optionId !== id) })
-
-		// const { configId } = this.props
-
-		// this.setState({ loadingConfig : true }, () => {
-
-		// 	axios.get('/api/removeOption', {
-		// 		params : {
-		// 			configId,
-		// 			optionId
-		// 		}}).then(res => {
-
-		// 			this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
-		// 				this.checkBuild()
-		// 			})
-		// 		})
-		// 		.catch(err => <Error message={`Could not remove option ${optionId}`} />)
-		// })
 	}
-
-	// rebuildConfig = () => {
-
-	// 	const { configId } = this.props
-
-	// 	this.setState({ loadingConfig : true }, () => {
-
-	// 		axios.get('/api/rebuildConfig', {
-	// 			params : {
-	// 				configId,
-	// 			}}).then(res => {
-
-	// 				this.setState({ loadingConfig : false }, this.getChoices)
-	// 			})
-	// 			.catch(err => <Error message={`Could not rebuild configuration ${configId}`} />)
-	// 	})
-	// }
-
-	// checkBuild = () => {
-
-	// 	const { configId } = this.props
-
-	// 	axios.get('/api/checkBuild', {
-	// 		params : {
-	// 			configId
-	// 		}}).then(res => {
-
-	// 			this.setState({ build : res.data })
-	// 		})
-	// 		.catch(err => <Error message={`Could not rebuild configuration ${configId}`} />)
-	// }
-
-	// getChoices = () => {
-
-	// 	const { configId } = this.props
-
-	// 	axios.get('/api/choices', {
-	// 		params : { configId }
-	// 	}).then(res => {
-
-	// 		this.setState({
-	// 			loadingChoices : false,
-	// 			options: res.data
-	// 		})
-
-	// 	})
-	// 	.catch(err => <Error message={`Could not get choices for ${configId}`}/>)
-	// }
 
 	getOptions = () => {
 
@@ -204,9 +122,15 @@ class OptionsContainer extends Component {
 		this.getOptions()
 	}
 
-	onCategoryClick = ({ selectedCategory }) => {
+	onCategoryClick = ({ category }) => {
 
-		this.setState({ selectedCategory })
+		const { selectedCategories } = this.state
+
+		console.log(category, selectedCategories)
+
+		if (selectedCategories.includes(category) === -1)
+			this.setState({ selectedCategories: selectedCategories.push(category)})
+
 	}
 
 	handleChange = (event, uniqueCategories) => {
@@ -216,18 +140,26 @@ class OptionsContainer extends Component {
 	}
 
 	getCategories = allCategories => {
+
 		return allCategories.map( (category, i) => {
-			const treeCategoryClassName = category === this.state.selectedCategory
+			const treeCategoryClassName = category === this.state.selectedCategories
 				? 'tree-category selected'
 				: 'tree-category'
 			return (
-				<div
-					className={ treeCategoryClassName }
-					key={i}
-					onClick={() => {
-						this.onCategoryClick({ selectedCategory: category })
-					}}
-					><h1>{ category }</h1>
+				<div>
+					<div
+						className={ treeCategoryClassName }
+						key={i}
+						onClick={() => {
+							this.onCategoryClick({ category })
+						}}
+						><h1>{ category }</h1>
+					</div>
+					{ category === this.state.selectedCategories.length > 0 &&
+						<div className='tree-option-wrapper'>
+							{this.getOptionsOfCategory( allCategories )}
+						</div>
+					}
 				</div>
 			)})
 	}
@@ -236,11 +168,11 @@ class OptionsContainer extends Component {
 
 		const {
 			options,
-			selectedCategory,
+			selectedCategories,
 			selectedOptions
 		} = this.state
 
-		return options.filter( option => option.category == selectedCategory && allCategories.indexOf(selectedCategory) !== -1)
+		return options.filter( option => option.category == selectedCategories && allCategories.indexOf(selectedCategories) !== -1)
 			.map( (option, i) => {
 				const isSelected = selectedOptions.includes(option.id)
 				return (
@@ -262,7 +194,7 @@ class OptionsContainer extends Component {
 		const {
 			options,
 			loadingOptions,
-			selectedCategory,
+			selectedCategories,
 			selectedOptions,
 			searchedCategories
 		} = this.state
@@ -289,6 +221,7 @@ class OptionsContainer extends Component {
 			<Heading size={6} className='has-text-centered'>
 				{model.type.name}
 			</Heading>
+			<img src='https://images.hgmsites.net/med/2019-audi-a4_100656485_m.jpg'/>
 			<input
 				type='text'
 				className='input-category-search'
@@ -309,10 +242,6 @@ class OptionsContainer extends Component {
 					<Columns.Column className='tree-category-wrapper'>
 						<Heading size={6}> Categories </Heading>
 						{this.getCategories(searchedCategories === null ? uniqueCategories : searchedCategories)}
-					</Columns.Column>
-					<Columns.Column className='tree-options-wrapper'>
-						<Heading size={6}> Options </Heading>
-						{this.getOptionsOfCategory(searchedCategories === null ? uniqueCategories : searchedCategories)}
 					</Columns.Column>
 				</Columns>
 			}
