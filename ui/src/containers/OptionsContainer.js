@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Redirect from 'react-router-dom/Redirect'
 import Error from '../components/Error'
-import { Loader, Button, Heading, Box, Footer } from 'react-bulma-components/full'
+import { Loader, Button, Heading, Box, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import '../style/optionsContainer.css'
 
@@ -12,7 +12,7 @@ const Tags = ({ options, selectedOptions, onRemove }) => {
 			{ options.map( ( option, i) => {
 				if (selectedOptions.includes(option.id)){
 					return (
-						<div className='tag' key={i}>
+						<div className='tag description-tag' key={i}>
 							{option.description}
 							<span onClick={ () => onRemove({ id: option.id }) } className='tag-close'><i className="fas fa-times"></i></span>
 						</div>
@@ -187,6 +187,17 @@ class OptionsContainer extends Component {
 		.catch(err => <Error message={`Could not get options for ${model.type.id}`}/>)
 	}
 
+	cancelConfiguration = () => {
+
+	}
+
+	restoreConfiguration = () => {
+
+	}
+
+	applyConfiguration = () => {
+
+	}
 
 	async componentDidMount() {
 
@@ -210,14 +221,14 @@ class OptionsContainer extends Component {
 				? 'tree-category selected'
 				: 'tree-category'
 			return (
-				<Box
+				<div
 					className={ treeCategoryClassName }
 					key={i}
 					onClick={() => {
 						this.onCategoryClick({ selectedCategory: category })
 					}}
 					><h1>{ category }</h1>
-				</Box>
+				</div>
 			)})
 	}
 
@@ -233,7 +244,7 @@ class OptionsContainer extends Component {
 			.map( (option, i) => {
 				const isSelected = selectedOptions.includes(option.id)
 				return (
-					<Box
+					<div
 						className={isSelected ? 'tree-option selected' : 'tree-option'}
 						key={i}
 						onClick={ isSelected
@@ -241,7 +252,7 @@ class OptionsContainer extends Component {
 							: () => this.addOption({ id: option.id, description: option.description }) }
 						>
 							{option.description}
-					</Box>
+					</div>
 				)
 			})
 	}
@@ -271,44 +282,48 @@ class OptionsContainer extends Component {
 			isOpen={isOpen}
 			onRequestClose={closeModal}
 		>
-		<Heading size={4} className='has-text-centered'>
-			Configure Your {model.name}
-		</Heading>
-		<Heading size={6} className='has-text-centered'>
-			{model.type.name}
-		</Heading>
-		<input
-			type='text'
-			className='input-category-search'
-			onChange={ event => this.handleChange(event, uniqueCategories)}
-			placeholder='Look for a category'
-		/>
-		<Tags
-			options={ options }
-			selectedOptions={ selectedOptions }
-			onRemove={ this.removeOption }
-		/>
-
-		{
-			loadingOptions
+		<div className='header-wrapper'>
+			<Heading size={4} className='has-text-centered'>
+				Configure Your {model.name}
+			</Heading>
+			<Heading size={6} className='has-text-centered'>
+				{model.type.name}
+			</Heading>
+			<input
+				type='text'
+				className='input-category-search'
+				onChange={ event => this.handleChange(event, uniqueCategories)}
+				placeholder='Look for a category'
+			/>
+			<Tags
+				options={ options }
+				selectedOptions={ selectedOptions }
+				onRemove={ this.removeOption }
+			/>
+		</div>
+		<div className='options-wrapper'>
+			{loadingOptions
 				? <Loader message='loading options'/>
 				:
-				<div className='tree-wrapper has-text-centered'>
-					{/* <Heading> Categories </Heading> */}
-					<div className='tree-category-wrapper'>
+				<Columns className='tree-wrapper has-text-centered'>
+					<Columns.Column className='tree-category-wrapper'>
+						<Heading size={6}> Categories </Heading>
 						{this.getCategories(searchedCategories === null ? uniqueCategories : searchedCategories)}
-					</div>
-					<div className='tree-options-wrapper'>
+					</Columns.Column>
+					<Columns.Column className='tree-options-wrapper'>
+						<Heading size={6}> Options </Heading>
 						{this.getOptionsOfCategory(searchedCategories === null ? uniqueCategories : searchedCategories)}
-					</div>
-				</div>
+					</Columns.Column>
+				</Columns>
 			}
-			<Button className='configure-button'>Cancel</Button>
-			<Button className='configure-button'>Restore</Button>
-			<Button className='configure-button'>Rebuild</Button>
+		</div>
+		<div className='button-panel'>
+			<Button onClick={ this.cancelConfiguration } className='configure-button'>Cancel</Button>
+			<Button onClick={ this.restoreConfiguration } className='configure-button'>Restore</Button>
+			<Button onClick={ this.applyConfiguration } className='configure-button'>Apply</Button>
+		</div>
 		</Modal>)
 	}
-
 }
 
 export default OptionsContainer

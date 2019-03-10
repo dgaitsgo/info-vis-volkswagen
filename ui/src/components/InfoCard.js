@@ -129,7 +129,7 @@ class InfoCard extends Component {
 											/>: null }
 									</div>
 									<div className='tire-data-wrapper'>
-										<span onClick={ this.setShowMoreTire } className='tire-header'> TireIcon class <Icon icon='angle-down'/></span>
+										<span onClick={ this.setShowMoreTire } className='tire-header'> TireIcon Tire Classification <Icon icon='angle-down'/></span>
 										{ showMoreTire
 											? <ShowMoreTireInformation
 												wltpData={ wltpData }

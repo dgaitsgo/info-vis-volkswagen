@@ -33,10 +33,10 @@ class App extends Component {
 			nav: null
 		}
 	}
-	
+
 	render() {
 		const urlData = this.props.location.pathname.split('/')
-		
+
 		const footerClass = urlData.length <= 2 && urlData[1] == "" ? '' : 'changed'
 			return (
 			<div className="main">
@@ -58,12 +58,12 @@ class App extends Component {
 									<Content className='has-text-centered'>
 											<p>
 												Developed by
-												<a href="#"> David Gaitsgory</a>,
-												<a href="#"> Sebastian Kunz</a> and
-												<a href="#"> Jessica Liu</a>.
-												The source code is <a href='https://bit.ly/1JWRKa9'>MIT</a> licensed.
+												<a href="#" target="_blank"> David Gaitsgory</a>,
+												<a href="https://github.com/SebastianKunz" target="_blank"> Sebastian Kunz</a> and
+												<a href="#" target="_blank"> Jessica Liu</a>.
+												The source code is <a href='https://bit.ly/1JWRKa9' target="_blank">MIT</a> licensed.
 												 The website's content is{' '}
-												<a href='https://bit.ly/OIgYRT'>CC BY NC SA 4.0</a> licensed.
+												<a href='https://bit.ly/OIgYRT' target="_blank">CC BY NC SA 4.0</a> licensed.
 											</p>
 									</Content>
 								</Container>

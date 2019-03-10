@@ -201,8 +201,10 @@ class ModelsContainer extends Component {
 													modelName: modalContent.model_name,
 													modelId: modalContent.model_id,
 													typeName: type.name,
-													typeId: type.id})}
-											key={i}> {type.name}
+													typeId: type.id})
+												}
+												key={i}>
+											{type.name}
 										</div>
 									)
 								})
