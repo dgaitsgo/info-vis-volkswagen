@@ -20,15 +20,15 @@ const Model = ({
 		<div className='model-wrapper'>
         <Columns.Column>
 			<Card className={modelClassName} onClick={ () => onClick({ id, name }) }>
-				<Card.Content>	
+				<Card.Content>
 					<div>
-					<Heading className={headingClassName} size={5}>{ name.toUpperCase() }</Heading>
+					<Heading className={headingClassName} size={5}>{ name }</Heading>
 					</div>
 					<div className={typeNameClassName}>
 					{ selected && selected.type && selected.type.name }
-					</div>	
+					</div>
 				</Card.Content>
-							
+
 			</Card>
 		</Columns.Column>
 		</div>

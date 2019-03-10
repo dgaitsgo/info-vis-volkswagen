@@ -5,6 +5,7 @@ import Options from '../components/Options'
 import Error from '../components/Error'
 import { Loader, Button, Heading, Box, Footer } from 'react-bulma-components/full'
 import Modal from 'react-modal'
+// import { WithContext as ReactTags } from 'react-tag-input'
 
 class OptionsContainer extends Component {
 
@@ -255,7 +256,6 @@ class OptionsContainer extends Component {
 			onChange={ event => this.handleChange(event, uniqueCategories)}
 			placeholder='Look for a category'
 		/>
-
 		{
 			loadingOptions
 				? <Loader message='loading options'/>

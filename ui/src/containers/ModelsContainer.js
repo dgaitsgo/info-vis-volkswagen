@@ -32,7 +32,6 @@ class ModelsContainer extends Component {
     componentDidMount() {
 
 		const urlData = this.props.location.pathname.split('/')
-		// console.log(urlData)
 
         axios.get('/api/models', {
             params : {
@@ -43,7 +42,6 @@ class ModelsContainer extends Component {
         .then( res => {
 			let models = res.data.models.data
 			models.sort( (a, b) => a.name > b.name ? 1 : -1)
-			console.log('my models', models)
 			this.setState({ models, modelsLoading: false })
 		}).catch(err => {
 			const to = {
@@ -78,6 +76,7 @@ class ModelsContainer extends Component {
 				model_id: id
 			}
 		}).then( res => {
+
 			let allTypes = res.data.modelTypes.data
 			allTypes.sort( (a, b) => a.name > b.name ? 1 : -1)
 			this.setState({ modalIsOpen: true,
@@ -129,20 +128,20 @@ class ModelsContainer extends Component {
         if (modelsLoading)
 			return (
 				<div className="loaders">
-				<ContentLoader
-					height={190}
-					width={500}
-					speed={1}
-					primaryColor="#f3f3f3"
-					secondaryColor="#ecebeb"
+					<ContentLoader
+						height={190}
+						width={500}
+						speed={1}
+						primaryColor="#f3f3f3"
+						secondaryColor="#ecebeb"
 					>
-					<rect x="80" y="30" rx="0" ry="0" width="90" height="30" />
-					<rect x="180" y="30" rx="0" ry="0" width="90" height="30" />
-					<rect x="280" y="30" rx="0" ry="0" width="90" height="30" />
-					<rect x="80" y="105" rx="0" ry="0" width="90" height="30" />
-					<rect x="180" y="105" rx="0" ry="0" width="90" height="30" />
-					<rect x="280" y="105" rx="0" ry="0" width="90" height="30" />
-				</ContentLoader>
+						<rect x="80" y="30" rx="0" ry="0" width="90" height="30" />
+						<rect x="180" y="30" rx="0" ry="0" width="90" height="30" />
+						<rect x="280" y="30" rx="0" ry="0" width="90" height="30" />
+						<rect x="80" y="105" rx="0" ry="0" width="90" height="30" />
+						<rect x="180" y="105" rx="0" ry="0" width="90" height="30" />
+						<rect x="280" y="105" rx="0" ry="0" width="90" height="30" />
+					</ContentLoader>
 				</div>
 			)
 
@@ -155,7 +154,7 @@ class ModelsContainer extends Component {
 			<Section>
 			<Container>
 				<Heading size={4} className='models-header has-text-centered'>
-					Select Models:
+					Select Models
 				</Heading>
 				<div className='models-body'>
 					{loadingConfigurations && <ContentLoader />}

@@ -84,36 +84,36 @@ class InfoCard extends Component {
 			interpolation.value_type === compareMode ? compareUnit = interpolation.unit : 0)
 
 		return (
-				<Card className='compare-model-wrapper'>
+				<Card className='card-wrapper'>
 					<Card.Header>
 						<div className='header-wrapper'>
-							<div className="header-card">
+							<div className='header-card'>
 								<h1>
 									{ ranking === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
 									{ ranking === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 									{ ranking === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-									{`${ranking + 1}.`} { model.model.name.toUpperCase() }
+									{`${ranking + 1}.`} { model.model.name }
 								</h1>
 								<p className='average-wrapper'> {`${average} ${compareUnit}` }</p>
 							</div>
-							<p className="typeName">{model.type.name}</p>
+							<p className='typeName'>{model.type.name}</p>
 						</div>
 					</Card.Header>
 					<Card.Content>
-						<Columns className="car-img" >
+						<Columns className='car-img' >
 							<Columns.Column>
 								<Image style={{width: 256}} src={carThumbnail}/>
 							</Columns.Column>
 							<Columns.Column>
 								<div className='data-wrapper'>
 									<div>
-										<i class="fas fa-weight-hanging"></i> {generalData.value.toFixed(2)} {generalData.unit}
+										<i class='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}
 									</div>
 									<div>
-										<i class="fas fa-gas-pump"></i> {wltpData.fuel_types}
+										<i class='fas fa-gas-pump'></i> {wltpData.fuel_types}
 									</div>
 									<div className='compare-model-value'>
-										<span onClick={ this.setShowMoreEmissions }> Detailed emissions<Icon icon="angle-down"/> </span>
+										<span onClick={ this.setShowMoreEmissions }> Detailed emissions<Icon icon='angle-down'/> </span>
 										{ showMoreEmissions
 											? <ShowMoreInformation
 												key={ranking}
@@ -121,7 +121,7 @@ class InfoCard extends Component {
 											/>: null }
 									</div>
 									<div>
-										<span onClick={ this.setShowMoreConsumption }><i class="fas fa-tint"/> Detailed consumption<Icon icon="angle-down"/></span>
+										<span onClick={ this.setShowMoreConsumption }><i class='fas fa-tint'/> Detailed consumption<Icon icon='angle-down'/></span>
 										{ showMoreConsumption
 											? <ShowMoreInformation
 												key={ranking}
@@ -129,7 +129,7 @@ class InfoCard extends Component {
 											/>: null }
 									</div>
 									<div className='tire-data-wrapper'>
-										<span onClick={ this.setShowMoreTire } className='tire-header'> TireIcon class <Icon icon="angle-down"/></span>
+										<span onClick={ this.setShowMoreTire } className='tire-header'> TireIcon class <Icon icon='angle-down'/></span>
 										{ showMoreTire
 											? <ShowMoreTireInformation
 												wltpData={ wltpData }

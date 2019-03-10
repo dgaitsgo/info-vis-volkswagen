@@ -75,7 +75,7 @@ class BrandsContainer extends Component {
 				<Section>
 					<Container>
 						<Heading className='brands-headline has-text-centered' size={4}>
-							Choose A Brand:
+							Choose A Brand
 						</Heading>
 						<Columns className="is-centered">
 							{brands.map(({ brand_id, name }, i) => {

@@ -9,7 +9,7 @@ const NoData = () => {
 			<font color='#d50000'> No Data Found </font>
 			<i data-tip='Please be advised, that currently not for all models within OKAPI,
 				WLTP values can be provided.'
-			class="fas fa-info-circle"/>
+			class='fas fa-info-circle'/>
 			<ReactTooltip
 				place='top'
 				type='dark'
@@ -22,15 +22,15 @@ const NoData = () => {
 const MissingCard = ({ model, openConfiguration}) => {
 
 	return (
-		<Card className='missing-card-wrapper'>
+		<Card className='card-wrapper missing-wrapper'>
 			<Card.Header>
 				<div className='header-wrapper'>
-					<div className="header-card">
+					<div className='header-card'>
 						<h1>
-							{ model.model.name.toUpperCase() }
+							{ model.model.name }
 						</h1>
 					</div>
-					<p className="typeName">{model.type.name}</p>
+					<p className='typeName'>{model.type.name}</p>
 				</div>
 			</Card.Header>
 			<Card.Content>
