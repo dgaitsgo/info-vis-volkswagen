@@ -4,7 +4,7 @@ import axios from 'axios'
 import Modal from 'react-modal'
 import { Loader, Button, Icon, Columns, Section, Container, Heading, Box } from 'react-bulma-components/full'
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs'
-import "react-tabs/style/react-tabs.css"
+import 'react-tabs/style/react-tabs.css'
 
 import Dashboard from '../components/Dashboard'
 import BarChart from '../components/BarChart'
@@ -62,7 +62,9 @@ class CompareContainer extends Component {
 	}
 
 	setCompareMode = compareMode => this.setState({ compareMode })
+
 	closeModal = () => this.setState({ modalIsOpen: false })
+
 	openConfiguration = ({ modelId, modelName, typeName, typeId }) => {
 		this.setState({ modalIsOpen: true,
 			model: {
@@ -89,7 +91,7 @@ class CompareContainer extends Component {
 
 		if (!defaultModels)
 			return (
-					<div className="loaders">
+					<div className='loaders'>
 						<Loader
 						style={{
 							position:'fixed',
@@ -114,35 +116,31 @@ class CompareContainer extends Component {
 					<Heading size={4} className='has-text-centered'>
 						Model Comparison
 					</Heading>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-					<br />
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+						<br />
 					<Heading size={5} className='has-text-centered'>
 						Bar Chart Title Goes Here
 					</Heading>
 					<div className='button-wrapper'>
 						<div>
 							<span><strong>Sort by: </strong></span>
-							<label for="exampleRadioInline1" className="field">CO<sub>2</sub> Emissions
+							<label className='field'>CO<sub>2</sub> Emissions
 								<input
 									onClick={() => this.setCompareMode('CO2')}
-									className={'is-checkradio'}
-									id="exampleRadioInline1"
-									type="radio"
-									name="exampleRadioInline"
+									className='is-checkradio'
+									type='radio'
 									checked={compareMode === 'CO2'}
 								/>
-								<span class="checkmark"></span>
+								<span className='checkmark'></span>
 							</label>
-							<label for="exampleRadioInline2" className="field">Fuel Consumption
+							<label className='field'>Fuel Consumption
 								<input
 									onClick={() => this.setCompareMode('CONSUMPTION')}
-									className="is-checkradio"
-									id="exampleRadioInline2"
-									type="radio"
-									name="exampleRadioInline"
-									checked={compareMode ==='CONSUMPTION'} />
-									<span class="checkmark"></span>
+									className='is-checkradio'
+									type='radio'
+									checked={compareMode === 'CONSUMPTION'} />
+									<span className='checkmark'></span>
 							</label>
 						</div>
 					</div>
@@ -155,8 +153,8 @@ class CompareContainer extends Component {
 					<Heading size={4} className='has-text-centered'>
 						Model Ranking
 					</Heading>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-					<br />
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+						<br />
 					<Dashboard
 						defaultModels={ defaultModels }
 						compareMode={ compareMode }
@@ -169,7 +167,7 @@ class CompareContainer extends Component {
 							closeModal={ this.closeModal }
 							model={model}
 							countryCode={ urlData[2] }
-							selectedOptions={ defaultModels[model.id].model.defaultOptions.map( option => option.id) }
+							selectedOptions={ defaultModels[model.id].model.defaultOptions.map( option => option) }
 						/>}
 					</Container>
 				</Section>

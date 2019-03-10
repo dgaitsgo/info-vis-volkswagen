@@ -5,7 +5,21 @@ import Options from '../components/Options'
 import Error from '../components/Error'
 import { Loader, Button, Heading, Box, Footer } from 'react-bulma-components/full'
 import Modal from 'react-modal'
-// import { WithContext as ReactTags } from 'react-tag-input'
+
+const Tags = ({ selectedOptions, onRemove }) => {
+	return (
+		<div className='tags-wrapper'>
+			{ selectedOptions.map( ( option, i) => {
+				return (
+					<div className='tag' key={i}>
+						{option.id}
+						<span onClick={ () => onRemove({ id: option.id }) } className='tag-close'><i className="fas fa-times"></i></span>
+					</div>
+				)
+			})}
+		</div>
+	)
+}
 
 class OptionsContainer extends Component {
 
@@ -50,9 +64,14 @@ class OptionsContainer extends Component {
 		}
 	}
 
-	addOption = (optionId) => {
+	addOption = ({ id, description }) => {
 
 		console.log('toDo: add option')
+
+		let selectedOptions = this.state.selectedOptions
+		selectedOptions.push({ id, description })
+
+		this.setState({ selectedOptions })
 
 		// const { configId } = this.props
 
@@ -72,25 +91,31 @@ class OptionsContainer extends Component {
 		// .catch(err => <Error message={`Could not add option ${optionId}`} />)
 	}
 
-	// removeOption = (optionId) => {
+	removeOption = ({ id }) => {
 
-	// 	const { configId } = this.props
+		const {
+			selectedOptions
+		} = this.state
 
-	// 	this.setState({ loadingConfig : true }, () => {
+		this.setState({ selectedOptions: selectedOptions.filter( option => option.id !== id) })
 
-	// 		axios.get('/api/removeOption', {
-	// 			params : {
-	// 				configId,
-	// 				optionId
-	// 			}}).then(res => {
+		// const { configId } = this.props
 
-	// 				this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
-	// 					this.checkBuild()
-	// 				})
-	// 			})
-	// 			.catch(err => <Error message={`Could not remove option ${optionId}`} />)
-	// 	})
-	// }
+		// this.setState({ loadingConfig : true }, () => {
+
+		// 	axios.get('/api/removeOption', {
+		// 		params : {
+		// 			configId,
+		// 			optionId
+		// 		}}).then(res => {
+
+		// 			this.setState({ loadingConfig : false, loadingCheckBuild : true }, () => {
+		// 				this.checkBuild()
+		// 			})
+		// 		})
+		// 		.catch(err => <Error message={`Could not remove option ${optionId}`} />)
+		// })
+	}
 
 	// rebuildConfig = () => {
 
@@ -144,7 +169,8 @@ class OptionsContainer extends Component {
 
 		const {
 			countryCode,
-			model
+			model,
+			selectedOptions
 		} = this.props
 
 		axios.get('/api/options', {
@@ -156,6 +182,7 @@ class OptionsContainer extends Component {
 			this.setState({
 				loadingOptions : false,
 				options: res.data.options.data,
+				selectedOptions: selectedOptions
 			})
 		})
 		.catch(err => <Error message={`Could not get options for ${model.type.id}`}/>)
@@ -211,7 +238,7 @@ class OptionsContainer extends Component {
 					<Box
 						className={treeOptionClassName}
 						key={i}
-						onClick={ this.addOption }
+						onClick={ () => this.addOption({ id: option.id, description: option.description }) }
 						>
 							{option.description}
 					</Box>
@@ -225,6 +252,7 @@ class OptionsContainer extends Component {
 			options,
 			loadingOptions,
 			selectedCategory,
+			selectedOptions,
 			searchedCategories
 		} = this.state
 
@@ -233,7 +261,6 @@ class OptionsContainer extends Component {
 			onRequestClose,
 			model,
 			closeModal,
-			selectedOptions,
 		} = this.props
 
 		const categoriesWithDups = options.map( option => option.category)
@@ -256,11 +283,15 @@ class OptionsContainer extends Component {
 			onChange={ event => this.handleChange(event, uniqueCategories)}
 			placeholder='Look for a category'
 		/>
+		<Tags
+			selectedOptions={ selectedOptions }
+			onRemove={ this.removeOption }
+		/>
+
 		{
 			loadingOptions
 				? <Loader message='loading options'/>
 				:
-				<div>
 				<div className='tree-wrapper has-text-centered'>
 					{/* <Heading> Categories </Heading> */}
 					<div className='tree-category-wrapper'>
@@ -268,10 +299,8 @@ class OptionsContainer extends Component {
 					</div>
 					<div className='tree-options-wrapper'>
 						{this.getOptionsOfCategory(searchedCategories === null ? uniqueCategories : searchedCategories)}
-
 					</div>
 				</div>
-			</div>
 			}
 			<Button className='configure-button'>Cancel</Button>
 			<Button className='configure-button'>Restore</Button>
