@@ -22,17 +22,12 @@ class BarChart extends Component{
 		}
 	}
 	getInterpolations = ({ defaultModels, phase, compareMode}) => {
-
-		return Object.keys(defaultModels).map( (modelId, i) => {
-
+		return Object.keys(defaultModels).map((modelId, i) => {
 			const model = defaultModels[modelId]
-
 			if (model.model.wltp.length) {
-
 				const currentInterps = model.model.wltp[0].interpolations
 					.filter(interp => interp.value_type === compareMode && interp.phase == phase)
 					.map( interp => interp.value)
-
 					return ({
 						value: currentInterps,
 						name: model.model.name
@@ -57,7 +52,6 @@ class BarChart extends Component{
 	}
 
 	render() {
-
 		const {
 			defaultModels,
 			compareMode,
@@ -66,9 +60,7 @@ class BarChart extends Component{
 
 		const dataSets = phases.map(phase => this.getInterpolations( { defaultModels, compareMode, phase: phase.key}))
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
-
 		const { value } = this.state
-
 		return (
 			<div className='bar-chart-wrapper'>
 				<XYPlot xType="ordinal" width={800} height={300} xDistance={800}>
@@ -88,7 +80,7 @@ class BarChart extends Component{
 					}) }
 					{/* <LabelSeries data={ data[0] }  /> */}
 					{value ? <Hint value={ value } /> : null}
-					</XYPlot>
+				</XYPlot>
 			</div>
 		)
 	}

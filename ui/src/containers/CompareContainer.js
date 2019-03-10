@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 
 import Modal from 'react-modal'
-import { Loader, Button, Icon, Columns, Section, Heading, Box } from 'react-bulma-components/full'
+import { Loader, Button, Icon, Columns, Section, Container, Heading, Box } from 'react-bulma-components/full'
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs'
 import "react-tabs/style/react-tabs.css"
 
@@ -21,9 +21,7 @@ import compareData from './compareData.js'
 class CompareContainer extends Component {
 
     constructor(props) {
-
 		super(props)
-
         this.state = {
 			defaultModels : null,
 			compareMode : 'CO2',
@@ -61,14 +59,11 @@ class CompareContainer extends Component {
 				model,
 				type : selectedModels[model.model_id].type
 		})
-
 		this.setState({ defaultModels })
 	}
 
 	setCompareMode = compareMode => this.setState({ compareMode })
-
 	closeModal = () => this.setState({ modalIsOpen: false })
-
 	openConfiguration = ({ modelId, modelName, typeName, typeId }) => {
 		this.setState({ modalIsOpen: true,
 			model: {
@@ -95,36 +90,61 @@ class CompareContainer extends Component {
 
 		if (!defaultModels)
 			return (
-				<div>
-					<Loader message={'Getting configurations...'} />
-				</div>
+					<div className="loaders">
+						<Loader 
+						style={{
+							position:'fixed',
+							width:300,
+							height:300,
+							border: '4px solid #023268',
+							borderTopColor: 'transparent',
+							boderRightColor: 'transparent',
+							margin: 'auto',
+							top: '-50px',
+							left: 0,
+							bottom: 0,
+							right: 0
+						}}
+						message={'Getting configurations...'} />
+					</div>
 			)
 		return (
 			<div className='compare-container-wrapper'>
-				<div className='dashboard'>
+				<Section>
+					<Container>
 					<Heading size={4} className='has-text-centered'>
 						Model Comparison
 					</Heading>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+					<br />
+					<Heading size={5} className='has-text-centered'>
+						Bar Chart Title Goes Here
+					</Heading>
 					<div className='button-wrapper'>
-						<div className="field">
-							<span>Sort by: </span>
-							<input
-								onClick={() => this.setCompareMode('CO2')}
-								className={'is-checkradio'}
-								id="exampleRadioInline1"
-								type="radio"
-								name="exampleRadioInline"
-								checked={compareMode === 'CO2'}
-							/>
-							<label for="exampleRadioInline1">CO<sub>2</sub></label>
-							<input
-								onClick={() => this.setCompareMode('CONSUMPTION')}
-								className="is-checkradio"
-								id="exampleRadioInline2"
-								type="radio"
-								name="exampleRadioInline"
-								checked={compareMode ==='CONSUMPTION'} />
-							<label for="exampleRadioInline2">Consumption</label>
+						<div>
+							<span><strong>Sort by: </strong></span>
+							<label for="exampleRadioInline1" className="field">CO<sub>2</sub> Emissions
+								<input
+									onClick={() => this.setCompareMode('CO2')}
+									className={'is-checkradio'}
+									id="exampleRadioInline1"
+									type="radio"
+									name="exampleRadioInline"
+									checked={compareMode === 'CO2'}
+								/>
+								<span class="checkmark"></span>
+							</label>
+							<label for="exampleRadioInline2" className="field">Fuel Consumption
+								<input
+									onClick={() => this.setCompareMode('CONSUMPTION')}
+									className="is-checkradio"
+									id="exampleRadioInline2"
+									type="radio"
+									name="exampleRadioInline"
+									checked={compareMode ==='CONSUMPTION'} />
+									<span class="checkmark"></span>
+							</label>
 						</div>
 					</div>
 					<BarChart
@@ -133,6 +153,11 @@ class CompareContainer extends Component {
 						phases={ this.phases }
 					/>
 					<hr class='divider'/>
+					<Heading size={4} className='has-text-centered'>
+						Model Ranking
+					</Heading>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+					<br />
 					<Dashboard
 						defaultModels={ defaultModels }
 						compareMode={ compareMode }
@@ -147,7 +172,8 @@ class CompareContainer extends Component {
 							countryCode={ urlData[2] }
 							selectedOptions={ defaultModels[model.id].model.defaultOptions.map( option => option.id) }
 						/>}
-				</div>
+					</Container>
+				</Section>
 			</div>
 		)
 	}

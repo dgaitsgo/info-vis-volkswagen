@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.15",
+    "@fortawesome/free-solid-svg-icons": "^5.7.2",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "@kennethormandy/react-flipcard": "^0.4.3",
     "@material/react-list": "^0.10.0",
     "axios": "^0.18.0",
@@ -33,12 +36,15 @@
     "react-force-graph-3d": "^1.6.1",
     "react-list": "^0.8.11",
     "react-modal": "^3.8.1",
+    "react-popup": "^0.10.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
     "react-tabs": "^3.0.0",
+    "react-tooltip": "^3.10.0",
     "react-typist": "^2.0.5",
     "react-vis": "^1.11.6",
     "reactstrap": "^7.1.0",
+    "rsuite": "^3.7.8",
     "semantic-ui-react": "^0.85.0"
   },
   "scripts": {
