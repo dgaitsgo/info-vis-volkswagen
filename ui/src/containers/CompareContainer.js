@@ -16,7 +16,6 @@ import OptionsContainer from './OptionsContainer'
 import _ from 'lodash'
 
 import '../style/compareContainer.css'
-import compareData from './compareData.js'
 
 class CompareContainer extends Component {
 
@@ -91,7 +90,7 @@ class CompareContainer extends Component {
 		if (!defaultModels)
 			return (
 					<div className="loaders">
-						<Loader 
+						<Loader
 						style={{
 							position:'fixed',
 							width:300,

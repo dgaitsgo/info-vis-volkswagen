@@ -1,6 +1,3 @@
-/*
- * Navigation Component by Sebastian Kunz
-*/
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import logoWhite from '../res/nav-vw-logo-white.png'
@@ -23,7 +20,6 @@ class Navigation extends Component {
 	}
     render() {
 		const urlData = this.props.location.pathname.split('/')
-		console.log(urlData);
 		const open = this.state.open;
 		const navColor = this.state.color;
 		const navColorL = this.state.colorL;

@@ -3,33 +3,12 @@ import _ from 'lodash'
 import { Box, Button, Icon, Card, Heading, Media, Image } from 'react-bulma-components/full'
 
 import '../style/dashboard.css'
-import InfoCard from './InfoCard';
+import InfoCard from './InfoCard'
+import MissingCard from '../components/MissingCard'
 
 const sum = (accumulator, currentValue) => accumulator + currentValue
 
 const average = array => array.reduce(sum) / array.length
-
-
-// const rankModels = ({ defaultModels, compareMode }) => {
-
-// 	const interpData = getInterpolation({ defaultModels, compareMode })
-
-// 	console.log('interpData', interpData)
-
-// 	const arr = interpData.map( (currentInterps) => currentInterps.interpolation)
-
-// 	console.log('arr', arr)
-
-// 	const averageModelMap = arr.map( (item) => item.map( (item2) => item2.value ))
-
-// 	const ass = averageModelMap.map( (item) => average(item))
-
-// 	console.log('avgMap', averageModelMap)
-
-// 	console.log('ass', ass)
-
-// 	return (ass.sort( (a, b) => (a, b) => a < b ? 1 : -1 ))
-// }
 
 const rankModels = ({ defaultModels, compareMode }) => {
 
@@ -52,11 +31,11 @@ const rankModels = ({ defaultModels, compareMode }) => {
 
 		return ({
 			modelId,
-			average: 0
+			average: null
 		})
-	}).filter(val => val)
+	})
 
-	return (_.sortBy(averageModelMap, elem => elem.average).reverse())
+	return (_.sortBy(averageModelMap, elem => elem.average))
 }
 
 class Dashboard extends Component {
@@ -67,8 +46,6 @@ class Dashboard extends Component {
 
 		this.state = {
 
-			//when true displays more information about this config
-			shouldShowMore: false,
 		}
 	}
 
@@ -101,9 +78,6 @@ class Dashboard extends Component {
 	}
 
 	render () {
-		const {
-			shouldShowMore,
-		} = this.state
 
 		const {
 			defaultModels,
@@ -115,28 +89,42 @@ class Dashboard extends Component {
 		const rankedModels = rankModels(this.props)
 
 		return (
+			<div className='dashboard-wrapper'>
+			{
+				rankedModels.map( (rankedModel, i) => {
 
-			rankedModels.map( (rankedModel, i) => {
+					const currModel = defaultModels[rankedModel.modelId]
+					const hasWltpData = rankedModel.average !== null
+					const avg = hasWltpData ? rankedModel.average.toFixed(2) : null
 
-				const currModel = defaultModels[rankedModel.modelId]
-				const hasWltpData = rankedModel.average === 0
-					? false
-					: true
-
-				return (
-					<InfoCard
-						key={i}
-						ranking={i}
-						model={ currModel }
-						hasWltpData={ hasWltpData }
-						compareMode={ compareMode }
-						openConfiguration={ openConfiguration }
-						getInterpolations={ this.getInterpolations }
-						phases={ phases }
-						average={ rankedModel.average.toFixed(2) }
-					/>
-				)
-			})
+					if (hasWltpData) {
+						return (
+							<InfoCard
+								key={i}
+								ranking={i}
+								model={ currModel }
+								compareMode={ compareMode }
+								compareUnit={ null }
+								openConfiguration={ openConfiguration }
+								getInterpolations={ this.getInterpolations }
+								phases={ phases }
+								average={ avg }
+							/>
+						)
+					}
+					else {
+						return (
+							<MissingCard
+								key={i}
+								model={ currModel }
+								hasWltpData={ hasWltpData }
+								openConfiguration={ openConfiguration }
+							/>
+						)
+					}
+				})
+			}
+			</div>
 		)
 	}
 }
