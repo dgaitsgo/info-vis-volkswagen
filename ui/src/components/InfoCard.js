@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import { Box, Button, Icon, Card, Heading, Media, Image } from 'react-bulma-components/full'
+import { Box, Button, Icon, Card, Heading, Media, Image, Columns } from 'react-bulma-components/full'
 
 import '../style/dashboard.css'
 import '../style/infocard.css'
+import { compare } from 'ltgt';
+import carTumbNail from '../res/carIcon.png'
 
 import ReactTooltip from 'react-tooltip'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -87,22 +89,23 @@ class InfoCard extends Component {
 
 		return (
 				<Card className='compare-model-wrapper'>
-
+    
 					<Card.Header>
-						{ ranking === 0 && hasWltpData && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
-						{ ranking === 1 && hasWltpData && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
-						{ ranking === 2 && hasWltpData && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-						<Heading size={4}> { hasWltpData && `${ranking + 1}.`} { model.model.name } </Heading>
-						<Heading size={6}> {model.type.name} </Heading>
-						<Heading size={8}> {average} </Heading>
+            <div className="headerCard">
+						  { ranking === 0 && hasWltpData && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
+						  { ranking === 1 && hasWltpData && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
+					  	{ ranking === 2 && hasWltpData && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
+						  <Heading size={4}> { hasWltpData && `${ranking + 1}.`} { model.model.name.toUpperCase() } </Heading>
+						  <p className="typeName">{model.type.name} </p>
+						  <p className="averageNum">Average of LOW, MEDIUM, HIGH, and EXTRA_HIGH: {average} </p>
+            </div>
 					</Card.Header>
 					<Card.Content>
-						<Media>
-							<Media.Item>
-							</Media.Item>
-						</Media>
-
-						<div>
+            <Columns className="carImg" >
+							<Columns.Column>
+							<Image style={{width: 256}} src={carTumbNail}/>
+							</Columns.Column>
+						<Columns.Column>
 							{	hasWltpData
 									?
 									<div className='has-wltp-data-wrapper'>
@@ -141,12 +144,10 @@ class InfoCard extends Component {
 													</div>
 												)
 											})}
-										</div>
-									</div>
+										</Columns.Column>
 									: <NoData/>
 							}
-						</div>
-						<Button
+							<Button
 							className='configure-button'
 							onClick= { () =>
 								openConfiguration({
@@ -156,6 +157,9 @@ class InfoCard extends Component {
 									typeId: model.type.id
 								})}
 						> configure </Button>
+							</Columns.Column>
+						</Columns>
+							
 					</Card.Content>
 				</Card>
 		)
