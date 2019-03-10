@@ -8,7 +8,6 @@ import 'react-tabs/style/react-tabs.css'
 
 import Dashboard from '../components/Dashboard'
 import BarChart from '../components/BarChart'
-import Option from '../components/Option'
 import ModelCard from '../components/ModelCard'
 import Redirect from 'react-router-dom/Redirect'
 import getLocalStorage from '../modules/localStorage'
@@ -167,7 +166,7 @@ class CompareContainer extends Component {
 							closeModal={ this.closeModal }
 							model={model}
 							countryCode={ urlData[2] }
-							selectedOptions={ defaultModels[model.id].model.defaultOptions.map( option => option) }
+							defaultOptions={ defaultModels[model.id].model.defaultOptions }
 						/>}
 					</Container>
 				</Section>

@@ -1,0 +1,23 @@
+
+.type-elem{
+
+}
+
+.tree-category.selected{
+	background-color: lightblue;
+}
+
+.divider{
+}
+
+.tree-option.selected{
+	background-color: lightcyan;
+}
+
+.tree-wrapper{
+	flex:1
+}
+
+.tree-category-wrapper{
+	flex: display;
+}

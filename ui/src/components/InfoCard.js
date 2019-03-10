@@ -12,9 +12,9 @@ const ShowMoreInformation = ({ data, enabled}) => {
 		: 'detailed-interpolation-wrapper'
 	return (
 		<div className={ interpolationClassName }>
-			{data.map( entry => {
+			{data.map( (entry, i) => {
 				return (
-					<div>
+					<div className='more-interpolation' key={i}>
 						<span> <font color={`${entry.phase.color}`}> {entry.phase.label} </font> {entry.value.toFixed(2)} </span>
 					</div>
 				)

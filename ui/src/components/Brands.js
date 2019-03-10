@@ -31,7 +31,6 @@ const Brands = (props) => {
 		<Columns.Column className='brand-wrapper has-text-centered'>
 			<Box>
 				<img src={brandLogos[name] || null} alt={`${brandLogos[name]} logo`} />
-				{/* <p className='has-text-centered'>{ name } </p> */}
 			</Box>
 		</Columns.Column>
 	)

@@ -1,21 +1,23 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Redirect from 'react-router-dom/Redirect'
-import Options from '../components/Options'
 import Error from '../components/Error'
 import { Loader, Button, Heading, Box, Footer } from 'react-bulma-components/full'
 import Modal from 'react-modal'
+import '../style/optionsContainer.css'
 
-const Tags = ({ selectedOptions, onRemove }) => {
+const Tags = ({ options, selectedOptions, onRemove }) => {
 	return (
 		<div className='tags-wrapper'>
-			{ selectedOptions.map( ( option, i) => {
-				return (
-					<div className='tag' key={i}>
-						{option.id}
-						<span onClick={ () => onRemove({ id: option.id }) } className='tag-close'><i className="fas fa-times"></i></span>
-					</div>
-				)
+			{ options.map( ( option, i) => {
+				if (selectedOptions.includes(option.id)){
+					return (
+						<div className='tag' key={i}>
+							{option.description}
+							<span onClick={ () => onRemove({ id: option.id }) } className='tag-close'><i className="fas fa-times"></i></span>
+						</div>
+					)
+				}
 			})}
 		</div>
 	)
@@ -28,7 +30,7 @@ class OptionsContainer extends Component {
 		super(props)
 
 		const {
-			selectedOptions
+			defaultOptions
 		} = this.props
 
 		this.state = {
@@ -51,7 +53,7 @@ class OptionsContainer extends Component {
 			//all the options a user can choose for a type
 			options: [],
 
-			selectedOptions,
+			selectedOptions: defaultOptions.map( option => option.id),
 
 			searchedCategories: null,
 
@@ -64,12 +66,11 @@ class OptionsContainer extends Component {
 		}
 	}
 
-	addOption = ({ id, description }) => {
-
-		console.log('toDo: add option')
+	addOption = ({ id }) => {
 
 		let selectedOptions = this.state.selectedOptions
-		selectedOptions.push({ id, description })
+
+		selectedOptions.push( id )
 
 		this.setState({ selectedOptions })
 
@@ -97,7 +98,7 @@ class OptionsContainer extends Component {
 			selectedOptions
 		} = this.state
 
-		this.setState({ selectedOptions: selectedOptions.filter( option => option.id !== id) })
+		this.setState({ selectedOptions: selectedOptions.filter( optionId => optionId !== id) })
 
 		// const { configId } = this.props
 
@@ -170,7 +171,6 @@ class OptionsContainer extends Component {
 		const {
 			countryCode,
 			model,
-			selectedOptions
 		} = this.props
 
 		axios.get('/api/options', {
@@ -182,7 +182,6 @@ class OptionsContainer extends Component {
 			this.setState({
 				loadingOptions : false,
 				options: res.data.options.data,
-				selectedOptions: selectedOptions
 			})
 		})
 		.catch(err => <Error message={`Could not get options for ${model.type.id}`}/>)
@@ -209,7 +208,7 @@ class OptionsContainer extends Component {
 		return allCategories.map( (category, i) => {
 			const treeCategoryClassName = category === this.state.selectedCategory
 				? 'tree-category selected'
-				: 'tree-catehory'
+				: 'tree-category'
 			return (
 				<Box
 					className={ treeCategoryClassName }
@@ -222,23 +221,24 @@ class OptionsContainer extends Component {
 			)})
 	}
 
-	getOptionsOfCategory = (allCategories) => {
+	getOptionsOfCategory = allCategories => {
 
 		const {
 			options,
 			selectedCategory,
+			selectedOptions
 		} = this.state
 
 		return options.filter( option => option.category == selectedCategory && allCategories.indexOf(selectedCategory) !== -1)
 			.map( (option, i) => {
-				const treeOptionClassName = this.props.selectedOptions.indexOf(option.id) === -1
-					? 'tree-option'
-					: 'tree-option selected'
+				const isSelected = selectedOptions.includes(option.id)
 				return (
 					<Box
-						className={treeOptionClassName}
+						className={isSelected ? 'tree-option selected' : 'tree-option'}
 						key={i}
-						onClick={ () => this.addOption({ id: option.id, description: option.description }) }
+						onClick={ isSelected
+							? () => this.removeOption( { id: option.id })
+							: () => this.addOption({ id: option.id, description: option.description }) }
 						>
 							{option.description}
 					</Box>
@@ -284,6 +284,7 @@ class OptionsContainer extends Component {
 			placeholder='Look for a category'
 		/>
 		<Tags
+			options={ options }
 			selectedOptions={ selectedOptions }
 			onRemove={ this.removeOption }
 		/>
