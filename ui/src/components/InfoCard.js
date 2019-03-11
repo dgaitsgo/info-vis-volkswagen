@@ -113,7 +113,7 @@ class InfoCard extends Component {
 										<i class='fas fa-gas-pump'></i> {wltpData.fuel_types}
 									</div>
 									<div className='compare-model-value'>
-										<span onClick={ this.setShowMoreEmissions }> Detailed emissions<Icon icon='angle-down'/> </span>
+										<span onClick={ this.setShowMoreEmissions }> Detailed emissions <i className={showMoreEmissions ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> </span>
 										{ showMoreEmissions
 											? <ShowMoreInformation
 												key={ranking}
@@ -121,7 +121,7 @@ class InfoCard extends Component {
 											/>: null }
 									</div>
 									<div>
-										<span onClick={ this.setShowMoreConsumption }><i class='fas fa-tint'/> Detailed consumption<Icon icon='angle-down'/></span>
+										<span onClick={ this.setShowMoreConsumption }><i class='fas fa-tint'/> Detailed consumption <i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i></span>
 										{ showMoreConsumption
 											? <ShowMoreInformation
 												key={ranking}
@@ -129,7 +129,7 @@ class InfoCard extends Component {
 											/>: null }
 									</div>
 									<div className='tire-data-wrapper'>
-										<span onClick={ this.setShowMoreTire } className='tire-header'> TireIcon Tire Classification <Icon icon='angle-down'/></span>
+										<span onClick={ this.setShowMoreTire } className='tire-header'> TireIcon Tire Classification <i className={showMoreTire ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i></span>
 										{ showMoreTire
 											? <ShowMoreTireInformation
 												wltpData={ wltpData }

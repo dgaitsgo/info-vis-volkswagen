@@ -1,24 +1,23 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import Redirect from 'react-router-dom/Redirect'
 import Error from '../components/Error'
-import { Loader, Button, Heading, Box, Columns } from 'react-bulma-components/full'
+import { Icon, Loader, Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import '../style/optionsContainer.css'
 
 const Tags = ({ options, selectedOptions, onRemove }) => {
 	return (
 		<div className='tags-wrapper'>
-			{ options.map( ( option, i) => {
-				if (selectedOptions.includes(option.id)){
+			{ options.filter( option => selectedOptions.includes(option.id))
+			.map( (option, i) => {
 					return (
-						<div className='tag description-tag' key={i}>
+						<div className='tag description-tag' key={`tag_${i}`}>
 							{option.description}
 							<span onClick={ () => onRemove({ id: option.id }) } className='tag-close'><i className="fas fa-times"></i></span>
 						</div>
 					)
-				}
-			})}
+				})
+			}
 		</div>
 	)
 }
@@ -124,12 +123,17 @@ class OptionsContainer extends Component {
 
 	onCategoryClick = ({ category }) => {
 
-		const { selectedCategories } = this.state
+		let { selectedCategories } = this.state
 
-		console.log(category, selectedCategories)
 
-		if (selectedCategories.includes(category) === -1)
-			this.setState({ selectedCategories: selectedCategories.push(category)})
+		if (!selectedCategories.includes(category))
+		{
+			selectedCategories.push(category)
+			this.setState({ selectedCategories })
+		}
+		else {
+			this.setState({ selectedCategories: selectedCategories.filter( elem => elem !== category )})
+		}
 
 	}
 
@@ -142,43 +146,43 @@ class OptionsContainer extends Component {
 	getCategories = allCategories => {
 
 		return allCategories.map( (category, i) => {
-			const treeCategoryClassName = category === this.state.selectedCategories
+			const isSelected = this.state.selectedCategories.includes(category)
+			const treeCategoryClassName = isSelected
 				? 'tree-category selected'
 				: 'tree-category'
 			return (
-				<div>
+				<div className='tree-category-wrapper' key={`tree-wrapper_${i}`}>
 					<div
 						className={ treeCategoryClassName }
-						key={i}
+						key={`tree-category_${i}`}
 						onClick={() => {
 							this.onCategoryClick({ category })
 						}}
-						><h1>{ category }</h1>
+						><h1>{ category } <i className={isSelected ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i></h1>
 					</div>
-					{ category === this.state.selectedCategories.length > 0 &&
+					{ isSelected &&
 						<div className='tree-option-wrapper'>
-							{this.getOptionsOfCategory( allCategories )}
+							{this.getOptionsOfCategory( category )}
 						</div>
 					}
 				</div>
 			)})
 	}
 
-	getOptionsOfCategory = allCategories => {
+	getOptionsOfCategory = category => {
 
 		const {
 			options,
-			selectedCategories,
 			selectedOptions
 		} = this.state
 
-		return options.filter( option => option.category == selectedCategories && allCategories.indexOf(selectedCategories) !== -1)
+		return options.filter( option => option.category === category)
 			.map( (option, i) => {
 				const isSelected = selectedOptions.includes(option.id)
 				return (
 					<div
 						className={isSelected ? 'tree-option selected' : 'tree-option'}
-						key={i}
+						key={`tree_option_${i}`}
 						onClick={ isSelected
 							? () => this.removeOption( { id: option.id })
 							: () => this.addOption({ id: option.id, description: option.description }) }
