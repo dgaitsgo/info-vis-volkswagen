@@ -1,8 +1,3 @@
-.tree-category {
-    width: 100%;
-    padding: 10px;
-	border-bottom: 1px solid rgb(168, 168, 168);
-}
 
 .tree-category.selected{
 	background-color: lightblue;
@@ -16,12 +11,6 @@
 	flex: display;
 }
 
-.tree-option {
-	width: 80%;
-	margin: 0 auto;
-    padding: 10px;
-}
-
 .tree-option.selected{
 	background-color: lightcyan;
 }
@@ -30,13 +19,6 @@
 	max-height: 45%;
 	overflow-y: scroll;
 	padding: 1%;
-}
-
-.button-panel {
-	border-top: 1px solid grey;
-	display: flex;
-	justify-content: space-between;
-	align-content: stretch;
 }
 
 .input-category-search {

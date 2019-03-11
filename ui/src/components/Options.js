@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { Button, Heading, Box, Columns } from 'react-bulma-components/full'
+import { Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import { Loader } from 'react-bulma-components/full'
+
+import '../style/options.css'
 
 const Tags = ({ selectedOptions, flatChoices, onRemove }) => {
 	return (
@@ -27,11 +29,8 @@ class Options extends Component {
 
 		this.state = {
 			searchedCategories: null,
-			selectedCategory: null,
-
-
-
-			filterMode: null,
+			selectedCategories: [],
+			selectedOptions: this.props.selectedOptions,
 		}
 	}
 	// getCategories = allCategories => {
@@ -81,66 +80,86 @@ class Options extends Component {
 	// 						{option.description}
 	// 				</div>
 	// 			)
-	filterEquipment = ({ uniqueCategories, classification }) => {
 
-		let {
-			searchedCategories
-		} =  this.state
+	handleSearchChange = (event) => {
 
-		if (classification === this.state.filterMode)
-			this.setState({ searchedCategories: null, filterMode: null })
-		else {
-			searchedCategories = uniqueCategories.filter( category => category.classification === classification).map( category => category.category ).sort()
+		const { currentConfig } = this.props
 
-			this.setState({ searchedCategories, filterMode: classification })
-		}
-	}
+		const allChoices = currentConfig.choices
 
-
-	handleSearchChange = (event, uniqueCategories) => {
-
-		let searchedCategories = uniqueCategories.filter( category => category.includes(event.target.value.toUpperCase()))
+		let searchedCategories = allChoices.filter( category => {
+			const label = category.description.length ? category.description : category.id
+			return label.toUpperCase().includes(event.target.value.toUpperCase())
+		})
 		this.setState({ searchedCategories })
 	}
 
-	onCategoryClick = ({ category }) => {
+	onCategoryClick = ({ categoryId }) => {
 
 		let { selectedCategories } = this.state
 
-		if (!selectedCategories.includes(category))
+		if (!selectedCategories.includes(categoryId))
 		{
-			selectedCategories.push(category)
+			selectedCategories.push(categoryId)
 			this.setState({ selectedCategories })
-		}
-		else {
-			this.setState({ selectedCategories: selectedCategories.filter( elem => elem !== category )})
+		} else {
+			this.setState({ selectedCategories: selectedCategories.filter( elem => elem !== categoryId )})
 		}
 
 	}
 
 	getCategories = allCategories => {
+		const { selectedCategories } = this.state
+
 		return allCategories.map( (category, i) => {
 			const label = category.description.length ? category.description : category.id
-			const isSelected = false
+			const isSelected = selectedCategories.includes(category.id)
 			const treeCategoryClassName = isSelected
 				? 'tree-category selected'
 				: 'tree-category'
 			return (
-				<div
-					className={ treeCategoryClassName }
-					key={`${i}`}
-					onClick={() => this.onCategoryClick({ categoryDescription: label })}
-					><h1>{ label }</h1>
+				<div>
+					<div
+						className={ treeCategoryClassName }
+						key={`${i}`}
+						onClick={() => this.onCategoryClick({ categoryId: category.id })}
+						><h1><i className={isSelected ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> { label }</h1>
+					</div>
+					<div className='choice-wrapper'>
+						{ isSelected && this.getChoicesOfCategory(category.id)}
+					</div>
 				</div>
 			)})
 	}
 
-	getChoicesOfCategory = categoryDescription => {
+	getChoicesOfCategory = categoryId => {
+
+		const { currentConfig } = this.props
+
+		const allChoices = currentConfig.choices
+
+		return (
+			allChoices.filter( choice => choice.id === categoryId).map( choice => {
+
+			return (choice.valid.map( valid => {
+				return (
+					<div className='choice valid'>
+						{valid.description}
+					</div>
+				)
+			}).concat(choice.invalid.map( invalid => {
+				return (
+					<div className='choice invalid'>
+						{invalid.description}
+					</div>
+				)
+			})))
+		})
+	)
 
 	}
 
-	onRemove = id => {
-		// selectedOptions. flatChoices[option.id].choiceDescription
+	removeTag = id => {
 
 	}
 
@@ -153,8 +172,11 @@ class Options extends Component {
 			flatChoices
 		} = this.props
 
+		const {
+			searchedCategories
+		} = this.state
+
 		const model = currentConfig.model
-		console.log('current config', currentConfig)
 
 	return (
 		<Modal
@@ -172,29 +194,26 @@ class Options extends Component {
 			<input
 				type='text'
 				className='input-category-search'
-				// onChange={ event => this.handleChange(event, uniqueCategoriesOnly) }
+				onChange={ event => this.handleSearchChange(event) }
 				placeholder='Look for a category'
 			/>
-			{/* <Button className={ filterMode === 'STANDARD_EQUIPMENT' ? 'filter-button selected' : 'filter-button' } onClick={ () => this.filterEquipment({classification: 'STANDARD_EQUIPMENT', uniqueCategories }) }> Standard Equipment </Button>
-			<Button className={ filterMode === 'OPTIONAL_EQUIPMENT' ? 'filter-button selected' : 'filter-button' } onClick={ () => this.filterEquipment({classification: 'OPTIONAL_EQUIPMENT', uniqueCategories }) }> Optional Equipment </Button> */}
 			<Tags
 				flatChoices={ flatChoices }
 				selectedOptions={ currentConfig.selectedOptions }
-				onRemove={ this.removeOption }
+				onRemove={ this.removeTag }
 			/>
 
 		</div>
-		{/* <div className='options-wrapper'>
-			{
-				<Columns className='tree-wrapper has-text-centered'>
-					<Columns.Column className='tree-category-wrapper'>
-						<Heading size={6}> Categories </Heading>
-						{this.getCategories(currentConfig.choices)}
-					</Columns.Column>
-				</Columns>
-			}
+		<div className='options-wrapper'>
+		{
+			<Columns className='tree-wrapper has-text-centered'>
+				<Columns.Column className='tree-category-wrapper'>
+					<Heading size={6}> Categories </Heading>
+					{this.getCategories(searchedCategories ? searchedCategories : currentConfig.choices)}
+				</Columns.Column>
+			</Columns>
 		}
-		</div> */}
+		</div>
 		<div className='button-panel'>
 			<Button onClick={ this.cancelConfiguration } className='configure-button'>Cancel</Button>
 			<Button onClick={ this.restoreConfiguration } className='configure-button'>Restore</Button>

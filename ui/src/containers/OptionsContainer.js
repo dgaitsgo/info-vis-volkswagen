@@ -128,9 +128,6 @@ class OptionsContainer extends Component {
 			currentConfig.rev = rev
 			currentConfig._rev = rev
 
-			console.log('add option', optionId)
-			console.log(currentConfig.selectedOptions)
-
 			this.setState({ currentConfig })
 
 		} catch (e) {
@@ -168,9 +165,6 @@ class OptionsContainer extends Component {
 
 			currentConfig.rev = rev
 			currentConfig._rev = rev
-
-			console.log('removing option', optionId)
-			console.log(currentConfig.selectedOptions)
 
 			this.setState({ currentConfig })
 
@@ -242,7 +236,6 @@ class OptionsContainer extends Component {
 
 			const ls_modelRes = await ls.find({ selector : { id : model.id }})
 
-			console.log('Available in local storage?', ls_modelRes)
 			if (ls_modelRes.docs.length && isBefore(ls_modelRes.docs[0].expirationDate, addDays(new Date(), 1)) ) {
 
 				const currentConfig = ls_modelRes.docs[0]
@@ -255,8 +248,6 @@ class OptionsContainer extends Component {
 				Alert.info(this.loadingEnum.CONFIG)
 				const newConfigRes = await this.createConfig(model.id, defaultOptions)
 				const newConfig = newConfigRes.data.newConfiguration
-
-				console.log('newConfig', newConfig)
 
 				Alert.info(this.loadingEnum.BUILD)
 				const buildRes = await this.checkBuild(newConfig.id)
@@ -302,8 +293,6 @@ class OptionsContainer extends Component {
 
 			const ls = getLocalStorage('vw_okapi')
 			const currentConfig = await this.getConfig(ls, model, defaultOptions)
-
-			console.log('Current configuration', currentConfig)
 
 			this.setState({
 				currentConfig,

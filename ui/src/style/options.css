@@ -1,0 +1,21 @@
+.tree-category {
+    width: 100%;
+    padding: 10px;
+	border-bottom: 1px solid rgb(168, 168, 168);
+}
+
+.choice {
+	width: 80%;
+	margin: 0 auto;
+	border-bottom: 1px solid rgb(168, 168, 168);
+	padding: 10px;
+
+}
+
+.choice.valid {
+	/* background-color: ; */
+}
+
+.choice.invalid {
+	background-color: #bdbdbd;
+}
