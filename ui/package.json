@@ -37,6 +37,7 @@
     "react-easy-chart": "^1.0.0",
     "react-force-graph-3d": "^1.6.1",
     "react-list": "^0.8.11",
+    "react-loading-overlay": "^1.0.1",
     "react-modal": "^3.8.1",
     "react-popup": "^0.10.0",
     "react-router-dom": "^4.3.1",

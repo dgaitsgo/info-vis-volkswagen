@@ -1,7 +1,3 @@
-/*
- * Brands Component by Sebastian Kunz
-*/
-
 import React from 'react'
 
 //import brand logos
@@ -15,7 +11,7 @@ import { Columns } from "react-bulma-components/full"
 import { Box } from "react-bulma-components/full"
 import { withRouter } from 'react-router-dom'
 
-const Brands = (props) => {
+const Brands = ( { name }) => {
 
 	const brandLogos = {
 		"Audi": audi,
@@ -24,8 +20,6 @@ const Brands = (props) => {
 		"Volkswagen PKW": vw_pkw,
 		"Skoda": skoda
 	}
-
-	const { brand_id, name } = props
 
 	return (
 		<Columns.Column className='brand-wrapper has-text-centered'>

@@ -1,8 +1,3 @@
-
-.type-elem{
-
-}
-
 .tree-category {
     width: 100%;
     padding: 10px;
@@ -13,19 +8,12 @@
 	background-color: lightblue;
 }
 
-.divider{
-}
-
 .tree-wrapper{
 	flex:1
 }
 
 .tree-category-wrapper{
 	flex: display;
-}
-
-.tree-option-wrapper {
-
 }
 
 .tree-option {
@@ -49,9 +37,6 @@
 	display: flex;
 	justify-content: space-between;
 	align-content: stretch;
-}
-
-.configure-button {
 }
 
 .input-category-search {

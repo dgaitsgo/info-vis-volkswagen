@@ -4,8 +4,7 @@ import { Container } from 'react-bulma-components/full';
 import { Content } from 'react-bulma-components/full';
 import { Hero } from 'react-bulma-components/full';
 
-import axios from 'axios'
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import Navigation from './components/Navigation'
 import NotFound from './components/NotFound'
 
@@ -37,7 +36,7 @@ class App extends Component {
 	render() {
 		const urlData = this.props.location.pathname.split('/')
 
-		const footerClass = urlData.length <= 2 && urlData[1] == '' ? '' : 'changed'
+		const footerClass = urlData.length <= 2 && urlData[1] === '' ? '' : 'changed'
 			return (
 			<div className='main'>
 				<Navigation />
@@ -58,9 +57,9 @@ class App extends Component {
 									<Content className='has-text-centered'>
 											<p>
 												Developed by
-												<a href='#' target='_blank'> David Gaitsgory</a>,
+												<a href='https://github.com/dgaitsgo' rel='noopener noreferrer' target='_blank'> David Gaitsgory</a>,
 												<a href='https://github.com/SebastianKunz' rel='noopener noreferrer' target='_blank'> Sebastian Kunz</a> and
-												<a href='#' rel='noopener noreferrer' target='_blank'> Jessica Liu</a>.
+												<a href='https://github.com/jessicaliuCW' rel='noopener noreferrer' target='_blank'> Jessica Liu</a>.
 												The source code is <a href='https://bit.ly/1JWRKa9' rel='noopener noreferrer' target='_blank'>MIT</a> licensed.
 												 The website's content is{' '}
 												<a href='https://bit.ly/OIgYRT' rel='noopener noreferrer' target='_blank'>CC BY NC SA 4.0</a> licensed.

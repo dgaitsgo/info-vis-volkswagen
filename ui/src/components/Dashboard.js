@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import { Box, Button, Icon, Card, Heading, Media, Image } from 'react-bulma-components/full'
-
-import '../style/dashboard.css'
 import InfoCard from './InfoCard'
 import MissingCard from '../components/MissingCard'
+
+import '../style/dashboard.css'
 
 const sum = (accumulator, currentValue) => accumulator + currentValue
 
@@ -55,7 +54,7 @@ class Dashboard extends Component {
 			if (model.model.wltp.length) {
 
 				const currentInterps = model.model.wltp[0].interpolations
-					.filter(interp => interp.value_type === compareMode && interp.phase == phase.key)
+					.filter(interp => interp.value_type === compareMode && interp.phase === phase.key)
 					.map( interp => interp.value)
 
 					return ({
@@ -64,7 +63,6 @@ class Dashboard extends Component {
 							label: phase.label,
 							color: phase.color
 						}
-
 					})
 			} else {
 				return ({

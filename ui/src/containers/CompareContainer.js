@@ -1,18 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
-import Modal from 'react-modal'
-import { Loader, Button, Icon, Columns, Section, Container, Heading, Box } from 'react-bulma-components/full'
-import { Tabs, TabList, Tab, TabPanel } from 'react-tabs'
+import { Loader, Section, Container, Heading } from 'react-bulma-components/full'
 import 'react-tabs/style/react-tabs.css'
 
 import Dashboard from '../components/Dashboard'
 import BarChart from '../components/BarChart'
-import ModelCard from '../components/ModelCard'
-import Redirect from 'react-router-dom/Redirect'
-import getLocalStorage from '../modules/localStorage'
 import OptionsContainer from './OptionsContainer'
-import _ from 'lodash'
 
 import '../style/compareContainer.css'
 
@@ -48,7 +42,6 @@ class CompareContainer extends Component {
 			}
 		})
 
-
 		let defaultModelsArr = defaultModelsRes.data
 		let defaultModels = {}
 		//reassociate types and models
@@ -82,7 +75,6 @@ class CompareContainer extends Component {
 			defaultModels,
 			compareMode,
 			modalIsOpen,
-			modalContent,
 			model
 		} = this.state
 
@@ -90,23 +82,23 @@ class CompareContainer extends Component {
 
 		if (!defaultModels)
 			return (
-					<div className='loaders'>
-						<Loader
-						style={{
-							position:'fixed',
-							width:300,
-							height:300,
-							border: '4px solid #023268',
-							borderTopColor: 'transparent',
-							boderRightColor: 'transparent',
-							margin: 'auto',
-							top: '-50px',
-							left: 0,
-							bottom: 0,
-							right: 0
-						}}
-						message={'Getting configurations...'} />
-					</div>
+				<div className='loaders'>
+					<Loader
+					style={{
+						position:'fixed',
+						width:300,
+						height:300,
+						border: '4px solid #023268',
+						borderTopColor: 'transparent',
+						boderRightColor: 'transparent',
+						margin: 'auto',
+						top: '-50px',
+						left: 0,
+						bottom: 0,
+						right: 0
+					}}
+					message={'Getting configurations...'} />
+				</div>
 			)
 		return (
 			<div className='compare-container-wrapper'>

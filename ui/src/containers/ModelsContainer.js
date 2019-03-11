@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import ContentLoader from 'react-content-loader'
 import axios from 'axios'
-import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
 import Model from '../components/Model'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import Modal from 'react-modal'
-import { NavLink } from 'react-router-dom'
-import { Heading, Box, Section, Container, Button, Columns } from "react-bulma-components/full"
+import { Heading, Loader, Section, Container, Button, Columns } from "react-bulma-components/full"
 import '../style/model.css'
 import isEmtpty from 'lodash/isEmpty'
 
@@ -50,6 +47,9 @@ class ModelsContainer extends Component {
 					err
 				}
 			}
+			return (
+				<Redirect to={to} />
+			)
 		})
     }
 
@@ -93,8 +93,6 @@ class ModelsContainer extends Component {
 
 	toModelsCompare = () => {
 
-		const escapedURL = escape((JSON.stringify(selectedModels)))
-		const urlData = this.props.location.pathname.split('/')
 		const {
 			selectedModels
 		} = this.state
@@ -103,8 +101,6 @@ class ModelsContainer extends Component {
 	}
 
     render() {
-
-		const urlData = this.props.location.pathname.split('/')
 
 		const {
 			models,
@@ -127,21 +123,22 @@ class ModelsContainer extends Component {
 
         if (modelsLoading)
 			return (
-				<div className="loaders">
-					<ContentLoader
-						height={190}
-						width={500}
-						speed={1}
-						primaryColor="#f3f3f3"
-						secondaryColor="#ecebeb"
-					>
-						<rect x="80" y="30" rx="0" ry="0" width="90" height="30" />
-						<rect x="180" y="30" rx="0" ry="0" width="90" height="30" />
-						<rect x="280" y="30" rx="0" ry="0" width="90" height="30" />
-						<rect x="80" y="105" rx="0" ry="0" width="90" height="30" />
-						<rect x="180" y="105" rx="0" ry="0" width="90" height="30" />
-						<rect x="280" y="105" rx="0" ry="0" width="90" height="30" />
-					</ContentLoader>
+				<div className='loaders'>
+					<Loader
+					style={{
+						position:'fixed',
+						width:300,
+						height:300,
+						border: '4px solid #023268',
+						borderTopColor: 'transparent',
+						boderRightColor: 'transparent',
+						margin: 'auto',
+						top: '-50px',
+						left: 0,
+						bottom: 0,
+						right: 0
+					}}
+					message={'Getting Models...'} />
 				</div>
 			)
 

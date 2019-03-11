@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
-import { Box, Button, Icon, Card, Heading, Media, Image, Columns } from 'react-bulma-components/full'
-
-import '../style/card.css'
-import { compare } from 'ltgt'
+import { Button, Card, Image, Columns } from 'react-bulma-components/full'
 import carThumbnail from '../res/carIcon.png'
+import '../style/card.css'
 
 const ShowMoreInformation = ({ data, enabled}) => {
 	const interpolationClassName = enabled

@@ -1,11 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Heading, Columns, Box, Card } from "react-bulma-components/full"
+import { Heading, Columns, Card } from "react-bulma-components/full"
 import '../style/model.css'
 
-const Model = ({
-    id, name, onClick, selected, src
-}) => {
+const Model = ({id, name, onClick, selected, src}) => {
 
 	const modelClassName = selected
 		? 'model selected'
@@ -16,6 +13,7 @@ const Model = ({
 	const typeNameClassName = selected
 		? 'typeNameBlock selected'
 		: 'typeNameBlock'
+
     return (
 		<div className='model-wrapper'>
         <Columns.Column>

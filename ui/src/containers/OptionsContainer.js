@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Error from '../components/Error'
-import { Icon, Loader, Button, Heading, Columns } from 'react-bulma-components/full'
+import { Loader, Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import '../style/optionsContainer.css'
 
@@ -158,7 +158,7 @@ class OptionsContainer extends Component {
 						onClick={() => {
 							this.onCategoryClick({ category })
 						}}
-						><h1>{ category } <i className={isSelected ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i></h1>
+						><h1><i className={isSelected ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> { category }</h1>
 					</div>
 					{ isSelected &&
 						<div className='tree-option-wrapper'>
@@ -198,14 +198,12 @@ class OptionsContainer extends Component {
 		const {
 			options,
 			loadingOptions,
-			selectedCategories,
 			selectedOptions,
 			searchedCategories
 		} = this.state
 
 		const {
 			isOpen,
-			onRequestClose,
 			model,
 			closeModal,
 		} = this.props
@@ -225,7 +223,7 @@ class OptionsContainer extends Component {
 			<Heading size={6} className='has-text-centered'>
 				{model.type.name}
 			</Heading>
-			<img src='https://images.hgmsites.net/med/2019-audi-a4_100656485_m.jpg'/>
+			<img src='https://images.hgmsites.net/med/2019-audi-a4_100656485_m.jpg' alt='test'/>
 			<input
 				type='text'
 				className='input-category-search'
