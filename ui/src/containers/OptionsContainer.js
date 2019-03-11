@@ -350,7 +350,6 @@ class OptionsContainer extends Component {
 
 		return (
 			<Options
-
 				flatChoices={this.flattenChoices()}
 				closeModal={closeModal}
 				isOpen={isOpen}

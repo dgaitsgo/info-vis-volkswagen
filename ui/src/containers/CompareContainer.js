@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-
 import { Loader, Section, Container, Heading } from 'react-bulma-components/full'
-import 'react-tabs/style/react-tabs.css'
-
 import Dashboard from '../components/Dashboard'
 import BarChart from '../components/BarChart'
 import OptionsContainer from './OptionsContainer'
@@ -21,6 +18,7 @@ class CompareContainer extends Component {
 			isTyping: true,
 			modalContent: {},
 		}
+
 		this.phases = [
 			{ key : 'LOW', color : '#4caf50', label : 'Low' },
 			{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
@@ -34,7 +32,7 @@ class CompareContainer extends Component {
 
 		const urlData = this.props.location.pathname.split('/')
 		const selectedModels = JSON.parse(decodeURIComponent(urlData[4]))
-		const selectedModelsIds = Object.keys(selectedModels).map( key => ({ id: key, name: selectedModels[key].modelName }))
+		const selectedModelsIds = Object.keys(selectedModels).map( key => ({ id: key, name: selectedModels[key].modelName, typeId: selectedModels[key].type.id}))
 
 		const defaultModelsRes = await axios.get('/api/defaultModels', {
 			params : {
@@ -44,6 +42,7 @@ class CompareContainer extends Component {
 
 		let defaultModelsArr = defaultModelsRes.data
 		let defaultModels = {}
+
 		//reassociate types and models
 		defaultModelsArr.forEach( (model, i) =>
 			defaultModels[model.model_id] =  {
@@ -140,7 +139,7 @@ class CompareContainer extends Component {
 						compareMode={ compareMode }
 						phases={ this.phases }
 					/>
-					<hr class='divider'/>
+					<hr className='divider'/>
 					<Heading size={4} className='has-text-centered'>
 						Model Ranking
 					</Heading>

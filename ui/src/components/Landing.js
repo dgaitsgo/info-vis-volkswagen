@@ -25,8 +25,6 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 		<div className='landing-wrapper'>
 			<Section>
 				<Container>
-					<p></p>
-					<br />
 					<Heading size={4} className='has-text-centered'>
 						Choose Your Country
 					</Heading>

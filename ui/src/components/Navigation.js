@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
 import logoWhite from '../res/nav-vw-logo-white.png'
 import logo from '../res/nav-vw-logo.png'
+
+import React, { Component } from 'react'
 import { Navbar } from 'react-bulma-components/full'
 import { withRouter } from 'react-router-dom'
 import '../style/navigation.css'

@@ -1,12 +1,13 @@
-import React from 'react'
-
-//import brand logos
+/*
+ * importing brand logos
+*/
 import audi from '../res/audi-logo.png'
 import vw_nutz from '../res/VW_Nutzfahrzeuge-logo.png'
 import seat from '../res/Seat-logo.png'
 import vw_pkw from '../res/vw-logo.png'
 import skoda from '../res/Skoda-logo.png'
 
+import React from 'react'
 import { Columns } from "react-bulma-components/full"
 import { Box } from "react-bulma-components/full"
 import { withRouter } from 'react-router-dom'

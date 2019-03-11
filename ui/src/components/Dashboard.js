@@ -113,7 +113,7 @@ class Dashboard extends Component {
 					else {
 						return (
 							<MissingCard
-								key={i}
+								key={`missingCard_${i}`}
 								model={ currModel }
 								hasWltpData={ hasWltpData }
 								openConfiguration={ openConfiguration }
