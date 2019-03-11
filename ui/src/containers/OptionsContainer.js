@@ -3,6 +3,7 @@ import axios from 'axios'
 import Error from '../components/Error'
 import { Loader, Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
+import _ from 'lodash'
 import '../style/optionsContainer.css'
 
 const Tags = ({ options, selectedOptions, onRemove }) => {
@@ -60,8 +61,9 @@ class OptionsContainer extends Component {
 			loadingOptions: true,
 
 			//represents the selected Category for a type
-			selectedCategories: []
+			selectedCategories: [],
 
+			filterMode: null,
 		}
 	}
 
@@ -193,13 +195,31 @@ class OptionsContainer extends Component {
 			})
 	}
 
+	filterEquipment = ({ uniqueCategories, classification }) => {
+
+		let {
+			searchedCategories
+		} =  this.state
+
+		if (classification === this.state.filterMode)
+			this.setState({ searchedCategories: null, filterMode: null })
+		else {
+			searchedCategories = uniqueCategories.filter( category => category.classification === classification).map( category => category.category ).sort()
+
+			this.setState({ searchedCategories, filterMode: classification })
+		}
+
+
+	}
+
 	render() {
 
 		const {
 			options,
 			loadingOptions,
 			selectedOptions,
-			searchedCategories
+			searchedCategories,
+			filterMode
 		} = this.state
 
 		const {
@@ -208,8 +228,14 @@ class OptionsContainer extends Component {
 			closeModal,
 		} = this.props
 
-		const categoriesWithDups = options.map( option => option.category)
-		const uniqueCategories = [...new Set(categoriesWithDups)].sort()
+		const categoriesWithDups = options.map( option => {
+			return {
+				category: option.category,
+				classification: option.classification
+			}
+		})
+		const uniqueCategories = _.uniqBy(categoriesWithDups, 'category');
+		const uniqueCategoriesOnly = uniqueCategories.map( category => category.category).sort()
 
 	return (
 		<Modal
@@ -227,9 +253,11 @@ class OptionsContainer extends Component {
 			<input
 				type='text'
 				className='input-category-search'
-				onChange={ event => this.handleChange(event, uniqueCategories)}
+				onChange={ event => this.handleChange(event, uniqueCategoriesOnly) }
 				placeholder='Look for a category'
 			/>
+			<Button className={ filterMode === 'STANDARD_EQUIPMENT' ? 'filter-button selected' : 'filter-button' } onClick={ () => this.filterEquipment({classification: 'STANDARD_EQUIPMENT', uniqueCategories }) }> Standard Equipment </Button>
+			<Button className={ filterMode === 'OPTIONAL_EQUIPMENT' ? 'filter-button selected' : 'filter-button' } onClick={ () => this.filterEquipment({classification: 'OPTIONAL_EQUIPMENT', uniqueCategories }) }> Optional Equipment </Button>
 			<Tags
 				options={ options }
 				selectedOptions={ selectedOptions }
@@ -243,7 +271,7 @@ class OptionsContainer extends Component {
 				<Columns className='tree-wrapper has-text-centered'>
 					<Columns.Column className='tree-category-wrapper'>
 						<Heading size={6}> Categories </Heading>
-						{this.getCategories(searchedCategories === null ? uniqueCategories : searchedCategories)}
+						{this.getCategories(searchedCategories === null ? uniqueCategoriesOnly : searchedCategories)}
 					</Columns.Column>
 				</Columns>
 			}

@@ -59,3 +59,7 @@
 .header-wrapper {
 	margin-bottom: 1%;
 }
+
+.filter-button.selected {
+	background-color: lightblue;
+}
