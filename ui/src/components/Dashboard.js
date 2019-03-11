@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
+import InfoCard from './InfoCard'
+import MissingCard from '../components/MissingCard'
 
 import '../style/dashboard.css'
-import InfoCard from './InfoCard';
 
 const sum = (accumulator, currentValue) => accumulator + currentValue
 
@@ -29,11 +30,11 @@ const rankModels = ({ defaultModels, compareMode }) => {
 
 		return ({
 			modelId,
-			average: 0
+			average: null
 		})
-	}).filter(val => val)
+	})
 
-	return (_.sortBy(averageModelMap, elem => elem.average).reverse())
+	return (_.sortBy(averageModelMap, elem => elem.average))
 }
 
 class Dashboard extends Component {
@@ -44,8 +45,6 @@ class Dashboard extends Component {
 
 		this.state = {
 
-			//when true displays more information about this config
-			shouldShowMore: false,
 		}
 	}
 
@@ -55,7 +54,7 @@ class Dashboard extends Component {
 			if (model.model.wltp.length) {
 
 				const currentInterps = model.model.wltp[0].interpolations
-					.filter(interp => interp.value_type === compareMode && interp.phase == phase.key)
+					.filter(interp => interp.value_type === compareMode && interp.phase === phase.key)
 					.map( interp => interp.value)
 
 					return ({
@@ -64,7 +63,6 @@ class Dashboard extends Component {
 							label: phase.label,
 							color: phase.color
 						}
-
 					})
 			} else {
 				return ({
@@ -89,28 +87,42 @@ class Dashboard extends Component {
 		const rankedModels = rankModels(this.props)
 
 		return (
+			<div className='dashboard-wrapper'>
+			{
+				rankedModels.map( (rankedModel, i) => {
 
-			rankedModels.map( (rankedModel, i) => {
+					const currModel = defaultModels[rankedModel.modelId]
+					const hasWltpData = rankedModel.average !== null
+					const avg = hasWltpData ? rankedModel.average.toFixed(2) : null
 
-				const currModel = defaultModels[rankedModel.modelId]
-				const hasWltpData = rankedModel.average === 0
-					? false
-					: true
-
-				return (
-					<InfoCard
-						key={`infoCard_${i}`}
-						ranking={i}
-						model={ currModel }
-						hasWltpData={ hasWltpData }
-						compareMode={ compareMode }
-						openConfiguration={ openConfiguration }
-						getInterpolations={ this.getInterpolations }
-						phases={ phases }
-						average={ rankedModel.average.toFixed(2) }
-					/>
-				)
-			})
+					if (hasWltpData) {
+						return (
+							<InfoCard
+								key={`infoCard_${i}`}
+								ranking={i}
+								model={ currModel }
+								compareMode={ compareMode }
+								compareUnit={ null }
+								openConfiguration={ openConfiguration }
+								getInterpolations={ this.getInterpolations }
+								phases={ phases }
+								average={ avg }
+							/>
+						)
+					}
+					else {
+						return (
+							<MissingCard
+								key={i}
+								model={ currModel }
+								hasWltpData={ hasWltpData }
+								openConfiguration={ openConfiguration }
+							/>
+						)
+					}
+				})
+			}
+			</div>
 		)
 	}
 }

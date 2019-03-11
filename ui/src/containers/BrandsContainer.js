@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Loader } from 'react-bulma-components/full'
-import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
 import Brands from '../components/Brands'
 import { NavLink } from 'react-router-dom'
-import { Section } from "react-bulma-components/full"
-import { Heading } from "react-bulma-components/full"
-import { Container } from "react-bulma-components/full"
-import { Columns } from "react-bulma-components/full"
+import { Section, Heading, Container, Columns } from "react-bulma-components/full"
 import '../style/brand.css'
 
 class BrandsContainer extends Component {
@@ -51,7 +47,7 @@ class BrandsContainer extends Component {
 
         if (!brands) {
             return (
-				<div className="loaders">
+				<div className='loaders'>
 					<Loader
 					style={{
 						position:'fixed',
@@ -75,7 +71,7 @@ class BrandsContainer extends Component {
 				<Section>
 					<Container>
 						<Heading className='brands-headline has-text-centered' size={4}>
-							Choose A Brand:
+							Choose A Brand
 						</Heading>
 						<Columns className="is-centered">
 							{brands.map(({ brand_id, name }, i) => {
@@ -90,7 +86,6 @@ class BrandsContainer extends Component {
 									<NavLink to={to} key={i}>
 										<Brands
 											name={ name }
-											brand_id={ brand_id }
 										/>
 									</NavLink>
 								)

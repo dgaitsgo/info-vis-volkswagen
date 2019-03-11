@@ -19,8 +19,6 @@ class LandingContainer extends Component {
 	closeModal = () => this.setState({ modalIsOpen: false })
     componentDidMount() {
 
-		const { token } = this.props
-
 		axios.get('/api/countries').then(res => {
 			let countries = res.data.countries.data
 			countries.sort( (a, b) => a.name > b.name ? 1 : -1 )

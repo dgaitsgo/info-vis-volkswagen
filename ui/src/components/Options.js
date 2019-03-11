@@ -1,7 +1,23 @@
 import React, { Component } from 'react'
-import { Button, Heading, Box } from 'react-bulma-components/full'
+import { Button, Heading, Box, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import { Loader } from 'react-bulma-components/full'
+
+const Tags = ({ selectedOptions, flatChoices, onRemove }) => {
+	return (
+		<div className='tags-wrapper'>
+			{selectedOptions.map( (option, i) => {
+					return (
+						<div className='tag description-tag' key={`tag_${i}`}>
+							{flatChoices[option.id].choiceDescription}
+							<span onClick={ () => onRemove({ id: option.id }) } className='tag-close'><i className="fas fa-times"></i></span>
+						</div>
+					)
+				})
+			}
+		</div>
+	)
+}
 
 class Options extends Component {
 
@@ -12,136 +28,189 @@ class Options extends Component {
 		this.state = {
 			searchedCategories: null,
 			selectedCategory: null,
+
+
+
+			filterMode: null,
+		}
+	}
+	// getCategories = allCategories => {
+
+	// 	return allCategories.map( (category, i) => {
+	// 		const isSelected = this.state.selectedCategories.includes(category)
+	// 		const treeCategoryClassName = isSelected
+	// 			? 'tree-category selected'
+	// 			: 'tree-category'
+	// 		return (
+	// 			<div className='tree-category-wrapper' key={`tree-wrapper_${i}`}>
+	// 				<div
+	// 					className={ treeCategoryClassName }
+	// 					key={`tree-category_${i}`}
+	// 					onClick={() => {
+	// 						this.onCategoryClick({ category })
+	// 					}}
+	// 					><h1><i className={isSelected ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> { category }</h1>
+	// 				</div>
+	// 				{ isSelected &&
+	// 					<div className='tree-option-wrapper'>
+	// 						{this.getOptionsOfCategory( category )}
+	// 					</div>
+	// 				}
+	// 			</div>
+	// 		)})
+	// }
+
+	// getOptionsOfCategory = category => {
+
+	// 	const {
+	// 		options,
+	// 		selectedOptions
+	// 	} = this.state
+
+	// 	return options.filter( option => option.category === category)
+	// 		.map( (option, i) => {
+	// 			const isSelected = selectedOptions.includes(option.id)
+	// 			return (
+	// 				<div
+	// 					className={isSelected ? 'tree-option selected' : 'tree-option'}
+	// 					key={`tree_option_${i}`}
+	// 					onClick={ isSelected
+	// 						? () => this.removeOption( { id: option.id })
+	// 						: () => this.addOption({ id: option.id, description: option.description }) }
+	// 					>
+	// 						{option.description}
+	// 				</div>
+	// 			)
+	filterEquipment = ({ uniqueCategories, classification }) => {
+
+		let {
+			searchedCategories
+		} =  this.state
+
+		if (classification === this.state.filterMode)
+			this.setState({ searchedCategories: null, filterMode: null })
+		else {
+			searchedCategories = uniqueCategories.filter( category => category.classification === classification).map( category => category.category ).sort()
+
+			this.setState({ searchedCategories, filterMode: classification })
 		}
 	}
 
-	onCategoryClick = ({ selectedCategory }) => {
-
-		this.setState({ selectedCategory })
-	}
 
 	handleSearchChange = (event, uniqueCategories) => {
-		
+
 		let searchedCategories = uniqueCategories.filter( category => category.includes(event.target.value.toUpperCase()))
 		this.setState({ searchedCategories })
 	}
 
+	onCategoryClick = ({ category }) => {
+
+		let { selectedCategories } = this.state
+
+		if (!selectedCategories.includes(category))
+		{
+			selectedCategories.push(category)
+			this.setState({ selectedCategories })
+		}
+		else {
+			this.setState({ selectedCategories: selectedCategories.filter( elem => elem !== category )})
+		}
+
+	}
+
 	getCategories = allCategories => {
 		return allCategories.map( (category, i) => {
-			const treeCategoryClassName = category === this.state.selectedCategory
+			const label = category.description.length ? category.description : category.id
+			const isSelected = false
+			const treeCategoryClassName = isSelected
 				? 'tree-category selected'
-				: 'tree-catehory'
+				: 'tree-category'
 			return (
-				<Box
+				<div
 					className={ treeCategoryClassName }
-					key={i}
-					onClick={() => {
-						this.onCategoryClick({ selectedCategory: category })
-					}}
-					><h1>{ category }</h1>
-				</Box>
+					key={`${i}`}
+					onClick={() => this.onCategoryClick({ categoryDescription: label })}
+					><h1>{ label }</h1>
+				</div>
 			)})
 	}
 
-	getChoicesOfCategory = (allCategories) => {
+	getChoicesOfCategory = categoryDescription => {
 
-		const {
-			selectedCategory,
-		} = this.state
+	}
 
-		const {
-			choices,
-			currentConfig
-		} = this.props
+	onRemove = id => {
+		// selectedOptions. flatChoices[option.id].choiceDescription
 
-		const {
-			selectedOptions
-		} = currentConfig
-
-		return choices.filter( choice => choice.category === selectedCategory && allCategories.indexOf(selectedCategory) !== -1)
-			.map( (choice, i) => {
-
-				const selected = selectedOptions.indexOf(choice.id) !== -1 
-
-				const treeOptionClassName = selected
-					? 'tree-choice selected'
-					: 'tree-choice'
-				
-				const choiceFn = selected
-					? () => this.props.removeOption(choice.id)
-					: () => this.props.addOption(choice.id)
-				
-				return (
-					<Box
-						className={treeOptionClassName}
-						key={i}
-						onClick={choiceFn}>
-						{choice.description}
-					</Box>
-				)
-			})
 	}
 
 	modalContent = () => {
 
 		const {
-			searchedCategories,
-		} = this.state
-
-		const {
-			currentConfig
+			isOpen,
+			closeModal,
+			currentConfig,
+			flatChoices
 		} = this.props
 
-		const { model, choices } = currentConfig
-		const categoriesWithDups = choices.map( choice => choice.category)
-		const uniqueCategories = [...new Set(categoriesWithDups)].sort()
+		const model = currentConfig.model
+		console.log('current config', currentConfig)
 
-		return (
-			<div>
-				<Heading size={4} className='has-text-centered'>
-					Configure Your {model.name}
-				</Heading>
-				<Heading size={6} className='has-text-centered'>
-					{model.type.name}
-				</Heading>
-				<div className='build-status-wrapper'>
-					<p className='build-status buildable'>{currentConfig.build.buildable ? 'Buildable' : 'Not Buildable'}</p>
-					<p className='build-status distinct'>{currentConfig.build.distinct ? 'Distinct' : 'Not Distinct'}</p>
-				</div>
-				<input
-					type='text'
-					className='input-category-search'
-					onChange={ event => this.handleSearchChange(event, uniqueCategories)}
-					placeholder='Look for a category'
-				/>
-				<div>
-					<div className='tree-wrapper has-text-centered'>
-						{/* <Heading> Categories </Heading> */}
-						<div className='tree-category-wrapper'>
-							{this.getCategories(searchedCategories === null ? uniqueCategories : searchedCategories)}
-						</div>
-						<div className='tree-choices-wrapper'>
-							{this.getChoicesOfCategory(searchedCategories === null ? uniqueCategories : searchedCategories)}
+	return (
+		<Modal
+			isOpen={isOpen}
+			onRequestClose={closeModal}
+		>
+		<div className='header-wrapper'>
+			<Heading size={4} className='has-text-centered'>
+				Configure Your {model.name}
+			</Heading>
+			<Heading size={6} className='has-text-centered'>
+				{model.type.name}
+			</Heading>
+			<img src='https://images.hgmsites.net/med/2019-audi-a4_100656485_m.jpg' alt='test'/>
+			<input
+				type='text'
+				className='input-category-search'
+				// onChange={ event => this.handleChange(event, uniqueCategoriesOnly) }
+				placeholder='Look for a category'
+			/>
+			{/* <Button className={ filterMode === 'STANDARD_EQUIPMENT' ? 'filter-button selected' : 'filter-button' } onClick={ () => this.filterEquipment({classification: 'STANDARD_EQUIPMENT', uniqueCategories }) }> Standard Equipment </Button>
+			<Button className={ filterMode === 'OPTIONAL_EQUIPMENT' ? 'filter-button selected' : 'filter-button' } onClick={ () => this.filterEquipment({classification: 'OPTIONAL_EQUIPMENT', uniqueCategories }) }> Optional Equipment </Button> */}
+			<Tags
+				flatChoices={ flatChoices }
+				selectedOptions={ currentConfig.selectedOptions }
+				onRemove={ this.removeOption }
+			/>
 
-						</div>
-					</div>
-				</div>
-				<Button className='configure-button'>Cancel</Button>
-				<Button className='configure-button'>Restore</Button>
-				<Button className='configure-button'>Rebuild</Button>
-			</div>
-		)
+		</div>
+		{/* <div className='options-wrapper'>
+			{
+				<Columns className='tree-wrapper has-text-centered'>
+					<Columns.Column className='tree-category-wrapper'>
+						<Heading size={6}> Categories </Heading>
+						{this.getCategories(currentConfig.choices)}
+					</Columns.Column>
+				</Columns>
+			}
+		}
+		</div> */}
+		<div className='button-panel'>
+			<Button onClick={ this.cancelConfiguration } className='configure-button'>Cancel</Button>
+			<Button onClick={ this.restoreConfiguration } className='configure-button'>Restore</Button>
+			<Button onClick={ this.applyConfiguration } className='configure-button'>Apply</Button>
+		</div>
+		</Modal>)
 	}
 
 	getModalContent = () => {
 
 		const {
 			currentConfig,
-			choices
 		} = this.props
 
 		return (
-			currentConfig && choices
+			currentConfig
 			? this.modalContent()
 			: <Loader message='Loading configuration and choices' />
 		)
