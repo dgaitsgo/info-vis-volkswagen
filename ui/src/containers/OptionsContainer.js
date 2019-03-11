@@ -1,19 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Alert } from 'rsuite'
-import Notification from 'react-bulma-notification'
 import getLocalStorage from '../modules/localStorage'
 import isBefore from 'date-fns/is_before'
 import addDays from 'date-fns/add_days'
 import Options from '../components/Options'
-
-function open(description){
-	Notification.notice(description, {
-		key: description,
-		duration: 500,
-		closable: false,
-	  });
-  }
 
 class OptionsContainer extends Component {
 
@@ -28,7 +19,6 @@ class OptionsContainer extends Component {
 			REMOVE : 'Removing option',
 			BUILD : 'Checking build',
 			REBUILD : 'Rebuilding configuration',
-			TYPE_OPTIONS : 'Getting options for the type.'
 		}
 
 		this.state = {
@@ -89,11 +79,21 @@ class OptionsContainer extends Component {
 		})
 
 	//Only show options that appear in the type and are valid for the configuration
-	optionsUnion = () => {
-		//type options
-		//config options
-	}
-	
+	/*
+		flatten configuration options
+		
+		target data set:
+		option : {
+			valid : boolean,
+			id : string,
+			optionDescription : string,
+			categoryDescription : string
+		}
+
+		filter by looking up ids in type options
+
+	*/
+
 	async handleAddOption(optionId) {
 		
 		let {
@@ -268,8 +268,7 @@ class OptionsContainer extends Component {
 			} else {
 
 				// else create a configuration and save to local storage
-				// Alert.info(this.loadingEnum.CONFIG)
-				open(this.loadingEnum.CONFIG)
+				Alert.info(this.loadingEnum.CONFIG)
 				const newConfigRes = await this.createConfig(model.id, defaultOptions)
 				const newConfig = newConfigRes.data.newConfiguration
 
@@ -314,15 +313,12 @@ class OptionsContainer extends Component {
 			
 		try {
 
-			const typeOptionsRes = await this.getTypeOptions()
-			const typeOptions = typeOptionsRes.data.typeOptions.data
 			const ls = getLocalStorage('vw_okapi')
 			const currentConfig = await this.getConfig(ls, model, defaultOptions)
 
 			console.log('Current configuration', currentConfig)
 
 			this.setState({
-				typeOptions,
 				currentConfig,
 				ls	
 			})
@@ -335,7 +331,6 @@ class OptionsContainer extends Component {
 	render() {
 
 		const {
-			typeOptions,
 			currentConfig,
 		} = this.state
 
@@ -346,7 +341,7 @@ class OptionsContainer extends Component {
 				addOption={this.handleAddOption}
 				removeOption={this.handleRemoveOption}
 				onClickRebuild={this.handleRebuildConfig}
-				typeOptions={typeOptions}
+				options={this.optionsUnion()}
 				currentConfig={currentConfig}
 			/>
 		)

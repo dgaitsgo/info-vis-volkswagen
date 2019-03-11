@@ -50,7 +50,7 @@ class Options extends Component {
 		} = this.state
 
 		const {
-			typeOptions,
+			choices,
 			currentConfig
 		} = this.props
 
@@ -58,25 +58,25 @@ class Options extends Component {
 			selectedOptions
 		} = currentConfig
 
-		return typeOptions.filter( option => option.category === selectedCategory && allCategories.indexOf(selectedCategory) !== -1)
-			.map( (option, i) => {
+		return choices.filter( choice => choice.category === selectedCategory && allCategories.indexOf(selectedCategory) !== -1)
+			.map( (choice, i) => {
 
-				const selected = selectedOptions.indexOf(option.id) !== -1 
+				const selected = selectedOptions.indexOf(choice.id) !== -1 
 
 				const treeOptionClassName = selected
-					? 'tree-option selected'
-					: 'tree-option'
+					? 'tree-choice selected'
+					: 'tree-choice'
 				
-				const optionFn = selected
-					? () => this.props.removeOption(option.id)
-					: () => this.props.addOption(option.id)
+				const choiceFn = selected
+					? () => this.props.removeOption(choice.id)
+					: () => this.props.addOption(choice.id)
 				
 				return (
 					<Box
 						className={treeOptionClassName}
 						key={i}
-						onClick={optionFn}>
-						{option.description}
+						onClick={choiceFn}>
+						{choice.description}
 					</Box>
 				)
 			})
@@ -89,13 +89,11 @@ class Options extends Component {
 		} = this.state
 
 		const {
-			typeOptions,
 			currentConfig
 		} = this.props
 
-		const { model } = currentConfig
-
-		const categoriesWithDups = typeOptions.map( option => option.category)
+		const { model, choices } = currentConfig
+		const categoriesWithDups = choices.map( choice => choice.category)
 		const uniqueCategories = [...new Set(categoriesWithDups)].sort()
 
 		return (
@@ -122,7 +120,7 @@ class Options extends Component {
 						<div className='tree-category-wrapper'>
 							{this.getCategories(searchedCategories === null ? uniqueCategories : searchedCategories)}
 						</div>
-						<div className='tree-typeOptions-wrapper'>
+						<div className='tree-choices-wrapper'>
 							{this.getChoicesOfCategory(searchedCategories === null ? uniqueCategories : searchedCategories)}
 
 						</div>
@@ -139,11 +137,11 @@ class Options extends Component {
 
 		const {
 			currentConfig,
-			typeOptions
+			choices
 		} = this.props
 
 		return (
-			currentConfig && typeOptions
+			currentConfig && choices
 			? this.modalContent()
 			: <Loader message='Loading configuration and choices' />
 		)
