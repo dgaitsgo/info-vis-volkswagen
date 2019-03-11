@@ -1,16 +1,9 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
-import { Box, Button, Icon, Card, Heading, Media, Image, Columns } from 'react-bulma-components/full'
-
+import { Button, Icon, Card, Image, Columns } from 'react-bulma-components/full'
 import '../style/dashboard.css'
 import '../style/infocard.css'
-import { compare } from 'ltgt';
 import carTumbNail from '../res/carIcon.png'
-
 import ReactTooltip from 'react-tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { tire, faAlignRight } from '@fortawesome/free-solid-svg-icons'
-
 
 const ShowMoreInformation = ({ data, enabled}) => {
 	const interpolationClassName = enabled
@@ -76,7 +69,6 @@ class InfoCard extends Component {
 			ranking,
 			hasWltpData,
 			model,
-			compareMode,
 			openConfiguration,
 			getInterpolations,
 			phases,

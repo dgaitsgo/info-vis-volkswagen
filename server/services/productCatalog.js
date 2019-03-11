@@ -18,7 +18,7 @@ const apiSchema = {
 	'models' : ['countryCode', 'brand_id'],
     'brandTypes' : ['countryCode', 'brand_id'],
     'modelTypes' : ['countryCode', 'model_id'],
-	'options' : ['countryCode', 'type_id'],
+	'typeOptions' : ['countryCode', 'type_id'],
 }
 
 const apiEndpoints = {
@@ -27,7 +27,7 @@ const apiEndpoints = {
 	'models' : (country_code, brand_id) => `${apiURL}/catalog/${country_code}/brands/${brand_id}/models`,
 	'brandTypes' : (country_code, brand_id) => `${apiURL}/catalog/${country_code}/models/${brand_id}/types`,
 	'modelTypes' : (country_code, model_id) => `${apiURL}/catalog/${country_code}/models/${model_id}/types`,
-	'options' : (country_code, type_id) => `${apiURL}/catalog/${country_code}/types/${type_id}/options`
+	'typeOptions' : (country_code, type_id) => `${apiURL}/catalog/${country_code}/types/${type_id}/options`
 }
 
 Object.keys(apiSchema).forEach(key => {

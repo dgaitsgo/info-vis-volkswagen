@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import { Box, Button, Icon, Card, Heading, Media, Image } from 'react-bulma-components/full'
 
 import '../style/dashboard.css'
 import InfoCard from './InfoCard';
@@ -8,28 +7,6 @@ import InfoCard from './InfoCard';
 const sum = (accumulator, currentValue) => accumulator + currentValue
 
 const average = array => array.reduce(sum) / array.length
-
-
-// const rankModels = ({ defaultModels, compareMode }) => {
-
-// 	const interpData = getInterpolation({ defaultModels, compareMode })
-
-// 	console.log('interpData', interpData)
-
-// 	const arr = interpData.map( (currentInterps) => currentInterps.interpolation)
-
-// 	console.log('arr', arr)
-
-// 	const averageModelMap = arr.map( (item) => item.map( (item2) => item2.value ))
-
-// 	const ass = averageModelMap.map( (item) => average(item))
-
-// 	console.log('avgMap', averageModelMap)
-
-// 	console.log('ass', ass)
-
-// 	return (ass.sort( (a, b) => (a, b) => a < b ? 1 : -1 ))
-// }
 
 const rankModels = ({ defaultModels, compareMode }) => {
 
@@ -101,9 +78,6 @@ class Dashboard extends Component {
 	}
 
 	render () {
-		const {
-			shouldShowMore,
-		} = this.state
 
 		const {
 			defaultModels,
@@ -125,7 +99,7 @@ class Dashboard extends Component {
 
 				return (
 					<InfoCard
-						key={i}
+						key={`infoCard_${i}`}
 						ranking={i}
 						model={ currModel }
 						hasWltpData={ hasWltpData }

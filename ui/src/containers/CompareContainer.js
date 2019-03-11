@@ -1,22 +1,14 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
-import Modal from 'react-modal'
-import { Loader, Button, Icon, Columns, Section, Container, Heading, Box } from 'react-bulma-components/full'
-import { Tabs, TabList, Tab, TabPanel } from 'react-tabs'
+import { Loader, Section, Container, Heading } from 'react-bulma-components/full'
 import "react-tabs/style/react-tabs.css"
 
 import Dashboard from '../components/Dashboard'
 import BarChart from '../components/BarChart'
-import Option from '../components/Option'
-import ModelCard from '../components/ModelCard'
-import Redirect from 'react-router-dom/Redirect'
-import getLocalStorage from '../modules/localStorage'
 import OptionsContainer from './OptionsContainer'
-import _ from 'lodash'
 
 import '../style/compareContainer.css'
-import compareData from './compareData.js'
 
 class CompareContainer extends Component {
 
@@ -82,7 +74,6 @@ class CompareContainer extends Component {
 			defaultModels,
 			compareMode,
 			modalIsOpen,
-			modalContent,
 			model
 		} = this.state
 
@@ -170,6 +161,7 @@ class CompareContainer extends Component {
 							closeModal={ this.closeModal }
 							model={model}
 							countryCode={ urlData[2] }
+							defaultOptions={defaultModels[model.id].model.defaultOptions}
 							selectedOptions={ defaultModels[model.id].model.defaultOptions.map( option => option.id) }
 						/>}
 					</Container>
