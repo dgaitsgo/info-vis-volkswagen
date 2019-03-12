@@ -8,9 +8,6 @@ import { compare } from 'ltgt';
 import carTumbNail from '../res/carIcon.png'
 
 import ReactTooltip from 'react-tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { tire, faAlignRight } from '@fortawesome/free-solid-svg-icons'
-
 
 const ShowMoreInformation = ({ data, enabled}) => {
 	const interpolationClassName = enabled
@@ -92,19 +89,19 @@ class InfoCard extends Component {
 					<Card.Header>
 						<div className='header-wrapper'>
 							<div className="header-card">
-								<h1>
+								<Heading size={4}>
 									{ ranking === 0 && hasWltpData && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
 									{ ranking === 1 && hasWltpData && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 									{ ranking === 2 && hasWltpData && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-									{ hasWltpData && `${ranking + 1}.`} { model.model.name.toUpperCase() }
-								</h1>
-								<p className='average-wrapper'> { average }</p>
+									{ hasWltpData && `NO ${ranking + 1}.`} { model.model.name.toUpperCase() }
+								</Heading>
+								<Heading size={4} className='average-wrapper'> { average }</Heading>
 							</div>
 							<p className="typeName">{model.type.name}</p>
 						</div>
 					</Card.Header>
 					<Card.Content>
-						<Columns className="carImg" >
+						<Columns className="carImg">
 							<Columns.Column>
 								<Image style={{width: 256}} src={carTumbNail}/>
 							</Columns.Column>

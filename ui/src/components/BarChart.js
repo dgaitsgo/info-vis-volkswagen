@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {
+	DiscreteColorLegend,
 	XYPlot,
 	XAxis,
 	YAxis,
@@ -7,18 +8,21 @@ import {
 	HorizontalGridLines,
 	VerticalBarSeries,
 	VerticalBarSeriesCanvas,
-	LabelSeries,
-	MarkSeries,
-	Hint
+	Hint,
+	makeVisFlexible,
   } from 'react-vis'
+  import '../style/barChart.css'
 
-class BarChart extends Component{
+  const ratio = .4;
+  class BarChart extends Component{
 
 	constructor (props) {
 
 		super(props)
 		this.state = {
 			value: null,
+			height: 0,
+			width: 0
 		}
 	}
 	getInterpolations = ({ defaultModels, phase, compareMode}) => {
@@ -26,7 +30,7 @@ class BarChart extends Component{
 			const model = defaultModels[modelId]
 			if (model.model.wltp.length) {
 				const currentInterps = model.model.wltp[0].interpolations
-					.filter(interp => interp.value_type === compareMode && interp.phase == phase)
+					.filter(interp => interp.value_type === compareMode && interp.phase === phase)
 					.map( interp => interp.value)
 					return ({
 						value: currentInterps,
@@ -50,6 +54,16 @@ class BarChart extends Component{
 	_rememberValue = value => {
 		this.setState({value: value.y})
 	}
+	componentDidMount(){
+		this.updateWindowDimensions();
+		window.addEventListener("resize", this.updateWindowDimensions);
+	}
+	componentWillMount(){
+		window.removeEventListener("resize", this.updateWindowDimensions);
+	}
+	updateWindowDimensions = () =>{
+		this.setState({width: window.innerHeight, height:window.innerHeight});
+	}
 
 	render() {
 		const {
@@ -58,16 +72,36 @@ class BarChart extends Component{
 			phases
 		} = this.props
 
+		const ITEMS = [
+			{title: 'Low',color: '#4caf50', strokeWidth: 20},
+			{title: 'Medium',color: '#ffeb3b', strokeWidth: 20},
+			{title: 'High',color: '#ff9800', strokeWidth: 20},
+			{title: 'Extra High',color: '#f44336', strokeWidth: 20},
+			{title: 'Combined',color: '#1565c0', strokeWidth: 20}
+			];
+		
+		const axisProps = {
+				tickSizeInner: 0,
+				style: {line: {stroke: '#939393', strokeWidth: '1px'}}
+			  };
+
 		const dataSets = phases.map(phase => this.getInterpolations( { defaultModels, compareMode, phase: phase.key}))
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
 		const { value } = this.state
+		const FlexibleXYPlot = makeVisFlexible(XYPlot)
+			  //if you use flexibleXY you can't use animation
 		return (
 			<div className='bar-chart-wrapper'>
-				<XYPlot xType="ordinal" width={800} height={300} xDistance={800}>
+			<DiscreteColorLegend orientation="horizontal" items={ITEMS}/>
+				<FlexibleXYPlot
+				margin={this.props.margin}
+				height={this.state.height * ratio}
+				xType="ordinal" 
+				xDistance={100}>
 					<VerticalGridLines />
 					<HorizontalGridLines />
-					<XAxis />
-					<YAxis />
+					<XAxis {...axisProps} tickFormat={String}/>
+					<YAxis {...axisProps} tickFormat={(d) => d}/>
 					{ normalizedDataSets.map( (dataSet, i) => {
 						return <VerticalBarSeries
 							className="vertical-bar-series-example"
@@ -79,8 +113,15 @@ class BarChart extends Component{
 						/>
 					}) }
 					{/* <LabelSeries data={ data[0] }  /> */}
-					{value ? <Hint value={ value } /> : null}
-				</XYPlot>
+					{value ? <Hint value={ value } style={{
+							fontSize: 14,
+							text: {display: 'none'},
+							value: {color: 'red'}}}>
+							<div>
+								<p>value: {value}</p>
+							</div>
+					</Hint> : null}
+				</FlexibleXYPlot>
 			</div>
 		)
 	}

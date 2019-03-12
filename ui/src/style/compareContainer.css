@@ -46,8 +46,9 @@
 	display: flex;
 }
 
-.typeName, .averageNum{
-	padding-left: 30px;
+.typeName{
+	padding-left: 55px;
+	padding-bottom: 30px;
 }
 .carImg{
 	margin: 20px;
