@@ -97,7 +97,7 @@ class InfoCard extends Component {
 									{ ranking === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
 									{ `NO ${ranking + 1}.`} { model.model.name.toUpperCase() }
 								</Heading>
-								<Heading size={4} className='average-wrapper'> { average }</Heading>
+								<Heading size={4} className='average-wrapper'> {`${average} ${compareUnit}` }</Heading>
 							</div>
 							<p className='typeName'>{model.type.name}</p>
 						</div>
