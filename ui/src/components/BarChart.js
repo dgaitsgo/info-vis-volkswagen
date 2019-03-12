@@ -10,6 +10,7 @@ import {
 	VerticalBarSeriesCanvas,
 	Hint,
 	makeVisFlexible,
+	ChartLabel,
   } from 'react-vis'
   import '../style/barChart.css'
 
@@ -28,6 +29,7 @@ import {
 	getInterpolations = ({ defaultModels, phase, compareMode}) => {
 		return Object.keys(defaultModels).map((modelId, i) => {
 			const model = defaultModels[modelId]
+			console.log(model);
 			if (model.model.wltp.length) {
 				const currentInterps = model.model.wltp[0].interpolations
 					.filter(interp => interp.value_type === compareMode && interp.phase === phase)
@@ -64,6 +66,8 @@ import {
 	updateWindowDimensions = () =>{
 		this.setState({width: window.innerHeight, height:window.innerHeight});
 	}
+
+	
 
 	render() {
 		const {
@@ -112,7 +116,19 @@ import {
 							onValueMouseOut={this._forgetValue}
 						/>
 					}) }
-					{/* <LabelSeries data={ data[0] }  /> */}
+					
+					<ChartLabel text="Car Name"
+							className="alt-x-label"
+							xPercent={0.8}
+							yPercent={0.72}
+					/>
+					{/* : Fuel Comminsion(g/km)} */}
+					<ChartLabel text="(l/100km)"
+						className="alt-y-label"
+						xPercent={0.04}
+						yPercent={0.82}
+						//style={{transform: 'rotate(-90)',textAnchor:'end'}}
+						/>
 					{value ? <Hint value={ value } style={{
 							fontSize: 14,
 							text: {display: 'none'},
