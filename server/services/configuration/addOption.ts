@@ -1,6 +1,9 @@
-import app from '../app/app'
-import Okapi from '../Okapi'
-import sendJSON from '../../helpers/sendJSON'
+export {}
+
+const Okapi = require('../Okapi')
+const sendJSON = require('../../helpers/sendJSON')
+const express = require('express')
+const app = require('../app/app')
 
 app.get('/api/addOption', async (req, res, next) => {
 
@@ -16,4 +19,3 @@ app.get('/api/addOption', async (req, res, next) => {
         next(new Error(e))
 	}
 })
-

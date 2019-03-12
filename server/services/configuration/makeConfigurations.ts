@@ -1,7 +1,11 @@
-import app from '../app/app'
-import sendJSON from '../../helpers/sendJSON'
-import Okapi from '../Okapi'
-import { addDays } from 'date-fns';
+export {}
+
+const Okapi = require('../Okapi')
+const apiURL = require('../../constants/apiURL')
+const sendJSON = require('../../helpers/sendJSON')
+const express = require('express')
+const app = require('../app/app')
+const addDays = require('date-fns/add_days')
 
 app.post('/api/makeConfigurations', async(req, res, next) => {
 
@@ -24,7 +28,7 @@ app.post('/api/makeConfigurations', async(req, res, next) => {
 		const defaultOptions = await Promise.all(configIds.map( async (configId, i) => {
 
 			// add type option
-            await Okapi.addOption(configId, models[i].typeId)
+            await Okapi.addOption(configId, models[i].type.id)
 
 			//get all of the options to complete the build
 			const optionsToSetRes = await Okapi.resolveOptions(configId, token)
@@ -37,16 +41,16 @@ app.post('/api/makeConfigurations', async(req, res, next) => {
 		const wltps = await Promise.all(configIds.map(configId => Okapi.getWLTP(configId, token)))
         const images = await Promise.all(configIds.map(configId => Okapi.getImages(configId, token)))
 
-		const target = models.map( (model, i : number) => ({
+		const newConfigurations = models.map( (model, i : number) => ({
 			model,
-			configId : configIds[i],	
+			configId : configIds[i],
 			wltp  : wltps[i],
 			images : images[i],
 			selectedOptions : defaultOptions[i],
 			expirationDate : addDays(new Date(), 1)
 		}))
 
-		sendJSON(res, target) 
+		sendJSON(res, { 'newConfigurations' : newConfigurations }) 
 	
 	} catch (e) {
 		

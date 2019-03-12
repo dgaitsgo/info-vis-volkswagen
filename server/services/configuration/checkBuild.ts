@@ -1,9 +1,9 @@
+export {}
 
-import app from '../app/app'
-import axios from 'axios'
-import apiURL from '../../constants/apiURL'
-import sendJSON from '../../helpers/sendJSON'
-import Okapi from '../Okapi'
+const sendJSON = require('../../helpers/sendJSON')
+const Okapi = require('../Okapi')
+const express = require('express')
+const app = require('../app/app')
 
 app.get('/api/checkBuild', async (req, res, next) => {
 

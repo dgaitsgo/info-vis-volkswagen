@@ -63,5 +63,5 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://ec2-35-172-140-7.compute-1.amazonaws.com"
+  "proxy" : "http://localhost:6000"
 }

@@ -1,7 +1,5 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-
-const app = express()
+const app = require('express')()
+const bodyParser = require('body-parser')
 
 app.use(bodyParser.urlencoded({
 	extended: true
@@ -9,4 +7,4 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json())
 
-export default app
+module.exports = app

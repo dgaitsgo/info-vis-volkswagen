@@ -1,7 +1,11 @@
-import app from '../app/app'
-import sendJSON from '../../helpers/sendJSON'
-import addDays from 'date-fns/add_days'
-import Okapi from '../Okapi'
+export {}
+
+const Okapi = require('../Okapi')
+const apiURL = require('../../constants/apiURL')
+const sendJSON = require('../../helpers/sendJSON')
+const express = require('express')
+const app = require('../app/app')
+const addDays = require('date-fns/add_days')
 
 app.get('/api/newConfiguration', async (req, res, next) => {
 

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const IdentitySchema = new Schema(
@@ -12,4 +12,4 @@ const IdentitySchema = new Schema(
     }
 )
 
-export default mongoose.model('IdentitySchema', IdentitySchema)
+module.exports = mongoose.model('IdentitySchema', IdentitySchema)

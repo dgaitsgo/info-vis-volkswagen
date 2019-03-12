@@ -1,35 +1,25 @@
+export {}
+
 /******************************************************************************
- * Dependencies 
- *****************************************************************************/
-const express = require('express')
+* Dependencies 
+*****************************************************************************/
 const axios = require('axios')
 const addSeconds = require('date-fns/add_seconds')
-
 /******************************************************************************
- * Modules
- *****************************************************************************/
-// const sendJSON = require('./helpers/sendJSON')
-
-/******************************************************************************
- * Config 
- *****************************************************************************/
-// const app = require('./services/app/app')
-import app from './services/app/app'
-/******************************************************************************
- * Services 
- *****************************************************************************/
+* Services 
+******************************************************************************/
+const app = require('./services/app/app')
 const db = require('./services/db')
-const identity = require('./services/identity')
-// const defaultModels = require('./services/defaultModels')
-const productCatalog = require('./services/productCatalog')
-const configureCar = require('./services/configuration')
-// const allUniqueModels = require('./services/allUniqueModels')
-const errorHandler = require('./services/app/errorHandler')
-
-console.log(app.listen)
 /******************************************************************************
- * Server 
- *****************************************************************************/
-const port = process.env.PORT
+* Endpoints 
+******************************************************************************/
+const identity = require('./services/identity')
+const productCatalog = require('./services/productCatalog')
+const configuration = require('./services/configuration')
+const errorHandler = require('./services/app/errorHandler')
+/******************************************************************************
+* Server 
+******************************************************************************/
+const port = process.env.PORT || 6000  
 app.get('/', (req, res) => res.send('Hello world'))
 app.listen(port, () => console.log(`Server started on ${ port }`))

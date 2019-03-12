@@ -1,10 +1,11 @@
-import axios from 'axios'
-import app from './app/app'
-import sendJSON from '../helpers/sendJSON'
+export {}
 
+const axios = require('axios')
+const sendJSON = require('../helpers/sendJSON')
 const apiURL = 'https://api.productdata.vwgroup.com/v2'
+const app = require('../services/app/app')
 
-const defaultHeaders = (access_token : string) => ({
+const defaultHeaders = (access_token) => ({
 	headers: {
 		'Authorization': 'bearer ' + access_token,
 		'Accept' : 'application/json',
@@ -23,18 +24,18 @@ const apiSchema = {
 
 const apiEndpoints = {
 	'countries' : () => `${apiURL}/countries`,
-	'brands' : (country_code : string) => `${apiURL}/catalog/${country_code}/brands`,
-	'models' : (country_code : string, brand_id : string) => `${apiURL}/catalog/${country_code}/brands/${brand_id}/models`,
-	'brandTypes' : (country_code : string, brand_id : string) => `${apiURL}/catalog/${country_code}/models/${brand_id}/types`,
-	'modelTypes' : (country_code : string, model_id : string) => `${apiURL}/catalog/${country_code}/models/${model_id}/types`,
-	'typeOptions' : (country_code : string, type_id : string) => `${apiURL}/catalog/${country_code}/types/${type_id}/options`
+	'brands' : (country_code) => `${apiURL}/catalog/${country_code}/brands`,
+	'models' : (country_code, brand_id) => `${apiURL}/catalog/${country_code}/brands/${brand_id}/models`,
+	'brandTypes' : (country_code, brand_id) => `${apiURL}/catalog/${country_code}/models/${brand_id}/types`,
+	'modelTypes' : (country_code, model_id) => `${apiURL}/catalog/${country_code}/models/${model_id}/types`,
+	'typeOptions' : (country_code, type_id) => `${apiURL}/catalog/${country_code}/types/${type_id}/options`
 }
 
 Object.keys(apiSchema).forEach(key => {
 
     app.get(`/api/${key}`, (req, res, next) => {
 
-        const _args = apiSchema[key].map(( paramKey : string ) => req.query[paramKey])
+        const _args = apiSchema[key].map(( paramKey ) => req.query[paramKey])
 
         reqProductData(
             req,
@@ -49,6 +50,8 @@ Object.keys(apiSchema).forEach(key => {
 const reqProductData = async (req, res, next, url, key) => {
 
 	const { token } = req.query
+
+	console.log(token)
 
 	try {
 

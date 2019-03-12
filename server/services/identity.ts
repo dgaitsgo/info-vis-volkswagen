@@ -1,15 +1,18 @@
-import axios from 'axios'
-import addSeconds from 'date-fns/add_seconds'
-import isAfter from 'date-fns/is_after'
-import app from './app/app'
-import Identity from './db/models/Identity.model'
+export {}
+
+const axios = require('axios')
+const addSeconds = require('date-fns/add_seconds')
+const isAfter = require('date-fns/is_after')
+const express = require('express')
+const app = require('../services/app/app')
+const baseUrl = 'https://identity.vwgroup.io/oidc/v1/token'
+const Identity = require('./db/models/Identity.model')
 
 interface Identity {
 	expirationDate : string
 	access_token : any
+	findOne : any
 }
-
-const baseUrl = 'https://identity.vwgroup.io/oidc/v1/token'
 
 const refreshAccessToken = () =>
 	axios ({
@@ -30,6 +33,8 @@ const refreshAccessToken = () =>
 app.use( async (req, res, next) => {
 
 	const now = new Date()
+
+	console.log(Identity.findOne)
 
     //find latest token
     let token = await Identity.findOne().sort({ createdAt : -1 }) as unknown as Identity

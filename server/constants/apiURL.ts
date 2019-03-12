@@ -1,1 +1,1 @@
-export default 'https://api.productdata.vwgroup.com/v2'
+module.exports = 'https://api.productdata.vwgroup.com/v2'

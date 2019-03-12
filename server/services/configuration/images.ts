@@ -6,19 +6,19 @@ const sendJSON = require('../../helpers/sendJSON')
 const express = require('express')
 const app = require('../app/app')
 
-app.get('/api/configChoices', async(req, res, next) => {
+app.get('/api/images', async (req, res, next) => {
 
 	const { configId, token } = req.query
 
 	try {
 
-		const choicesRes = await Okapi.configChoices(configId, token)
-		const { data } = choicesRes
+        const imagesRes = await Okapi.getImages(configId, token)
+		const { data } = imagesRes 
 
-        sendJSON(res, { choices : data.data })
-        
-    } catch (err) {
+		sendJSON(res, { images : data })
 
-        next(new Error(err))
-    }    
+	} catch (err) {
+		
+		next(new Error(err))
+	}
 })

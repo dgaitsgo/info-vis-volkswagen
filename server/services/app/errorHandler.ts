@@ -1,17 +1,17 @@
-import app from '../../services/app/app'
+export {}
+
+const app = require('../app/app')
 
 app.use( (err, req, res, next) => {
 
-    if (err.response) {
-        const { status, statusText } = err.response
+    let status, statusText = null
 
-        res.status(status).send({
-            error : true,
-            message: statusText,
-        })
+    if (err.response) {
+       [status, statusText] = err.response
     }
-    res.status(500).send({
+
+    res.status(status || 500).send({
         error: true,
-        message : 'Internal Service Error'
+        message : statusText || 'Internal Service Error'
     })
 })
