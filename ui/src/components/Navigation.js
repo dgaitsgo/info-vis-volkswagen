@@ -1,3 +1,6 @@
+/*
+ * import VW-Group logo
+*/
 import logoWhite from '../res/nav-vw-logo-white.png'
 import logo from '../res/nav-vw-logo.png'
 

@@ -9,9 +9,11 @@ const Tags = ({ selectedOptions, flatChoices, removeOption }) => {
 	return (
 		<div className='tags-wrapper'>
 			{selectedOptions.map( (option, i) => {
+					if (!flatChoices[option.id])
+						console.log('missing option is', flatChoices[option.id])
 					return (
 						<div className='tag description-tag' key={`tag_${i}`}>
-							{flatChoices[option.id].choiceDescription}
+							{flatChoices[option.id] && flatChoices[option.id].choiceDescription}
 							<span onClick={ () => removeOption({ id: option.id }) } className='tag-close'><i className="fas fa-times"></i></span>
 						</div>
 					)
@@ -71,10 +73,10 @@ class Options extends Component {
 				: 'tree-category'
 
 			return (
-				<div>
+				<div className='category-wrapper' key={`category_wrapper${i}`}>
 					<div
 						className={ treeCategoryClassName }
-						key={`${i}`}
+						key={`category_${i}`}
 						onClick={() => this.onCategoryClick({ categoryId: category.id })}
 						><h1><i className={isSelected ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> { label }</h1>
 					</div>
@@ -140,7 +142,7 @@ class Options extends Component {
 				isOpen={isOpen}
 				onRequestClose={closeModal}
 			>
-			<div className='header-wrapper'>
+			<div className='modal-header-wrapper'>
 				<Heading size={4} className='has-text-centered'>
 					Configure Your {model.name}
 				</Heading>
@@ -152,7 +154,7 @@ class Options extends Component {
 					type='text'
 					className='input-category-search'
 					onChange={ event => this.handleSearchChange(event) }
-					placeholder='Look for a category'
+					placeholder='Search for a category'
 				/>
 				<Tags
 					flatChoices={ flatChoices }

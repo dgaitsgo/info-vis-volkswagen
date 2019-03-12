@@ -33,4 +33,18 @@
 
 .card-wrapper{
 	margin-bottom: 2vh;
+
+}
+
+.more-interpolation {
+	animation: slideDown .2 ease-in;
+}
+
+@keyframes slideDown {
+	0%{
+		transform: translateY(-100px)
+	}
+	100%{
+		transform: translateY(0px)
+	}
 }

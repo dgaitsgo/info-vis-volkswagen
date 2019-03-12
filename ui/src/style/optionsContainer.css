@@ -16,8 +16,9 @@
 }
 
 .options-wrapper {
-	max-height: 45%;
+	max-height: 42%;
 	overflow-y: scroll;
+	overflow-x: hidden;
 	padding: 1%;
 }
 
@@ -44,4 +45,17 @@
 
 .filter-button.selected {
 	background-color: lightblue;
+}
+
+.choice-wrapper {
+	animation: slideDown .5s ease-in;
+}
+
+@keyframes slideDown {
+	0%{
+		transform: translateY(-100px)
+	}
+	100%{
+		transform: translateY(0px)
+	}
 }

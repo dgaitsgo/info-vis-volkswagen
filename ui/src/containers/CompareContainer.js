@@ -106,9 +106,6 @@ class CompareContainer extends Component {
 					<Heading size={4} className='has-text-centered'>
 						Model Comparison
 					</Heading>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-						<br />
 					<Heading size={5} className='has-text-centered'>
 						Bar Chart Title Goes Here
 					</Heading>
@@ -117,7 +114,7 @@ class CompareContainer extends Component {
 							<span><strong>Sort by: </strong></span>
 							<label className='field'>CO<sub>2</sub> Emissions
 								<input
-									onClick={() => this.setCompareMode('CO2')}
+									onChange={() => this.setCompareMode('CO2')}
 									className='is-checkradio'
 									type='radio'
 									checked={compareMode === 'CO2'}
@@ -126,7 +123,7 @@ class CompareContainer extends Component {
 							</label>
 							<label className='field'>Fuel Consumption
 								<input
-									onClick={() => this.setCompareMode('CONSUMPTION')}
+									onChange={() => this.setCompareMode('CONSUMPTION')}
 									className='is-checkradio'
 									type='radio'
 									checked={compareMode === 'CONSUMPTION'} />
@@ -143,8 +140,6 @@ class CompareContainer extends Component {
 					<Heading size={4} className='has-text-centered'>
 						Model Ranking
 					</Heading>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-						<br />
 					<Dashboard
 						defaultModels={ defaultModels }
 						compareMode={ compareMode }

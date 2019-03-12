@@ -12,6 +12,16 @@
 
 }
 
+.modal-header-wrapper {
+	/* background-color: red; */
+	padding-bottom: 5px;
+}
+
+.button-panel {
+	display: flex;
+	justify-content: space-between;
+}
+
 .choice.valid {
 	/* background-color: ; */
 }
