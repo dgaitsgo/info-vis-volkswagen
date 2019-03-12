@@ -1,0 +1,13 @@
+.rv-discrete-color-legend-item{
+    display: inline-block;
+    padding: 10px 10px 0px 10px;
+}
+.rv-discrete-color-legend-item svg{
+    height: 12px;
+}
+.rv-discrete-color-legend-item__title{
+    padding-left: 5px;
+}
+.rv-xy-plot__axis__ticks{
+    transform:translate(45px, 0px);
+}
