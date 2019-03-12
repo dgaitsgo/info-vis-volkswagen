@@ -69,20 +69,6 @@ const resolveOptions = (apiURL, configId, token) =>
 		}
 	})
 
-const addOption = (apiURL, configId, optionId, token) =>
-	axios({
-		method : 'post',
-		url : `${apiURL}/configurations/${configId}/options`,
-		headers : {
-			'Authorization' : 'bearer ' + token.access_token,
-			'Content-Type' : 'application/json',
-			'Accept' : 'application/json'
-		},
-		data : {
-			id : optionId
-		}
-	})
-
 const getImages = (apiURL, configId, token) =>
 	axios({
 		method : 'get',

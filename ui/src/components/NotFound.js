@@ -1,8 +1,4 @@
-/*
- * notFound Component by Sebastian Kunz
-*/
-
-import React, { Component } from 'react'
+import React from 'react'
 
 const NotFound = () => {
 
