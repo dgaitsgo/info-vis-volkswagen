@@ -1,69 +1,66 @@
 /*
- * Navigation Component by Sebastian Kunz
+ * import VW-Group logo
 */
-import React, { Component } from 'react'
-import { NavLink } from 'react-router-dom'
 import logoWhite from '../res/nav-vw-logo-white.png'
 import logo from '../res/nav-vw-logo.png'
-import { Button } from 'react-bulma-components/full'
+
+import React, { Component } from 'react'
 import { Navbar } from 'react-bulma-components/full'
-import { withRouter } from 'react-router-dom'
+import { withRouter, NavLink } from 'react-router-dom'
 import '../style/navigation.css'
 
 class Navigation extends Component {
+
     constructor(props) {
         super(props)
         this.state = {
 			open: true,
-			color: "black",
-			colorL: "light",
-			logo: logo,
-			logoW: logoWhite
         }
 	}
+
     render() {
 		const urlData = this.props.location.pathname.split('/')
-		console.log(urlData);
-		const open = this.state.open;
-		const navColor = this.state.color;
-		const navColorL = this.state.colorL;
-		const logo = this.state.logo;
-		const logoW = this.state.logoW;
+		const isGraphPage = urlData[1] === ''
+		const { open } = this.state
+
         return (
 			<Navbar
-				color={urlData.length <= 2 && urlData[1] == "" ? navColor: navColorL}
-				fixed="top"
+				color={isGraphPage ? 'black' : 'light' }
+				fixed='top'
 				active={!open}
 				transparent={false}
 			>
 				<Navbar.Brand>
-					<Navbar.Item renderAs="a" href="/">
+					<NavLink className='navbar-item' to='/'>
 						<img
-							src={urlData.length <= 2 && urlData[1] == "" ? logoWhite: logo}
-							alt="logo"
-							width = "112"
-							height = "31"
+							src={isGraphPage ? logoWhite :  logo}
+							alt='logo'
+							width = '112'
+							height = '31'
 						/>
-					</Navbar.Item>
+					</NavLink>
 					<Navbar.Burger
 						active={open}
-						onClick={() =>
-							this.setState({
-							open: !this.state.open
-							})
-						}
+						onClick={() => this.setState({ open: !this.state.open })}
 					/>
 				</Navbar.Brand>
 				<Navbar.Menu active={open}>
-								{urlData[1] == "explore" && <Navbar.Item href={`/${urlData[1]}`}>Country</Navbar.Item>}
-								{urlData.length > 2 && <Navbar.Item href={`/${urlData[1]}/${urlData[2]}`}>Brands</Navbar.Item>}
-								{urlData.length > 3 && <Navbar.Item href={`/${urlData[1]}/${urlData[2]}/${urlData[3]}`}>Models</Navbar.Item>}
-								{urlData.length > 4 && <Navbar.Item href={`/${urlData[1]}/${urlData[2]}/${urlData[3]}/${urlData[4]}`}>Configure</Navbar.Item>}
+					{urlData.length > 2 &&
+						<NavLink className='navbar-item' to={`/${urlData[1]}`}>
+							<div>Country</div>
+						</NavLink>}
+					{urlData.length > 3 &&
+						<NavLink className='navbar-item' to={`/${urlData[1]}/${urlData[2]}`}>
+							<div>Brands</div>
+						</NavLink>}
+					{urlData.length > 4 &&
+						<NavLink className='navbar-item' to={`/${urlData[1]}/${urlData[2]}/${urlData[3]}`}>
+							<div>Models</div>
+						</NavLink>}
 				</Navbar.Menu>
-		</Navbar>
+			</Navbar>
 		)
     }
-
 }
 
 export default withRouter(Navigation)

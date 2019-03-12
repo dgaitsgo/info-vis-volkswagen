@@ -6,11 +6,8 @@ import {
 	VerticalGridLines,
 	HorizontalGridLines,
 	VerticalBarSeries,
-	VerticalBarSeriesCanvas,
-	LabelSeries,
-	MarkSeries,
 	Hint
-  } from 'react-vis'
+} from 'react-vis'
 
 class BarChart extends Component{
 
@@ -26,7 +23,7 @@ class BarChart extends Component{
 			const model = defaultModels[modelId]
 			if (model.model.wltp.length) {
 				const currentInterps = model.model.wltp[0].interpolations
-					.filter(interp => interp.value_type === compareMode && interp.phase == phase)
+					.filter(interp => interp.value_type === compareMode && interp.phase === phase)
 					.map( interp => interp.value)
 					return ({
 						value: currentInterps,

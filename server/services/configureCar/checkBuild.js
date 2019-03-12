@@ -7,7 +7,9 @@ app.get('/api/checkBuild', async (req, res) => {
 
 	const _token = req.query.token
 	const token = typeof(_token) === 'string' ? JSON.parse(_token) : _token
-	const { configurationId } = req.query
+	const { configId } = req.query
+
+	console.log('checking build for : ', configId)
 
 	try {
         
@@ -23,9 +25,11 @@ app.get('/api/checkBuild', async (req, res) => {
 
 		const { data } = checkRes
 
-		sendJSON(res, { token, build : data })
+		sendJSON(res, { build : data })
 
 	} catch (err) {
+
+		console.error(err)		
 
         const { status, statusText, headers } = err.response
 

@@ -1,6 +1,3 @@
-/*
- * Component by Sebastian Kunz
-*/
 import React, { Component } from 'react'
 import ForceGraph3D from 'react-force-graph-3d'
 import data from './data.js'
@@ -21,6 +18,7 @@ class GraphContainer extends Component {
 			nodes: [],
 			links: []
 		}
+
 		// define brand and model colors
 		const colors = {
 			"Audi": {
@@ -44,6 +42,7 @@ class GraphContainer extends Component {
 				darker:'#b71c1c'
 			}
 		}
+
 		// define center Node
 		res.nodes.push({
 			id:'vw-group',
@@ -78,24 +77,27 @@ class GraphContainer extends Component {
 			})
 		})
 		return res
-		}
-		componentWillUnmount()
-		{
-			clearInterval(this.rotateInterval)
-		}
-		componentDidMount() {
-			
-			const distance = 400
-			let angle = 0
+	}
 
-			this.rotateInterval = setInterval(() => {
-				this.fg.cameraPosition({
-					x: distance * Math.sin(angle),
-					z: distance * Math.cos(angle)
-				});
-				angle += Math.PI / 300;
-			}, 30)
-		}
+	componentWillUnmount()
+	{
+		clearInterval(this.rotateInterval)
+	}
+
+	componentDidMount() {
+
+		const distance = 500
+		let angle = 0
+
+		this.rotateInterval = setInterval(() => {
+			this.fg.cameraPosition({
+				x: distance * Math.sin(angle),
+				z: distance * Math.cos(angle)
+			});
+			angle += Math.PI / 300;
+		}, 30)
+	}
+
 	render() {
 		const gData = this.prepGData(data)
 		return <ForceGraph3D

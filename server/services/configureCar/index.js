@@ -1,9 +1,9 @@
 module.exports = {
     configurations : require('./configurations'),
     newConfiguration : require('./newConfiguration'),
-    configurationOptions : require('./configurationOptions'),
-    // defaultConfigurations : require('./defaultConfigurations'),
+    configChoices : require('./configChoices'),
     deleteAllConfigurations : require('./deleteAllConfigurations'),
-    choices : require('./choices'),
-    checkBuild : require('./checkBuild')
+    checkBuild : require('./checkBuild'),
+    addOption : require('./addOption'),
+    removeOption : require('./removeOption')
 }

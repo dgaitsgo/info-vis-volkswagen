@@ -6,20 +6,22 @@ import Redirect from 'react-router-dom/Redirect'
 
 class LandingContainer extends Component {
 
-    constructor(props) {
+	constructor(props) {
 
 		super(props)
 
-        this.state = {
-            modalIsOpen: false,
-            countries : null
-        }
-    }
-	openModal = () => this.setState({ modalIsOpen: true })
-	closeModal = () => this.setState({ modalIsOpen: false })
-    componentDidMount() {
+		this.state = {
+			modalIsOpen: false,
 
-		const { token } = this.props
+			//all the countries of OKAPI
+			countries : null
+		}
+	}
+	openModal = () => this.setState({ modalIsOpen: true })
+
+	closeModal = () => this.setState({ modalIsOpen: false })
+
+	componentDidMount() {
 
 		axios.get('/api/countries').then(res => {
 			let countries = res.data.countries.data
@@ -39,45 +41,43 @@ class LandingContainer extends Component {
 		})
 	}
 
-    render() {
+	render() {
 
-        const {
-            countries
-        } = this.state
+		const { countries } = this.state
 
-        if (!countries) {
-            return (
-                <div className="loaders">
-                <Loader
-                style={{
-                    position:'fixed',
-                    width:300,
-                    height:300,
-                    border: '4px solid #023268',
-                    borderTopColor: 'transparent',
-                    boderRightColor: 'transparent',
-                    margin: 'auto',
-                    top: '-50px',
-                    left: 0,
-                    bottom: 0,
-                    right: 0
-                }}
-                message={'Getting markets...'} />
-                </div>
-            )
-        }
+		if (!countries) {
+			return (
+				<div className="loaders">
+				<Loader
+					style={{
+						position:'fixed',
+						width:300,
+						height:300,
+						border: '4px solid #023268',
+						borderTopColor: 'transparent',
+						boderRightColor: 'transparent',
+						margin: 'auto',
+						top: '-50px',
+						left: 0,
+						bottom: 0,
+						right: 0
+					}}
+				message={'Getting markets...'} />
+				</div>
+			)
+		}
 
-        return (
-            <Landing
-                onClickCountry={this.onClickCountry}
-                toggleModal={this.toggleModal}
-                openModal={this.openModal}
-                closeModal={this.closeModal}
+		return (
+			<Landing
+				onClickCountry={this.onClickCountry}
+				toggleModal={this.toggleModal}
+				openModal={this.openModal}
+				closeModal={this.closeModal}
 				modalIsOpen={this.state.modalIsOpen}
 				countries={countries}
-            />
-        )
-    }
+			/>
+		)
+	}
 }
 
 export default LandingContainer
