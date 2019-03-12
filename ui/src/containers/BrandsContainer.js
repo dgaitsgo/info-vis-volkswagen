@@ -13,6 +13,7 @@ class BrandsContainer extends Component {
 		super(props)
 
         this.state = {
+			//all the brands that are available in the selected country
 			brands : null,
         }
 	}

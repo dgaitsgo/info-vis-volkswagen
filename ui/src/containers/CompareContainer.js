@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-
 import { Loader, Section, Container, Heading } from 'react-bulma-components/full'
-import 'react-tabs/style/react-tabs.css'
-
 import Dashboard from '../components/Dashboard'
 import BarChart from '../components/BarChart'
 import OptionsContainer from './OptionsContainer'
@@ -21,6 +18,7 @@ class CompareContainer extends Component {
 			isTyping: true,
 			modalContent: {},
 		}
+
 		this.phases = [
 			{ key : 'LOW', color : '#4caf50', label : 'Low' },
 			{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
@@ -34,7 +32,7 @@ class CompareContainer extends Component {
 
 		const urlData = this.props.location.pathname.split('/')
 		const selectedModels = JSON.parse(decodeURIComponent(urlData[4]))
-		const selectedModelsIds = Object.keys(selectedModels).map( key => ({ id: key, name: selectedModels[key].modelName }))
+		const selectedModelsIds = Object.keys(selectedModels).map( key => ({ id: key, name: selectedModels[key].modelName, typeId: selectedModels[key].type.id}))
 
 		const defaultModelsRes = await axios.get('/api/defaultModels', {
 			params : {
@@ -44,6 +42,7 @@ class CompareContainer extends Component {
 
 		let defaultModelsArr = defaultModelsRes.data
 		let defaultModels = {}
+
 		//reassociate types and models
 		defaultModelsArr.forEach( (model, i) =>
 			defaultModels[model.model_id] =  {
@@ -107,9 +106,6 @@ class CompareContainer extends Component {
 					<Heading size={4} className='has-text-centered'>
 						Model Comparison
 					</Heading>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-						<br />
 					<Heading size={5} className='has-text-centered'>
 						Bar Chart Title Goes Here
 					</Heading>
@@ -118,7 +114,7 @@ class CompareContainer extends Component {
 							<span><strong>Sort by: </strong></span>
 							<label className='field'>CO<sub>2</sub> Emissions
 								<input
-									onClick={() => this.setCompareMode('CO2')}
+									onChange={() => this.setCompareMode('CO2')}
 									className='is-checkradio'
 									type='radio'
 									checked={compareMode === 'CO2'}
@@ -127,7 +123,7 @@ class CompareContainer extends Component {
 							</label>
 							<label className='field'>Fuel Consumption
 								<input
-									onClick={() => this.setCompareMode('CONSUMPTION')}
+									onChange={() => this.setCompareMode('CONSUMPTION')}
 									className='is-checkradio'
 									type='radio'
 									checked={compareMode === 'CONSUMPTION'} />
@@ -140,12 +136,10 @@ class CompareContainer extends Component {
 						compareMode={ compareMode }
 						phases={ this.phases }
 					/>
-					<hr class='divider'/>
+					<hr className='divider'/>
 					<Heading size={4} className='has-text-centered'>
 						Model Ranking
 					</Heading>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-						<br />
 					<Dashboard
 						defaultModels={ defaultModels }
 						compareMode={ compareMode }
@@ -158,7 +152,7 @@ class CompareContainer extends Component {
 							closeModal={ this.closeModal }
 							model={model}
 							countryCode={ urlData[2] }
-							defaultOptions={ defaultModels[model.id].model.defaultOptions }
+							defaultOptions={defaultModels[model.id].model.defaultOptions}
 						/>}
 					</Container>
 				</Section>

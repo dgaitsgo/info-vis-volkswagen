@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
+import { sortBy } from 'lodash'
 import InfoCard from './InfoCard'
 import MissingCard from '../components/MissingCard'
 
@@ -34,7 +34,7 @@ const rankModels = ({ defaultModels, compareMode }) => {
 		})
 	})
 
-	return (_.sortBy(averageModelMap, elem => elem.average))
+	return (sortBy(averageModelMap, elem => elem.average))
 }
 
 class Dashboard extends Component {
@@ -98,7 +98,7 @@ class Dashboard extends Component {
 					if (hasWltpData) {
 						return (
 							<InfoCard
-								key={i}
+								key={`infoCard_${i}`}
 								ranking={i}
 								model={ currModel }
 								compareMode={ compareMode }
@@ -113,7 +113,7 @@ class Dashboard extends Component {
 					else {
 						return (
 							<MissingCard
-								key={i}
+								key={`missingCard_${i}`}
 								model={ currModel }
 								hasWltpData={ hasWltpData }
 								openConfiguration={ openConfiguration }

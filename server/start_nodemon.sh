@@ -1,1 +1,1 @@
-../node_modules/.bin/nodemon index.js
+./node_modules/.bin/nodemon index.js

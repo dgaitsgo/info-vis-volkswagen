@@ -9,7 +9,7 @@ const NoData = () => {
 			<font color='#d50000'> No Data Found </font>
 			<i data-tip='Please be advised, that currently not for all models within OKAPI,
 				WLTP values can be provided.'
-			class='fas fa-info-circle'/>
+			className='fas fa-info-circle'/>
 			<ReactTooltip
 				place='top'
 				type='dark'

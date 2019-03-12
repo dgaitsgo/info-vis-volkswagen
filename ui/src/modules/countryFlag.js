@@ -1,5 +1,3 @@
-//Thanks to this random guy
-
 const offset = 127397;
 const A = 65;
 const Z = 90;

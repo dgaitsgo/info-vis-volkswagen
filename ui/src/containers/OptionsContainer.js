@@ -1,27 +1,13 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Error from '../components/Error'
-import { Loader, Button, Heading, Columns } from 'react-bulma-components/full'
-import Modal from 'react-modal'
-import _ from 'lodash'
 import '../style/optionsContainer.css'
+import { Alert } from 'rsuite'
+import getLocalStorage from '../modules/localStorage'
+import isBefore from 'date-fns/is_before'
+import addDays from 'date-fns/add_days'
+import Options from '../components/Options'
 
-const Tags = ({ options, selectedOptions, onRemove }) => {
-	return (
-		<div className='tags-wrapper'>
-			{ options.filter( option => selectedOptions.includes(option.id))
-			.map( (option, i) => {
-					return (
-						<div className='tag description-tag' key={`tag_${i}`}>
-							{option.description}
-							<span onClick={ () => onRemove({ id: option.id }) } className='tag-close'><i className="fas fa-times"></i></span>
-						</div>
-					)
-				})
-			}
-		</div>
-	)
-}
 
 class OptionsContainer extends Component {
 
@@ -29,259 +15,349 @@ class OptionsContainer extends Component {
 
 		super(props)
 
+		this.loadingEnum = {
+			CONFIG : 'Checking config',
+			CHOICES : 'Loading choices',
+			ADD : 'Adding option',
+			REMOVE : 'Removing option',
+			BUILD : 'Checking build',
+			REBUILD : 'Rebuilding configuration',
+		}
+
+		this.state = {
+			currentConfig : null,
+			error : null,
+			isOpen : true
+		}
+
+		this.handleAddOption = this.handleAddOption.bind(this)
+		this.handleRebuildConfig = this.handleRebuildConfig.bind(this)
+		this.handleRemoveOption = this.handleRemoveOption.bind(this)
+	}
+
+	replaceOptions = (configId, options) =>
+		axios.get('/api/replaceOptions', {
+			params : {
+				configId,
+				options
+			}
+		})
+
+	configChoices = (configId) =>
+		axios.get('/api/configChoices', {
+			params : {
+				configId
+			}
+		})
+
+	createConfig = (modelId, options) =>
+		axios.get('/api/newConfiguration', {
+			params : {
+				model_id : modelId,
+				options
+			}
+		})
+
+	checkBuild = configId =>
+		axios.get('/api/checkBuild', {
+			params : {
+				configId
+			}
+		})
+
+	removeOption = (configId, optionId) =>
+		axios.get('/api/removeOption', {
+			params : {
+				configId,
+				optionId
+			}
+		})
+
+	addOption = (configId, optionId) =>
+		axios.get('/api/addOption', {
+			params : {
+				configId,
+				optionId
+			}
+		})
+
+	//Only show options that appear in the type and are valid for the configuration
+	/*
+		flatten configuration options
+
+		target data set:
+		option : {
+			valid : boolean,
+			id : string,
+			optionDescription : string,
+			categoryDescription : string
+		}
+			selectedOptions: defaultOptions.map( option => option.id),
+
+		filter by looking up ids in type options
+
+	*/
+
+	async handleAddOption(optionId) {
+
+		let {
+			currentConfig,
+			ls
+		} = this.state
+
+		Alert.info(this.loadingEnum.ADD)
+
+		try {
+
+			//Add option
+			const nextOptionsRes = await this.addOption(currentConfig.configId, optionId)
+			const nextOptions = nextOptionsRes.data.nextOptions
+
+			//check build
+			Alert.info(this.loadingEnum.BUILD)
+			const buildRes = await this.checkBuild(currentConfig.configId)
+			const build = buildRes.data.build
+
+			//update configuration
+			currentConfig.selectedOptions = nextOptions
+			currentConfig.build = build
+
+			//insert in local storage and get revision
+			const rev = await ls.insert(currentConfig)
+
+			currentConfig.rev = rev
+			currentConfig._rev = rev
+
+			this.setState({ currentConfig })
+
+		} catch (e) {
+
+			this.setState({ error : { e, message : 'Could not add option.' } })
+		}
+	}
+
+	async handleRemoveOption(optionId) {
+
+		let {
+			currentConfig,
+			ls
+		} = this.state
+
+		Alert.info(this.loadingEnum.REMOVE)
+
+		try {
+
+			//remove option
+			const nextOptionsRes = await this.removeOption(currentConfig.configId, optionId)
+			const nextOptions = nextOptionsRes.data.data
+
+			//check build
+			Alert.info(this.loadingEnum.BUILD)
+			const buildRes = await this.checkBuild(currentConfig.configId)
+			const build = buildRes.data.build
+
+			//update configuration
+			currentConfig.selectedOptions = nextOptions
+			currentConfig.build = build
+
+			//insert in local storage and get revision
+			const rev = await ls.insert(currentConfig)
+
+			currentConfig.rev = rev
+			currentConfig._rev = rev
+
+			this.setState({ currentConfig })
+
+		} catch (e) {
+			this.setState({ error : { e, message : 'Could not remove option.' } })
+		}
+	}
+
+
+	async handleRebuildConfig() {
+
+		let {
+			currentConfig,
+			ls
+		} = this.state
+
 		const {
 			defaultOptions
 		} = this.props
 
-		this.state = {
+		Alert.info(this.loadingEnum.REBUILD)
 
-			// initially loading all othe choices
-			loadingConfigOptions : true,
+		try {
 
-			//we're reloading the config after every addition and removal of options
-			loadingConfig : false,
+			//replace options
+			const nextOptionsRes = await this.replaceOptions(currentConfig.configId, defaultOptions)
+			const nextOptions = nextOptionsRes.data
 
-			loadingCheckBuild : false,
+			//check build
+			Alert.info(this.loadingEnum.BUILD)
+			const buildRes = await this.checkBuild(currentConfig.configId)
+			const build = buildRes.data.build
 
-			//all the choices for a configuration
-			choices : null,
+			// update current config
+			currentConfig.selectedOptions = nextOptions
+			currentConfig.build = build
 
-			// let the user know if the build they have is configurable or not
-			build : null,
+			//save to local storage
+			const rev = await ls.insert(currentConfig)
 
-			//skunz added////
-			//all the options a user can choose for a type
-			options: [],
+			currentConfig.rev = rev
+			currentConfig._rev = rev
 
-			selectedOptions: defaultOptions.map( option => option.id),
+			this.setState({ currentConfig })
 
-			searchedCategories: null,
 
-			//indicading if the options are currently beeing loaded
-			loadingOptions: true,
+		} catch (e) {
 
-			//represents the selected Category for a type
-			selectedCategories: [],
-
-			filterMode: null,
+			this.setState({ error : { e, message : 'Could not rebuild configuration.' } })
 		}
 	}
 
-	addOption = ({ id }) => {
 
-		let selectedOptions = this.state.selectedOptions
+	/***
+	 * check in local storage first if user has already configured this model
+		and that it's been less than 24 hours since creation.
+		Else, create a configuration with default options and save it to local storage
+		target data : {
+			configId : string
+			model : Model
+			type : string type_id
+			options : [Options]
+			expirationDate : Date
+		}*/
 
-		selectedOptions.push( id )
+	async getConfig(ls, model, defaultOptions) {
 
-		this.setState({ selectedOptions })
-	}
+		try {
 
-	removeOption = ({ id }) => {
+			const ls_modelRes = await ls.find({ selector : { id : model.id }})
 
-		const {
-			selectedOptions
-		} = this.state
+			if (ls_modelRes.docs.length && isBefore(ls_modelRes.docs[0].expirationDate, addDays(new Date(), 1)) ) {
 
-		this.setState({ selectedOptions: selectedOptions.filter( optionId => optionId !== id) })
-	}
+				const currentConfig = ls_modelRes.docs[0]
 
-	getOptions = () => {
+				return (currentConfig)
 
-		const {
-			countryCode,
-			model,
-		} = this.props
+			} else {
 
-		axios.get('/api/options', {
-			params : {
-				countryCode,
-				type_id: model.type.id
+				// else create a configuration and save to local storage
+				Alert.info(this.loadingEnum.CONFIG)
+				const newConfigRes = await this.createConfig(model.id, defaultOptions)
+				const newConfig = newConfigRes.data.newConfiguration
+
+				Alert.info(this.loadingEnum.BUILD)
+				const buildRes = await this.checkBuild(newConfig.id)
+				const build = buildRes.data.build
+
+				Alert.info(this.loadingEnum.CONFIG_CHOICES)
+				const configChoicesRes = await this.configChoices(newConfig.id)
+				const choices = configChoicesRes.data.choices
+
+				const currentConfig = {
+					id : model.id,
+					_id : model.id,
+					configId : newConfig.id,
+					expirationDate : newConfig.expirationDate,
+					model : this.props.model,
+					selectedOptions : defaultOptions,
+					choices,
+					build
+				}
+
+				// Local storage variables to track revision
+				const rev = await ls.insert(currentConfig)
+
+				currentConfig.rev = rev
+				currentConfig._rev = rev
+
+				return (currentConfig)
 			}
-		}).then(res => {
-			this.setState({
-				loadingOptions : false,
-				options: res.data.options.data,
-			})
-		})
-		.catch(err => <Error message={`Could not get options for ${model.type.id}`}/>)
-	}
-
-	cancelConfiguration = () => {
-
-	}
-
-	restoreConfiguration = () => {
-
-	}
-
-	applyConfiguration = () => {
-
+		} catch (e) {
+			console.log(e)
+		}
 	}
 
 	async componentDidMount() {
 
-		this.getOptions()
-	}
-
-	onCategoryClick = ({ category }) => {
-
-		let { selectedCategories } = this.state
-
-
-		if (!selectedCategories.includes(category))
-		{
-			selectedCategories.push(category)
-			this.setState({ selectedCategories })
-		}
-		else {
-			this.setState({ selectedCategories: selectedCategories.filter( elem => elem !== category )})
-		}
-
-	}
-
-	handleChange = (event, uniqueCategories) => {
-		let searchedCategories = uniqueCategories.filter( category => category.includes(event.target.value.toUpperCase()))
-
-		this.setState({ searchedCategories })
-	}
-
-	getCategories = allCategories => {
-
-		return allCategories.map( (category, i) => {
-			const isSelected = this.state.selectedCategories.includes(category)
-			const treeCategoryClassName = isSelected
-				? 'tree-category selected'
-				: 'tree-category'
-			return (
-				<div className='tree-category-wrapper' key={`tree-wrapper_${i}`}>
-					<div
-						className={ treeCategoryClassName }
-						key={`tree-category_${i}`}
-						onClick={() => {
-							this.onCategoryClick({ category })
-						}}
-						><h1><i className={isSelected ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> { category }</h1>
-					</div>
-					{ isSelected &&
-						<div className='tree-option-wrapper'>
-							{this.getOptionsOfCategory( category )}
-						</div>
-					}
-				</div>
-			)})
-	}
-
-	getOptionsOfCategory = category => {
-
 		const {
-			options,
-			selectedOptions
-		} = this.state
+			model,
+			defaultOptions
+		} = this.props
 
-		return options.filter( option => option.category === category)
-			.map( (option, i) => {
-				const isSelected = selectedOptions.includes(option.id)
-				return (
-					<div
-						className={isSelected ? 'tree-option selected' : 'tree-option'}
-						key={`tree_option_${i}`}
-						onClick={ isSelected
-							? () => this.removeOption( { id: option.id })
-							: () => this.addOption({ id: option.id, description: option.description }) }
-						>
-							{option.description}
-					</div>
-				)
+		try {
+
+			const ls = getLocalStorage('vw_okapi')
+			const currentConfig = await this.getConfig(ls, model, defaultOptions)
+
+			this.setState({
+				currentConfig,
+				ls
 			})
+
+		} catch (e) {
+			this.setState({ error : { e, message : 'Could not load configurations.' } })
+		}
 	}
 
-	filterEquipment = ({ uniqueCategories, classification }) => {
+	flattenChoices () {
 
-		let {
-			searchedCategories
-		} =  this.state
+		if (!this.state.currentConfig)
+			return null
 
-		if (classification === this.state.filterMode)
-			this.setState({ searchedCategories: null, filterMode: null })
-		else {
-			searchedCategories = uniqueCategories.filter( category => category.classification === classification).map( category => category.category ).sort()
+		const { choices } = this.state.currentConfig
 
-			this.setState({ searchedCategories, filterMode: classification })
-		}
+		let flatChoices = {}
 
+		choices.forEach(category => {
 
+			const label = category.description.length ? category.description : category.id
+
+			category.valid.forEach( validOption => {
+
+				flatChoices[validOption.id] = {
+					id : validOption.id,
+					valid : true,
+					choiceDescription : validOption.description,
+					categoryDescription : label
+				}
+			})
+
+			category.invalid.forEach( invalidOption => {
+
+				flatChoices[invalidOption.id] = {
+					id : invalidOption.id,
+					valid : false,
+					choiceDescription : invalidOption.description,
+					categoryDescription : label
+				}
+			})
+		})
+
+		return (flatChoices)
 	}
 
 	render() {
 
 		const {
-			options,
-			loadingOptions,
-			selectedOptions,
-			searchedCategories,
-			filterMode
-		} = this.state
-
-		const {
-			isOpen,
-			model,
 			closeModal,
+			isOpen,
 		} = this.props
 
-		const categoriesWithDups = options.map( option => {
-			return {
-				category: option.category,
-				classification: option.classification
-			}
-		})
-		const uniqueCategories = _.uniqBy(categoriesWithDups, 'category');
-		const uniqueCategoriesOnly = uniqueCategories.map( category => category.category).sort()
-
-	return (
-		<Modal
-			isOpen={isOpen}
-			onRequestClose={closeModal}
-		>
-		<div className='header-wrapper'>
-			<Heading size={4} className='has-text-centered'>
-				Configure Your {model.name}
-			</Heading>
-			<Heading size={6} className='has-text-centered'>
-				{model.type.name}
-			</Heading>
-			<img src='https://images.hgmsites.net/med/2019-audi-a4_100656485_m.jpg' alt='test'/>
-			<input
-				type='text'
-				className='input-category-search'
-				onChange={ event => this.handleChange(event, uniqueCategoriesOnly) }
-				placeholder='Look for a category'
+		return (
+			<Options
+				flatChoices={this.flattenChoices()}
+				closeModal={closeModal}
+				isOpen={isOpen}
+				addOption={this.handleAddOption}
+				removeOption={this.handleRemoveOption}
+				onClickRebuild={this.handleRebuildConfig}
+				currentConfig={this.state.currentConfig}
 			/>
-			<Button className={ filterMode === 'STANDARD_EQUIPMENT' ? 'filter-button selected' : 'filter-button' } onClick={ () => this.filterEquipment({classification: 'STANDARD_EQUIPMENT', uniqueCategories }) }> Standard Equipment </Button>
-			<Button className={ filterMode === 'OPTIONAL_EQUIPMENT' ? 'filter-button selected' : 'filter-button' } onClick={ () => this.filterEquipment({classification: 'OPTIONAL_EQUIPMENT', uniqueCategories }) }> Optional Equipment </Button>
-			<Tags
-				options={ options }
-				selectedOptions={ selectedOptions }
-				onRemove={ this.removeOption }
-			/>
-		</div>
-		<div className='options-wrapper'>
-			{loadingOptions
-				? <Loader message='loading options'/>
-				:
-				<Columns className='tree-wrapper has-text-centered'>
-					<Columns.Column className='tree-category-wrapper'>
-						<Heading size={6}> Categories </Heading>
-						{this.getCategories(searchedCategories === null ? uniqueCategoriesOnly : searchedCategories)}
-					</Columns.Column>
-				</Columns>
-			}
-		</div>
-		<div className='button-panel'>
-			<Button onClick={ this.cancelConfiguration } className='configure-button'>Cancel</Button>
-			<Button onClick={ this.restoreConfiguration } className='configure-button'>Restore</Button>
-			<Button onClick={ this.applyConfiguration } className='configure-button'>Apply</Button>
-		</div>
-		</Modal>)
+		)
 	}
 }
 

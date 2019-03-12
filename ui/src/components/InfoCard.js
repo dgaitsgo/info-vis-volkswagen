@@ -65,11 +65,11 @@ class InfoCard extends Component {
 		const {
 			ranking,
 			model,
-			compareMode,
 			openConfiguration,
 			getInterpolations,
 			phases,
-			average
+			average,
+			compareMode
 		} = this.props
 
 		const wltpData = model.model.wltp[0]
@@ -104,10 +104,10 @@ class InfoCard extends Component {
 							<Columns.Column>
 								<div className='data-wrapper'>
 									<div>
-										<i class='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}
+										<i className='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}
 									</div>
 									<div>
-										<i class='fas fa-gas-pump'></i> {wltpData.fuel_types}
+										<i className='fas fa-gas-pump'></i> {wltpData.fuel_types}
 									</div>
 									<div className='compare-model-value'>
 										<span onClick={ this.setShowMoreEmissions }> Detailed emissions <i className={showMoreEmissions ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> </span>
@@ -118,7 +118,7 @@ class InfoCard extends Component {
 											/>: null }
 									</div>
 									<div>
-										<span onClick={ this.setShowMoreConsumption }><i class='fas fa-tint'/> Detailed consumption <i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i></span>
+										<span onClick={ this.setShowMoreConsumption }><i className='fas fa-tint'/> Detailed consumption <i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i></span>
 										{ showMoreConsumption
 											? <ShowMoreInformation
 												key={ranking}
