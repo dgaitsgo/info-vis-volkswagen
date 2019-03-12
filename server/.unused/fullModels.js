@@ -1,8 +1,8 @@
 
 const axios = require('axios')
-const app = require('../app')
-const apiURL = require('../../constants/apiURL')
-const sendJSON = require('../../helpers/sendJSON')
+const app = require('../services/app/app')
+const apiURL = require('../constants/apiURL')
+const sendJSON = require('../helpers/sendJSON')
 const db = require('../database')
 const addHours = require('date-fns/add_hours')
 

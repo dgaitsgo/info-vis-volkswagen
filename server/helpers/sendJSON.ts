@@ -4,4 +4,4 @@ const sendJSON = (res, content) => {
 	res.send(JSON.stringify(content))
 }
 
-module.exports = sendJSON
+export default sendJSON

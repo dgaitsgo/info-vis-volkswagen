@@ -142,8 +142,6 @@ class OptionsContainer extends Component {
 			ls
 		} = this.state
 
-		console.log('what the actual fuck')
-
 		Alert.info(this.loadingEnum.REMOVE)
 
 		try {

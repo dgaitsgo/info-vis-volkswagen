@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 const mongoDB = process.env.MONGO_URL
 
@@ -6,7 +6,7 @@ mongoose.connect(mongoDB, { useNewUrlParser : true })
     .then( () => {
         console.log('Connected to mongodb')
     })
-    .catch( () => {
+    .catch( err => {
         console.log(err)
     })
 
