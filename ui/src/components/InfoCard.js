@@ -5,7 +5,7 @@ import { Box, Button, Icon, Card, Heading, Media, Image, Columns } from 'react-b
 import '../style/dashboard.css'
 import '../style/infocard.css'
 import { compare } from 'ltgt';
-import carTumbNail from '../res/carIcon.png'
+import carThumbnail from '../res/carIcon.png'
 
 import ReactTooltip from 'react-tooltip'
 
@@ -92,10 +92,10 @@ class InfoCard extends Component {
 						<div className='header-wrapper'>
 							<div className="header-card">
 								<Heading size={4}>
-									{ ranking === 0 && hasWltpData && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
-									{ ranking === 1 && hasWltpData && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
-									{ ranking === 2 && hasWltpData && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-									{ hasWltpData && `NO ${ranking + 1}.`} { model.model.name.toUpperCase() }
+									{ ranking === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
+									{ ranking === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
+									{ ranking === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
+									{ `NO ${ranking + 1}.`} { model.model.name.toUpperCase() }
 								</Heading>
 								<Heading size={4} className='average-wrapper'> { average }</Heading>
 							</div>
