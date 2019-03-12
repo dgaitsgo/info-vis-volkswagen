@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Card, Image, Columns } from 'react-bulma-components/full'
 import carThumbnail from '../res/carIcon.png'
+
 import '../style/card.css'
 
 const ShowMoreInformation = ({ data, enabled}) => {
