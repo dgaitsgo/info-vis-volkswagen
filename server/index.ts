@@ -31,5 +31,5 @@ console.log(app.listen)
  * Server 
  *****************************************************************************/
 const port = process.env.PORT
-
+app.get('/', (req, res) => res.send('Hello world'))
 app.listen(port, () => console.log(`Server started on ${ port }`))
