@@ -1,7 +1,13 @@
 import React, { Component } from 'react'
-import { Button, Card, Image, Columns } from 'react-bulma-components/full'
+import _ from 'lodash'
+import { Box, Button, Icon, Card, Heading, Media, Image, Columns } from 'react-bulma-components/full'
+
+import '../style/dashboard.css'
+import '../style/infocard.css'
+import { compare } from 'ltgt';
 import carThumbnail from '../res/carIcon.png'
-import '../style/card.css'
+
+import ReactTooltip from 'react-tooltip'
 
 const ShowMoreInformation = ({ data, enabled}) => {
 	const interpolationClassName = enabled
@@ -84,20 +90,20 @@ class InfoCard extends Component {
 				<Card className='card-wrapper'>
 					<Card.Header>
 						<div className='header-wrapper'>
-							<div className='header-card'>
-								<h1>
+							<div className="header-card">
+								<Heading size={4}>
 									{ ranking === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
 									{ ranking === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 									{ ranking === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-									{`${ranking + 1}.`} { model.model.name }
-								</h1>
-								<p className='average-wrapper'> {`${average} ${compareUnit}` }</p>
+									{ `NO ${ranking + 1}.`} { model.model.name.toUpperCase() }
+								</Heading>
+								<Heading size={4} className='average-wrapper'> {`${average} ${compareUnit}` }</Heading>
 							</div>
 							<p className='typeName'>{model.type.name}</p>
 						</div>
 					</Card.Header>
 					<Card.Content>
-						<Columns className='car-img' >
+						<Columns className="carImg">
 							<Columns.Column>
 								<Image style={{width: 256}} src={carThumbnail}/>
 							</Columns.Column>
