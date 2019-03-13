@@ -30,7 +30,10 @@ fuck keine ahnung alda
 configure car and compare wltp data
 
 ## Who we are
-We are Sebastian Kunz (19) from Hamburg, Germany, David Gaitsgory (24) from Boston, USA and Jessica Liu (30?) from ... Taiwan. All of us study at 42 Silicon Valley in California, USA.
+Sebastian Kunz (19) from Hamburg, Germany
+David Gaitsgory (24) from Boston, USA
+Jessica Liu (30) from ... Taiwan.
+All of us study at 42 Silicon Valley in California, USA.
 
 ## Frontend - Sebastian Kunz
 We designed the user experience to be linear.
@@ -76,27 +79,22 @@ DONT OPEN THE NAVIGATION FILE PLLLLLLLLLLLLLLLLEAAAAAAAAAAAAAAASE ITS THE FINEST
 -cross origin
 
 ## Improvements to OKAPI
-First of all we want to mention, that it is difficult to write a perfectly understandable documentation. We appreaciate the appealing design and the interactivity. The CURL examples are amazing and were very helpful. In the following we want to list problems we ran into while working with OKAPI and want to bring in new ideas and improve existing endpoints. We are very interested in working with you to improve OKAPI.
+First of all we want to mention, that it is difficult to write a perfectly understandable documentation. We appreaciate the appealing design and interactivity. The CURL examples are amazing and were very helpful. In the following we want to list problems we ran into while working with OKAPI and bring up possible new features and improvements. We are happy to help improve OKAPI!
 
 ### Missing Images and WLTP data
-When we were experimenting with the images endpoint we were not able to consistenly get images of valid configurations. After one day of stress and frustration we realised that there are simply only images for the Audi models. This discovery was very disapointing. It would have been great when you provided a disclamer, just like for the WLTP data, that images are currently only available with audi models.
-Speaking of WLTP data. It is very demotivating to take part in a data visualization competition with a lot of missing data. For example all the models of the SEAT brand in Germany do not have WLTP data. For other brands the results are rather disapointing. Only the models of the Audi brand seem to provide the most data.
+When we were experimenting with the images endpoint we were not able to consistenly get images of valid configurations. After one day of stress and frustration we realised that there are simply only images for the Audi models. This discovery was very disapointing. It would have been great when you provide a disclamer, just like for the WLTP data, that images are currently only available with Audi models.
+Speaking of WLTP data. It is very demotivating to take part in a data visualization competition with a lot of missing data. For example all the models of the SEAT brand in Germany do not have WLTP data. For other brands the results are rather disapointing.
 Inside of the WLTP object there is also an NEDC object. However if there is no WLTP available that means that there is also no NEDC data available. It would have been great if WLTP and NEDC are independent, so that when WLTP is missing we can at least grab the NEDC data.
 
-
--type id
--choices and options
 ### Naming conventions
 What was very confusing to us was understanding the exact difference between choices and options. The words are quite similar and
+Another thing that we noticed is that the the typenames for the models are filled with parentheses, exclamation mark, pound signs and sometimes in only capital letters. We could not explain to ourselves how that naming makes sense. For us it makes the typename less clear and creates confusion.
 
-
-
-### False information in the documentation / Misleading information
+### False/Misleading information in the documentation
 We have noticed that there are several spelling mistake in the guide. "Complete a configuration", "Repair a configuration" and "Check the configuration" are all missing a 's' after '/configuration' in the request URL. The request URL should be  "api.productdata.vwgroup.com/v2/configuration**s**/" instead of "api.productdata.vwgroup.com/v2/configuration/".
-Next up are "Operations". As far as we can tell operations make use of configurations. Therefore it would be logical if the request URL takes a configuration_id as parameter. This is not the case and is still very confusing to us. All the API-Endpoints under Operations require a country_code, at least when you follow the documentation. However these endpoints resolve into error responses. So either the documentation is wrong or the endpoint is not working the way it should. Either way it is basiclly impossible to understand what these operations are usefull for.
+Next up are "Operations". As far as we can tell operations make use of configurations. Therefore it would make sense if the request URL takes a "configuration_id" as parameter. This is not the case and is still very confusing to us. All the API-Endpoints under Operations require "country_code", at least when you follow the documentation. However these endpoints resolve into error responses. So either the documentation is wrong or the endpoint is not working the way it should. Either way it is basiclly impossible to understand what Operations are usefull for.
+In addition to that it would be helpful if the provided response schema in the documentation is more explicit. Statements like "code: (string) the option's code" are unnecessary and should be replaced with a more explicit alternative.
 One more thing that got us very confused was that type_id something.
-
-
 
 ### Organize Models by categories
 As of now when you request models of a brand you receive a code, id and name. It would be great if you add more information to the object. For example add a category like SUV, Coupé, ... so that the user can filter models, that he is not interested in. This would greatly improve the user accessibility.
@@ -109,3 +107,5 @@ We implemented a custom endpoint that generates a default configuration, so that
 
 ## Room for improvement
 -reset "session" changes during configu000000000000000ration redo/undo kinda thing ye
+
+
