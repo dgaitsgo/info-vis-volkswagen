@@ -50,9 +50,6 @@
 	padding-left: 55px;
 	padding-bottom: 30px;
 }
-.carImg{
-	margin: 20px;
-}
 /* The container */
 .field {
 	position: relative;
@@ -115,4 +112,42 @@
 	  height: 8px;
 	  border-radius: 50%;
 	  background: white;
-  }
+	}
+
+	.image{
+		width: 320px;
+	}
+
+	.iconInfoImg{
+		width: 16px;
+		position: absolute;
+		margin-top: 5px;
+	}
+	.infosubtitle{
+		margin-left: 20px;
+	}
+	.infosubtitle2{
+		margin-left: 5px;
+	}
+	.compareContain{
+		width:800px;
+	}
+	.carInfo{
+		padding: 50px;
+	}
+	@media only screen and (max-width : 760px) {
+		.typeName{
+			padding-left: 30px;
+		padding-bottom: 20px;
+		padding-right: 30px;
+		}
+		.image{
+			width: 100%;
+		}
+		.iconInfoImg{
+			width:16px;
+		}
+		.compareContain{
+			width:100%;
+		}
+	}

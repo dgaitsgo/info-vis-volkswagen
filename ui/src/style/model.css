@@ -30,6 +30,11 @@
     .model-name{
         width:100%; 
         height: 50px; 
+        
+    }
+    .model{
+        width:100%;
+        height: 160px; 
     }
 }
 .models-wrapper{

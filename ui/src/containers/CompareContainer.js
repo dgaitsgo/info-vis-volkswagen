@@ -102,13 +102,11 @@ class CompareContainer extends Component {
 		return (
 			<div className='compare-container-wrapper'>
 				<Section>
-					<Container>
+					<Container className="compareContain">
 					<Heading size={4} className='has-text-centered'>
 						Model Comparison
 					</Heading>
-					<Heading size={5} className='has-text-centered'>
-						Bar Chart Title Goes Here
-					</Heading>
+					<p>The WLTP driving cycle is divided into four parts with different average speeds: low, medium, high and extra high. Each part contains a variety of driving phases, stops, acceleration and braking phases. For a certain car type, each powertrain configuration is tested with WLTP for the car’s lightest (most economical) and heaviest (least economical) version.</p>
 					<div className='button-wrapper'>
 						<div>
 							<span><strong>Sort by: </strong></span>
@@ -131,6 +129,9 @@ class CompareContainer extends Component {
 							</label>
 						</div>
 					</div>
+					<Heading size={5} className='has-text-centered'>
+						Bar Chart Title Goes Here
+					</Heading>
 					<BarChart
 						defaultModels={ defaultModels }
 						compareMode={ compareMode }

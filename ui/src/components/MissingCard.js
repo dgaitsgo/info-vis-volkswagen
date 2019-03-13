@@ -6,7 +6,7 @@ import '../style/card.css'
 const NoData = () => {
 	return (
 		<div className='no-data-found-wrapper'>
-			<font color='#d50000'> No Data Found </font>
+			<font color='#f96666'> No Data Found </font>
 			<i data-tip='Please be advised, that currently not for all models within OKAPI,
 				WLTP values can be provided.'
 			className='fas fa-info-circle'/>

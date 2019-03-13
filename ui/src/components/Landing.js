@@ -28,7 +28,7 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 					<Heading size={4} className='has-text-centered'>
 						Choose Your Country
 					</Heading>
-					<Columns>
+					<Columns className="is-centered">
 						{countries.map(({ countryCode, name }, i) => {
 							const to = {
 								pathname : `/explore/${countryCode}`,
