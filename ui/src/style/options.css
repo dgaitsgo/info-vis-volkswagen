@@ -22,8 +22,8 @@
 	justify-content: space-between;
 }
 
-.choice.valid {
-	/* background-color: ; */
+.choice.valid.selected {
+	background-color: lightgreen;
 }
 
 .choice.invalid {

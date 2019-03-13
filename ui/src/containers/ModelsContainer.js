@@ -6,7 +6,7 @@ import Model from '../components/Model'
 import Modal from 'react-modal'
 import { Heading, Loader, Section, Container, Button, Columns } from "react-bulma-components/full"
 import '../style/model.css'
-import isEmtpty from 'lodash/isEmpty'
+import { isEmtpty } from 'lodash/isEmpty'
 
 class ModelsContainer extends Component {
 

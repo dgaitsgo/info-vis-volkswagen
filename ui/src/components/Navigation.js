@@ -40,11 +40,11 @@ class Navigation extends Component {
 						/>
 					</NavLink>
 					<Navbar.Burger
-						active={open}
+						active={open ? 'true' : 'false'}
 						onClick={() => this.setState({ open: !this.state.open })}
 					/>
 				</Navbar.Brand>
-				<Navbar.Menu active={open}>
+				<Navbar.Menu active={open ? 'true' : 'false'}>
 					{urlData.length > 2 &&
 						<NavLink className='navbar-item' to={`/${urlData[1]}`}>
 							<div>Country</div>

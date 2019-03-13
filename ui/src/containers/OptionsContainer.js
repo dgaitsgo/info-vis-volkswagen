@@ -66,20 +66,26 @@ class OptionsContainer extends Component {
 		})
 
 	removeOption = (configId, optionId) =>
+	{
+		console.log('removeOption call')
 		axios.get('/api/removeOption', {
 			params : {
 				configId,
 				optionId
 			}
 		})
+	}
 
 	addOption = (configId, optionId) =>
+	{
+		console.log('addOption call')
 		axios.get('/api/addOption', {
 			params : {
 				configId,
 				optionId
 			}
 		})
+	}
 
 	//Only show options that appear in the type and are valid for the configuration
 	/*

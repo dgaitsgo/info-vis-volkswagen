@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import { Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import { Loader } from 'react-bulma-components/full'
+import { debounce } from 'lodash'
 
 import '../style/options.css'
 
 const Tags = ({ selectedOptions, flatChoices, removeOption }) => {
+
 	return (
 		<div className='tags-wrapper'>
 			{selectedOptions.map( (option, i) => {
@@ -14,7 +16,7 @@ const Tags = ({ selectedOptions, flatChoices, removeOption }) => {
 					return (
 						<div className='tag description-tag' key={`tag_${i}`}>
 							{flatChoices[option.id] && flatChoices[option.id].choiceDescription}
-							<span onClick={ () => removeOption({ id: option.id }) } className='tag-close'><i className="fas fa-times"></i></span>
+							<span onClick={ debounce(() => removeOption({ id: option.id }), 1000) } className='tag-close'><i className="fas fa-times"></i></span>
 						</div>
 					)
 				})
@@ -90,17 +92,19 @@ class Options extends Component {
 	getChoicesOfCategory = categoryId => {
 
 		const { currentConfig } = this.props
+		const selectedOptionsArr = currentConfig.selectedOptions.map( option => option.id)
 		const allChoices = currentConfig.choices
 
 		return (
 			allChoices.filter( choice => choice.id === categoryId).map( choice => {
 
 				return (choice.valid.map( valid => {
+					const isSelected = selectedOptionsArr.includes(valid.id)
 					return (
 						<div
-							className='choice valid'
+							className={`choice valid ${isSelected ? 'selected' : ''}`}
 							key={ valid.id }
-							onClick={ () => this.props.addOption( valid.id ) }
+							onClick={ debounce(() => this.props.addOption( valid.id ), 1000) }
 						>
 							&bull; {valid.description}
 						</div>
@@ -110,7 +114,6 @@ class Options extends Component {
 						<div
 							key={ invalid.id }
 							className='choice invalid'
-
 						>
 							&bull; {invalid.description}
 						</div>
@@ -127,7 +130,6 @@ class Options extends Component {
 			isOpen,
 			closeModal,
 			currentConfig,
-			flatChoices,
 			removeOption
 		} = this.props
 
@@ -136,6 +138,7 @@ class Options extends Component {
 		} = this.state
 
 		const model = currentConfig.model
+
 
 		return (
 			<Modal
@@ -157,7 +160,7 @@ class Options extends Component {
 					placeholder='Search for a category'
 				/>
 				<Tags
-					flatChoices={ flatChoices }
+					flatChoices={ this.props.flatChoices }
 					selectedOptions={ currentConfig.selectedOptions }
 					removeOption={ removeOption }
 				/>

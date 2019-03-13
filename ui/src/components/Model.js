@@ -1,5 +1,6 @@
 import React from 'react'
-import { Heading, Columns, Card } from "react-bulma-components/full"
+import { Heading, Columns, Card } from 'react-bulma-components/full'
+import { debouncer } from 'lodash'
 import '../style/model.css'
 
 const Model = ({id, name, onClick, selected, src}) => {
@@ -17,13 +18,13 @@ const Model = ({id, name, onClick, selected, src}) => {
     return (
 		<div className='model-wrapper'>
         <Columns.Column>
-			<Card className={modelClassName} onClick={ () => onClick({ id, name }) }>
+			<Card className={modelClassName} onClick={ debouncer(() => onClick({ id, name }), 1000) }>
 				<Card.Content>
 					<div>
 					<Heading className={headingClassName} size={5}>{ name }</Heading>
 					</div>
 					<div className={typeNameClassName}>
-					{ selected && selected.type && selected.type.name }
+						{ selected && selected.type && selected.type.name }
 					</div>
 				</Card.Content>
 
