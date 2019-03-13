@@ -1,7 +1,29 @@
 import React, { Component } from 'react'
-import { Button, Heading, Box } from 'react-bulma-components/full'
+import { Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import { Loader } from 'react-bulma-components/full'
+import { debounce } from 'lodash'
+
+import '../style/options.css'
+
+const Tags = ({ selectedOptions, flatChoices, removeOption }) => {
+
+	return (
+		<div className='tags-wrapper'>
+			{selectedOptions.map( (option, i) => {
+					if (!flatChoices[option.id])
+						console.log('missing option is', option.id)
+					return (
+						<div className='tag description-tag' key={`tag_${i}`}>
+							{flatChoices[option.id] && flatChoices[option.id].choiceDescription}
+							<span onClick={ debounce(() => removeOption({ id: option.id }), 1000) } className='tag-close'><i className="fas fa-times"></i></span>
+						</div>
+					)
+				})
+			}
+		</div>
+	)
+}
 
 class Options extends Component {
 
@@ -10,126 +32,170 @@ class Options extends Component {
 		super(props)
 
 		this.state = {
+			//All categories filterd by the search bar
 			searchedCategories: null,
-			selectedCategory: null,
+
+			//All categories that should display its choices
+			selectedCategories: [],
 		}
 	}
 
-	onCategoryClick = ({ selectedCategory }) => {
+	handleSearchChange = (event) => {
 
-		this.setState({ selectedCategory })
-	}
+		const { allChoices } = this.props
 
-	handleSearchChange = (event, uniqueCategories) => {
-		
-		let searchedCategories = uniqueCategories.filter( category => category.includes(event.target.value.toUpperCase()))
+		let searchedCategories = allChoices.filter( category => {
+			const label = category.description.length ? category.description : category.id
+			return label.toUpperCase().includes(event.target.value.toUpperCase())
+		})
 		this.setState({ searchedCategories })
 	}
 
+	onCategoryClick = ({ categoryId }) => {
+		let { selectedCategories } = this.state
+
+		if (!selectedCategories.includes(categoryId))
+		{
+			selectedCategories.push(categoryId)
+			this.setState({ selectedCategories })
+		} else {
+			this.setState({ selectedCategories: selectedCategories.filter( elem => elem !== categoryId )})
+		}
+
+	}
+
 	getCategories = allCategories => {
+		
+		const { selectedCategories } = this.state
+
 		return allCategories.map( (category, i) => {
-			const treeCategoryClassName = category === this.state.selectedCategory
+
+			const label = category.description.length ? category.description : category.id
+			const isSelected = selectedCategories.includes(category.id)
+			const treeCategoryClassName = isSelected
 				? 'tree-category selected'
-				: 'tree-catehory'
+				: 'tree-category'
+
 			return (
-				<Box
-					className={ treeCategoryClassName }
-					key={i}
-					onClick={() => {
-						this.onCategoryClick({ selectedCategory: category })
-					}}
-					><h1>{ category }</h1>
-				</Box>
+				<div className='category-wrapper' key={`category_wrapper${i}`}>
+					<div
+						className={ treeCategoryClassName }
+						key={`category_${i}`}
+						onClick={() => this.onCategoryClick({ categoryId: category.id })}
+						><h1><i className={isSelected ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> { label }</h1>
+					</div>
+					<div className='choice-wrapper'>
+						{ isSelected && this.getChoicesOfCategory(category.id)}
+					</div>
+				</div>
 			)})
 	}
 
-	getChoicesOfCategory = (allCategories) => {
+	getChoicesOfCategory = categoryId => {
 
-		const {
-			selectedCategory,
-		} = this.state
+		const { currentConfig, allChoices } = this.props
+		const selectedOptionsArr = currentConfig.selectedOptions.map( option => option.id)
 
-		const {
-			choices,
-			currentConfig
-		} = this.props
+		return (
+			allChoices.filter( choice => choice.id === categoryId).map( choice => {
 
-		const {
-			selectedOptions
-		} = currentConfig
-
-		return choices.filter( choice => choice.category === selectedCategory && allCategories.indexOf(selectedCategory) !== -1)
-			.map( (choice, i) => {
-
-				const selected = selectedOptions.indexOf(choice.id) !== -1 
-
-				const treeOptionClassName = selected
-					? 'tree-choice selected'
-					: 'tree-choice'
-				
-				const choiceFn = selected
-					? () => this.props.removeOption(choice.id)
-					: () => this.props.addOption(choice.id)
-				
-				return (
-					<Box
-						className={treeOptionClassName}
-						key={i}
-						onClick={choiceFn}>
-						{choice.description}
-					</Box>
+				return (choice.valid.map( valid => {
+					const isSelected = selectedOptionsArr.includes(valid.id)
+					const delayedAdd = debounce(() => this.props.addOption(valid.id), 300)
+					const delayedRemove = debounce(() => this.props.removeOption(valid.id), 300)
+					return (
+						<div
+							className={`choice valid ${isSelected ? 'selected' : ''}`}
+							key={ valid.id }
+							onClick={ isSelected ? delayedRemove : delayedAdd }
+						>
+							&bull; {valid.description}
+						</div>
+					)
+				}).concat(choice.invalid.map( invalid => {
+					return (
+						<div
+							key={ invalid.id }
+							className='choice invalid'
+						>
+							&bull; {invalid.description}
+						</div>
+					)
+					}))
 				)
 			})
+		)
 	}
 
 	modalContent = () => {
 
 		const {
-			searchedCategories,
-		} = this.state
-
-		const {
-			currentConfig
+			isOpen,
+			closeModal,
+			currentConfig,
+			removeOption,
+			allChoices,
+			flatChoices,
+			loading
 		} = this.props
 
-		const { model, choices } = currentConfig
-		const categoriesWithDups = choices.map( choice => choice.category)
-		const uniqueCategories = [...new Set(categoriesWithDups)].sort()
+		const {
+			searchedCategories
+		} = this.state
+
+		const model = currentConfig.model
 
 		return (
-			<div>
+			<Modal
+				isOpen={isOpen}
+				onRequestClose={closeModal}
+			>
+			{loading && 
+				<Modal className='loading-modal'
+					overlayClassName='loading-modal-overlay'
+					isOpen={true}>
+					<div className='loader-message-wrapper'>
+						<div>{loading}</div>
+						<Loader message='Loading options for your configuration' />
+					</div>
+				</Modal>
+			}
+			<div className='modal-header-wrapper'>
 				<Heading size={4} className='has-text-centered'>
 					Configure Your {model.name}
 				</Heading>
 				<Heading size={6} className='has-text-centered'>
 					{model.type.name}
 				</Heading>
-				<div className='build-status-wrapper'>
-					<p className='build-status buildable'>{currentConfig.build.buildable ? 'Buildable' : 'Not Buildable'}</p>
-					<p className='build-status distinct'>{currentConfig.build.distinct ? 'Distinct' : 'Not Distinct'}</p>
-				</div>
+				<img src='https://images.hgmsites.net/med/2019-audi-a4_100656485_m.jpg' alt='test'/>
 				<input
 					type='text'
 					className='input-category-search'
-					onChange={ event => this.handleSearchChange(event, uniqueCategories)}
-					placeholder='Look for a category'
+					onChange={ event => this.handleSearchChange(event) }
+					placeholder='Search for a category'
 				/>
-				<div>
-					<div className='tree-wrapper has-text-centered'>
-						{/* <Heading> Categories </Heading> */}
-						<div className='tree-category-wrapper'>
-							{this.getCategories(searchedCategories === null ? uniqueCategories : searchedCategories)}
-						</div>
-						<div className='tree-choices-wrapper'>
-							{this.getChoicesOfCategory(searchedCategories === null ? uniqueCategories : searchedCategories)}
-
-						</div>
-					</div>
-				</div>
-				<Button className='configure-button'>Cancel</Button>
-				<Button className='configure-button'>Restore</Button>
-				<Button className='configure-button'>Rebuild</Button>
+				<Tags
+					
+					flatChoices={ flatChoices }
+					selectedOptions={ currentConfig.selectedOptions }
+					removeOption={ removeOption }
+				/>
 			</div>
+			<div className='options-wrapper'>
+			{
+				<Columns className='tree-wrapper has-text-centered'>
+					<Columns.Column className='tree-category-wrapper'>
+						<Heading size={6}> Categories </Heading>
+						{this.getCategories(searchedCategories ? searchedCategories : allChoices )}
+					</Columns.Column>
+				</Columns>
+			}
+			</div>
+			<div className='button-panel'>
+				<Button onClick={ this.restoreConfiguration } className='configure-button'>Restore</Button>
+				<Button onClick={ this.applyConfiguration } className='configure-button'>Done</Button>
+			</div>
+			</Modal>
 		)
 	}
 
@@ -137,13 +203,13 @@ class Options extends Component {
 
 		const {
 			currentConfig,
-			choices
+			allChoices,
 		} = this.props
 
 		return (
-			currentConfig && choices
+			currentConfig && allChoices
 			? this.modalContent()
-			: <Loader message='Loading configuration and choices' />
+			: <Loader message='Loading options for your configuration' />
 		)
 	}
 
@@ -151,13 +217,17 @@ class Options extends Component {
 
 		const {
 			isOpen,
-			closeModal
+			closeModal,
+			error
 		} = this.props
+
+		console.log('fucking error now', error)
 
 		return (
 			<Modal
 				isOpen={isOpen}
 				onRequestClose={closeModal}>
+				{error && error.message}
 				{this.getModalContent()}
 			</Modal>
 		)

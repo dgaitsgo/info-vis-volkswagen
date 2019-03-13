@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { Alert } from 'rsuite'
-import getLocalStorage from '../modules/localStorage'
 import isBefore from 'date-fns/is_before'
 import addDays from 'date-fns/add_days'
 import Options from '../components/Options'
@@ -22,14 +20,17 @@ class OptionsContainer extends Component {
 		}
 
 		this.state = {
-			currentConfig : null,
+			currentConfig : props.currentConfig,
 			error : null,
-			isOpen : true
+			isOpen : true,
+			loading: null
 		}
 
 		this.handleAddOption = this.handleAddOption.bind(this) 
 		this.handleRebuildConfig = this.handleRebuildConfig.bind(this)
 		this.handleRemoveOption = this.handleRemoveOption.bind(this)
+		this.preHandleAddOption = this.preHandleAddOption.bind(this)
+		this.preHandleRemoveOption = this.preHandleRemoveOption.bind(this)
 	}
 
 	replaceOptions = (configId, options) =>
@@ -77,81 +78,94 @@ class OptionsContainer extends Component {
 				optionId
 			}
 		})
+	
+	async flattenChoices (choices) {
 
-	//Only show options that appear in the type and are valid for the configuration
-	/*
-		flatten configuration options
-		
-		target data set:
-		option : {
-			valid : boolean,
-			id : string,
-			optionDescription : string,
-			categoryDescription : string
-		}
+		let flatChoices = {}
 
-		filter by looking up ids in type options
+		choices.forEach(category => {
 
-	*/
+			const label = category.description.length ? category.description : category.id
+
+			category.valid.forEach( validOption => {
+
+				flatChoices[validOption.id] = {
+					id : validOption.id,
+					valid : true,
+					choiceDescription : validOption.description,
+					categoryDescription : label
+				}
+			})
+
+			category.invalid.forEach( invalidOption => {
+
+				flatChoices[invalidOption.id] = {
+					id : invalidOption.id,
+					valid : false,
+					choiceDescription : invalidOption.description,
+					categoryDescription : label
+				}
+			})
+		})
+
+		return (flatChoices)
+	}
+
+	async preHandleAddOption(optionId) {
+		this.setState({ loading : this.loadingEnum.ADD }, () => this.handleAddOption(optionId))
+	}
 
 	async handleAddOption(optionId) {
-		
-		let {
-			currentConfig,
-			ls
-		} = this.state
 
-		Alert.info(this.loadingEnum.ADD)
+		let { currentConfig } = this.state
+		const { ls } = this.props
 
-		try {
-
-			//Add option
-			const nextOptionsRes = await this.addOption(currentConfig.configId, optionId)
-			const nextOptions = nextOptionsRes.data.nextOptions
-		
-			//check build
-			Alert.info(this.loadingEnum.BUILD)
-			const buildRes = await this.checkBuild(currentConfig.configId)
-			const build = buildRes.data.build
-
-			//update configuration
-			currentConfig.selectedOptions = nextOptions
-			currentConfig.build = build
-		
-			//insert in local storage and get revision
-			const rev = await ls.insert(currentConfig)
+			try {
+				//Add option
+				const nextOptionsRes = await this.addOption(currentConfig.configId, optionId)
+				const nextOptions = nextOptionsRes.data.options
 			
-			currentConfig.rev = rev
-			currentConfig._rev = rev
+				//check build
+				const buildRes = await this.checkBuild(currentConfig.configId)
+				const build = buildRes.data.build
 
-			console.log('add option', optionId)
-			console.log(currentConfig.selectedOptions)
-
-			this.setState({ currentConfig }) 
+				//update configuration
+				currentConfig.selectedOptions = nextOptions
+				currentConfig.build = build
 			
-		} catch (e) {
+				//insert in local storage and get revision
+				const rev = await ls.insert(currentConfig)
+				
+				currentConfig.rev = rev
+				currentConfig._rev = rev
 
-			this.setState({ error : { e, message : 'Could not add option.' } })
+				console.log('add option', optionId)
+				console.log(currentConfig.selectedOptions)
+
+				this.setState({ currentConfig, loading: null })
+
+			} catch (e) {
+
+				this.setState({ loading : null, error : { message : 'Could not add option.' } })
 		}
+	}
+
+	async preHandleRemoveOption(optionId) {
+		this.setState({ loading : this.loadingEnum.REMOVE }, () => this.handleRemoveOption(optionId))
 	}
 
 	async handleRemoveOption(optionId) {
 	
-		let {
-			currentConfig,
-			ls
-		} = this.state
-
-		Alert.info(this.loadingEnum.REMOVE)
+		let { currentConfig } = this.state
+		const { ls } = this.props
 
 		try {
 
 			//remove option
 			const nextOptionsRes = await this.removeOption(currentConfig.configId, optionId)
-			const nextOptions = nextOptionsRes.data.data
+			const nextOptions = nextOptionsRes.data.options
 		
 			//check build
-			Alert.info(this.loadingEnum.BUILD)
 			const buildRes = await this.checkBuild(currentConfig.configId)
 			const build = buildRes.data.build
 
@@ -171,32 +185,23 @@ class OptionsContainer extends Component {
 			this.setState({ currentConfig })
 		
 		} catch (e) {
-			this.setState({ error : { e, message : 'Could not remove option.' } })
+			this.setState({ loadiing : false, error : { e, message : 'Could not remove option.' } })
 		}
 	}
 
 
 	async handleRebuildConfig() {
 
-		let {
-			currentConfig,
-			ls
-		} = this.state
+		let { currentConfig } = this.state
+		const { ls } = this.props
 
-		const {
-			defaultOptions
-		} = this.props
-
-		Alert.info(this.loadingEnum.REBUILD)
-		
 		try {
 
 			//replace options
-			const nextOptionsRes = await this.replaceOptions(currentConfig.configId, defaultOptions)
+			const nextOptionsRes = await this.replaceOptions(currentConfig.configId, currentConfig.defaultOptions)
 			const nextOptions = nextOptionsRes.data
 
 			//check build
-			Alert.info(this.loadingEnum.BUILD)
 			const buildRes = await this.checkBuild(currentConfig.configId)
 			const build = buildRes.data.build
 
@@ -219,127 +224,40 @@ class OptionsContainer extends Component {
 		}
 	}
 
-	getTypeOptions() {
-
-		const {
-			countryCode,
-			model
-		} = this.props
-
-		console.log('getting type options for : ', countryCode, model.type.name)
-
-		return (axios.get('/api/typeOptions', {
-			params : {
-				countryCode,
-				type_id: model.type.id
-			}
-		}))
-	}
-
-	
-
-	/***
-	 * check in local storage first if user has already configured this model
-		and that it's been less than 24 hours since creation.
-		Else, create a configuration with default options and save it to local storage
-		target data : {
-			configId : string
-			model : Model
-			type : string type_id
-			options : [Options]
-			expirationDate : Date
-		}*/
-
-	async getConfig(ls, model, defaultOptions) {
-
-		try {
-		
-			const ls_modelRes = await ls.find({ selector : { id : model.id }})
-
-			console.log('Available in local storage?', ls_modelRes)
-			if (ls_modelRes.docs.length && isBefore(ls_modelRes.docs[0].expirationDate, addDays(new Date(), 1)) ) {
-
-				const currentConfig = ls_modelRes.docs[0]
-				
-				return (currentConfig)
-				
-			} else {
-
-				// else create a configuration and save to local storage
-				Alert.info(this.loadingEnum.CONFIG)
-				const newConfigRes = await this.createConfig(model.id, defaultOptions)
-				const newConfig = newConfigRes.data.newConfiguration
-
-				Alert.info(this.loadingEnum.BUILD)
-				const buildRes = await this.checkBuild(newConfig.id)
-				const build = buildRes.data.build
-
-				Alert.info(this.loadingEnum.CONFIG_CHOICES)
-				const configChoicesRes = await this.configChoices(newConfig.id)
-				const choices = configChoicesRes.data.choices
-
-				const currentConfig = {
-					id : model.id,
-					_id : model.id,
-					configId : newConfig.id,
-					expirationDate : newConfig.expirationDate,
-					model : this.props.model,
-					selectedOptions : defaultOptions,
-					choices,
-					build
-				}
-
-				// Local storage variables to track revision
-				const rev = await ls.insert(currentConfig)
-
-				currentConfig.rev = rev
-				currentConfig._rev = rev
-
-				return (currentConfig)
-			}
-		} catch (e) {
-			console.log(e)
-		}
-	}
 
 	async componentDidMount() {
+		
+		const { currentConfig } = this.state
 
-		const {
-			model,
-			defaultOptions
-		} = this.props
-			
-		try {
+		const configChoicesRes = await this.configChoices(currentConfig.configId)
+		const choices = configChoicesRes.data.choices
+		const flatChoices = this.flattenChoices(choices)
 
-			const ls = getLocalStorage('vw_okapi')
-			const currentConfig = await this.getConfig(ls, model, defaultOptions)
+		this.setState({ allChoices : choices, flatChoices })
 
-			console.log('Current configuration', currentConfig)
-
-			this.setState({
-				currentConfig,
-				ls	
-			})
-
-		} catch (e) {
-			this.setState({ error : { e, message : 'Could not load configurations.' } })
-		}
 	}
 
 	render() {
 
 		const {
+			error,
 			currentConfig,
+			allChoices,
+			flatChoices,
+			loading
 		} = this.state
 
 		return (
 			<Options
+				error={error}
+				loading={loading}
 				closeModal={this.props.closeModal}
 				isOpen={this.props.isOpen}
-				addOption={this.handleAddOption}
-				removeOption={this.handleRemoveOption}
+				addOption={this.preHandleAddOption}
+				removeOption={this.preHandleRemoveOption}
 				onClickRebuild={this.handleRebuildConfig}
-				options={this.optionsUnion()}
+				flatChoices={flatChoices}
+				allChoices={allChoices}
 				currentConfig={currentConfig}
 			/>
 		)

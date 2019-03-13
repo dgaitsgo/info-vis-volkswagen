@@ -75,7 +75,7 @@ class InfoCard extends Component {
 			average
 		} = this.props
 
-		const wltpData = model.model.wltp[0]
+		const wltpData = model.wltp[0]
 
 		const generalData = hasWltpData ? wltpData.general_data.values[0] : {}
 
@@ -145,14 +145,8 @@ class InfoCard extends Component {
 								}
 								<Button
 									className='configure-button'
-									onClick= { () =>
-										openConfiguration({
-											modelId: model.model.model_id,
-											modelName: model.model.name,
-											typeName: model.type.name,
-											typeId: model.type.id
-										})}
-									> configure
+									onClick= { () => openConfiguration(model) }
+									>Configure
 								</Button>
 							</Columns.Column>
 						</Columns>

@@ -1,6 +1,8 @@
 const axios = require('axios')
+const apiURL = require('../constants/apiURL')
 
 class Okapi {
+
 
     static defaultHeaders(token) { 
         return ({
@@ -15,7 +17,7 @@ class Okapi {
             axios ({
                 method: 'post',
                 url : `${apiURL}/configurations`,
-                headers: defaultHeaders(token),
+                headers: this.defaultHeaders(token),
                 data : { model_id : modelId }
             })
         )
@@ -27,8 +29,8 @@ class Okapi {
             axios ({
                 method : 'post',
                 url : `${apiURL}/configurations/${configId}/options`,
-                headers : defaultHeaders(token),
-                data : { id : optionId }
+                headers : this.defaultHeaders(token),
+                data : { id : optionId.id }
             })
         )
     }
@@ -38,7 +40,7 @@ class Okapi {
             axios ({
                 method : 'delete',
                 url : `${apiURL}/configurations/${configId}/options`,
-                headers : defaultHeaders(token),
+                headers : this.defaultHeaders(token),
                 data : { id : optionId }
             })
         )
@@ -49,7 +51,7 @@ class Okapi {
             axios ({
                 method : 'put',
                 url : `${apiURL}/configurations/${configId}/options`,
-                headers : defaultHeaders(token),
+                headers : this.defaultHeaders(token),
                 data : optionIds
             })
         )
@@ -60,7 +62,7 @@ class Okapi {
             axios({
                 method : 'get',
                 url : `${apiURL}/configurations/${configId}/check`,
-                headers : defaultHeaders(token)
+                headers : this.defaultHeaders(token)
             })
         )
     }
@@ -70,7 +72,7 @@ class Okapi {
             axios ({
                 method: 'get',
                 url : `${apiURL}/configurations/${configId}/choices`,
-                headers: defaultHeaders(token)
+                headers: this.defaultHeaders(token)
             })
         )
     }
@@ -80,7 +82,7 @@ class Okapi {
             axios ({
                 method : 'get',
                 url : `${apiURL}/configurations/${configId}/options?resolvetrue`,
-                headers : defaultHeaders(token)
+                headers : this.defaultHeaders(token)
             })
         )
     }
@@ -90,7 +92,7 @@ class Okapi {
             axios ({
                 method : 'get',
                 url : `${apiURL}/configurations/${configId}/wltp`,
-                headers : defaultHeaders(token)
+                headers : this.defaultHeaders(token)
             })
         )
     }
@@ -100,8 +102,10 @@ class Okapi {
             axios ({
                 method : 'get',
                 url : `${apiURL}/configurations/${configId}/images`,
-                headers : defaultHeaders(token)
+                headers : this.defaultHeaders(token)
             })
         )
     }
 }
+
+module.exports = Okapi

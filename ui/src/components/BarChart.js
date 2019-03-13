@@ -21,12 +21,12 @@ class BarChart extends Component{
 			value: null,
 		}
 	}
-	getInterpolations = ({ defaultModels, phase, compareMode}) => {
-		return Object.keys(defaultModels).map((modelId, i) => {
-			const model = defaultModels[modelId]
-			if (model.model.wltp.length) {
-				const currentInterps = model.model.wltp[0].interpolations
-					.filter(interp => interp.value_type === compareMode && interp.phase == phase)
+	getInterpolations = ({ configurations, phase, compareMode}) => {
+		return Object.keys(configurations).map((modelId, i) => {
+			const model = configurations[modelId]
+			if (model.wltp.length) {
+				const currentInterps = model.wltp[0].interpolations
+					.filter(interp => interp.value_type === compareMode && interp.phase === phase)
 					.map( interp => interp.value)
 					return ({
 						value: currentInterps,
@@ -53,12 +53,12 @@ class BarChart extends Component{
 
 	render() {
 		const {
-			defaultModels,
+			configurations,
 			compareMode,
 			phases
 		} = this.props
 
-		const dataSets = phases.map(phase => this.getInterpolations( { defaultModels, compareMode, phase: phase.key}))
+		const dataSets = phases.map(phase => this.getInterpolations( { configurations, compareMode, phase: phase.key}))
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
 		const { value } = this.state
 		return (
