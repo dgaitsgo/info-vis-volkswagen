@@ -74,3 +74,38 @@ DONT OPEN THE NAVIGATION FILE PLLLLLLLLLLLLLLLLEAAAAAAAAAAAAAAASE ITS THE FINEST
 
 ## Backend - David Gaitsgory
 -cross origin
+
+## Improvements to OKAPI
+First of all we want to mention, that it is difficult to write a perfectly understandable documentation. We appreaciate the appealing design and the interactivity. The CURL examples are amazing and were very helpful. In the following we want to list problems we ran into while working with OKAPI and want to bring in new ideas and improve existing endpoints. We are very interested in working with you to improve OKAPI.
+
+### Missing Images and WLTP data
+When we were experimenting with the images endpoint we were not able to consistenly get images of valid configurations. After one day of stress and frustration we realised that there are simply only images for the Audi models. This discovery was very disapointing. It would have been great when you provided a disclamer, just like for the WLTP data, that images are currently only available with audi models.
+Speaking of WLTP data. It is very demotivating to take part in a data visualization competition with a lot of missing data. For example all the models of the SEAT brand in Germany do not have WLTP data. For other brands the results are rather disapointing. Only the models of the Audi brand seem to provide the most data.
+Inside of the WLTP object there is also an NEDC object. However if there is no WLTP available that means that there is also no NEDC data available. It would have been great if WLTP and NEDC are independent, so that when WLTP is missing we can at least grab the NEDC data.
+
+
+-type id
+-choices and options
+### Naming conventions
+What was very confusing to us was understanding the exact difference between choices and options. The words are quite similar and
+
+
+
+### False information in the documentation / Misleading information
+We have noticed that there are several spelling mistake in the guide. "Complete a configuration", "Repair a configuration" and "Check the configuration" are all missing a 's' after '/configuration' in the request URL. The request URL should be  "api.productdata.vwgroup.com/v2/configuration**s**/" instead of "api.productdata.vwgroup.com/v2/configuration/".
+Next up are "Operations". As far as we can tell operations make use of configurations. Therefore it would be logical if the request URL takes a configuration_id as parameter. This is not the case and is still very confusing to us. All the API-Endpoints under Operations require a country_code, at least when you follow the documentation. However these endpoints resolve into error responses. So either the documentation is wrong or the endpoint is not working the way it should. Either way it is basiclly impossible to understand what these operations are usefull for.
+One more thing that got us very confused was that type_id something.
+
+
+
+### Organize Models by categories
+As of now when you request models of a brand you receive a code, id and name. It would be great if you add more information to the object. For example add a category like SUV, Coupé, ... so that the user can filter models, that he is not interested in. This would greatly improve the user accessibility.
+
+### Default Configuration Endpoint / Thumbnail endpoint
+We implemented a custom endpoint that generates a default configuration, so that we can show the user some WLTP data and an image, without forcing them to make a buildable and distinct car first. When choosing your models, due to the insane amount of API calls, it is not practical to generate a default configuration for every single model of a brand and then fetch the images. It would be great if there is some sort of default configuration endpoint or thumbnail endpoint. These endpoints are great when you want to get an aproximate of the WLTP data or a first impression if the style of the car interests you.
+
+
+## Testing
+
+## Room for improvement
+-reset "session" changes during configu000000000000000ration redo/undo kinda thing ye
