@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import { Box, Button, Icon, Card, Heading, Media, Image, Columns } from 'react-bulma-components/full'
+import { Button, Card, Heading, Image, Columns } from 'react-bulma-components/full'
 
 import '../style/dashboard.css'
-import '../style/infocard.css'
-import { compare } from 'ltgt';
 import carThumbnail from '../res/carIcon.png'
-
-import ReactTooltip from 'react-tooltip'
+import tire from '../res/tire.png'
+import co2 from '../res/co2.png'
 
 const ShowMoreInformation = ({ data, enabled}) => {
 	const interpolationClassName = enabled
@@ -91,21 +89,21 @@ class InfoCard extends Component {
 					<Card.Header>
 						<div className='header-wrapper'>
 							<div className="header-card">
-								<Heading size={4}>
+								<Heading size={5}>
 									{ ranking === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
 									{ ranking === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 									{ ranking === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
 									{ `NO ${ranking + 1}.`} { model.model.name.toUpperCase() }
 								</Heading>
-								<Heading size={4} className='average-wrapper'> {`${average} ${compareUnit}` }</Heading>
+								<Heading size={5} className='average-wrapper'> {`${average} ${compareUnit}` }</Heading>
 							</div>
 							<p className='typeName'>{model.type.name}</p>
 						</div>
 					</Card.Header>
-					<Card.Content>
-						<Columns className="carImg">
+					<Card.Content className="carInfo">
+						<Columns>
 							<Columns.Column>
-								<Image style={{width: 256}} src={carThumbnail}/>
+								<Image src={carThumbnail}/>
 							</Columns.Column>
 							<Columns.Column>
 								<div className='data-wrapper'>
@@ -116,7 +114,7 @@ class InfoCard extends Component {
 										<i className='fas fa-gas-pump'></i> {wltpData.fuel_types}
 									</div>
 									<div className='compare-model-value'>
-										<span onClick={ this.setShowMoreEmissions }> Detailed emissions <i className={showMoreEmissions ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> </span>
+										<span onClick={ this.setShowMoreEmissions }><Image className="iconInfoImg" src={co2} /><span className="infosubtitle"> Detailed emissions </span><i className={showMoreEmissions ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> </span>
 										{ showMoreEmissions
 											? <ShowMoreInformation
 												key={ranking}
@@ -124,7 +122,7 @@ class InfoCard extends Component {
 											/>: null }
 									</div>
 									<div>
-										<span onClick={ this.setShowMoreConsumption }><i className='fas fa-tint'/> Detailed consumption <i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i></span>
+										<span onClick={ this.setShowMoreConsumption }><i className='fas fa-tint'/> <span className="infosubtitle2">Detailed consumption</span> <i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i></span>
 										{ showMoreConsumption
 											? <ShowMoreInformation
 												key={ranking}
@@ -132,7 +130,7 @@ class InfoCard extends Component {
 											/>: null }
 									</div>
 									<div className='tire-data-wrapper'>
-										<span onClick={ this.setShowMoreTire } className='tire-header'> TireIcon Tire Classification <i className={showMoreTire ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i></span>
+										<span onClick={ this.setShowMoreTire } className='tire-header'><Image className="iconInfoImg" src={tire} /> <span className="infosubtitle"> Tire Classification </span><i className={showMoreTire ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i></span>
 										{ showMoreTire
 											? <ShowMoreTireInformation
 												wltpData={ wltpData }
@@ -148,7 +146,7 @@ class InfoCard extends Component {
 											typeName: model.type.name,
 											typeId: model.type.id
 										})}
-									> configure
+									><i class="fas fa-hammer"></i> configure
 								</Button>
 							</Columns.Column>
 						</Columns>
