@@ -51,17 +51,8 @@ class BrandsContainer extends Component {
 				<div className='loaders'>
 					<Loader
 					style={{
-						position:'fixed',
-						width:300,
-						height:300,
-						border: '4px solid #023268',
 						borderTopColor: 'transparent',
 						boderRightColor: 'transparent',
-						margin: 'auto',
-						top: '-50px',
-						left: 0,
-						bottom: 0,
-						right: 0
 					}}
 					message={'Getting brands...'} />
 				</div>

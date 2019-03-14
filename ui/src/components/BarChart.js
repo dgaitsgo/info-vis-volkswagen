@@ -13,7 +13,7 @@ import {
   } from 'react-vis'
   import '../style/barChart.css'
 
-  const ratio = 1;
+  const ratio = .4;
   class BarChart extends Component{
 
 	constructor (props) {
@@ -102,8 +102,7 @@ import {
 				<FlexibleXYPlot
 				margin={this.props.margin}
 				height={this.state.height * ratio}
-				xType="ordinal" 
-				xDistance={100}>
+				xType="ordinal" >
 					<VerticalGridLines />
 					<HorizontalGridLines />
 					<XAxis {...axisProps} tickFormat={String}/>
@@ -115,15 +114,9 @@ import {
 							data={dataSet}
 							key={i}
 							onValueMouseOver={this._rememberValue}
-							onValueMouseOut={this._forgetValue}
+							// onValueMouseOut={this._forgetValue}
 						/>
 					}) }
-					
-					<ChartLabel text="Car Name"
-							className="alt-x-label"
-							xPercent={0.8}
-							yPercent={0.72}
-					/>
 					{/* : Fuel Comminsion(g/km)} */}
 					<ChartLabel text="(l/100km)"
 						className="alt-y-label"

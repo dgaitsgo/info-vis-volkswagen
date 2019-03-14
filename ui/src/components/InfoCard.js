@@ -102,7 +102,7 @@ class InfoCard extends Component {
 					<Card.Content className="carInfo">
 						<Columns>
 							<Columns.Column>
-								<Image src={model.images.length ? model.images[3].url : carThumbnail}/>
+								<Image src={model.images && model.images.length ? model.images[3].url : carThumbnail}/>
 							</Columns.Column>
 							<Columns.Column>
 								<div className='data-wrapper'>
