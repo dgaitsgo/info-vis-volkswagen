@@ -35,16 +35,14 @@ Visit `www.vwg-okapi-client.de` and explore our website!
 fuck keine ahnung alda
 
 ## The concept
-configure car and compare wltp data
+configure car and compare car's wltp data
 
 ## Who we are
-Sebastian Kunz
-David Gaitsgory
-Jessica Liu 
+David Gaitsgory, Sebastian Kunz, Jessica Liu 
 
 All of us study at 42 Silicon Valley in California, USA.
-## Frontend - Sebastian Kunz
 
+## Frontend - Sebastian Kunz
 We designed the user experience to be linear.
 
 Generally speaking the frontend is divided in three main parts.
@@ -76,7 +74,10 @@ Once you click the configure button a modal opens. If there are images for your 
 
 Just like for the the Model Selection we make use of a debouncer to prevent floads of network requests.
 
+### Styling and Design
 
+### backend
+origin-cross
 
 ### No Data Found / Missing image
 
@@ -91,16 +92,6 @@ In the OKAPI documentation VW writes "Please be advised, that currently not for 
 ### Client sided routing
 
 DONT OPEN THE NAVIGATION FILE PLLLLLLLLLLLLLLLLEAAAAAAAAAAAAAAASE ITS THE FINEST SPAGETTTTT
-
-
-
-## Styling and Design - Jessica Liu
-
-
-
-## Backend - David Gaitsgory
-
--cross origin
 
 
 
