@@ -108,7 +108,6 @@ class OptionsContainer extends Component {
 				this.setState({ currentConfig, loading: null })
 
 			} catch (e) {
-
 				this.setState({ loading : null, error : { message : 'Could not add option.' } })
 		}
 	}
@@ -191,6 +190,9 @@ class OptionsContainer extends Component {
 		const configChoicesRes = await this.configChoices(currentConfig.configId)
 		const choices = configChoicesRes.data.choices
 		const flatChoices = this.flattenChoices(choices)
+
+		//scroll up to the top of the window
+		// ReactDom.findDOMNode(this).scrollIntoView()
 
 		this.setState({ allChoices : choices, flatChoices })
 

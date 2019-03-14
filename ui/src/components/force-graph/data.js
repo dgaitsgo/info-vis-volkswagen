@@ -1,4 +1,4 @@
-const data ={
+export default {
     "d3f207e5-18d8-5bd2-a5fa-a1acc05629fa" : {
         "name" : "Volkswagen Passenger Cars",
         "id": "d3f207e5-18d8-5bd2-a5fa-a1acc05629fa",
@@ -350,5 +350,3 @@ const data ={
         ]
     }
 }
-
-export default data
