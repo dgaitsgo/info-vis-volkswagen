@@ -94,16 +94,6 @@ DONT OPEN THE NAVIGATION FILE PLLLLLLLLLLLLLLLLEAAAAAAAAAAAAAAASE ITS THE FINEST
 
 
 
-## Styling and Design - Jessica Liu
-
-
-
-## Backend - David Gaitsgory
-
--cross origin
-
-
-
 ## Improvements to OKAPI
 
 First of all we want to mention, that it is difficult to write a perfectly understandable documentation. We appreaciate the appealing design and interactivity. The CURL examples are amazing and were very helpful. In the following we want to list problems we ran into while working with OKAPI and bring up possible new features and improvements. We are happy to help improve OKAPI!
