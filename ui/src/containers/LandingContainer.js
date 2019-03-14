@@ -11,17 +11,13 @@ class LandingContainer extends Component {
 		super(props)
 
 		this.state = {
-			modalIsOpen: false,
-
 			//all the countries of OKAPI
 			countries : null
 		}
 	}
-	openModal = () => this.setState({ modalIsOpen: true })
-
-	closeModal = () => this.setState({ modalIsOpen: false })
 
 	componentDidMount() {
+		window.scrollTo(0, 0)
 
 		axios.get('/api/countries').then(res => {
 			let countries = res.data.countries.data
@@ -35,9 +31,7 @@ class LandingContainer extends Component {
 					err
 				}
 			}
-			return (
-				<Redirect to={to} />
-			)
+			return <Redirect to={to} />
 		})
 	}
 
@@ -47,7 +41,7 @@ class LandingContainer extends Component {
 
 		if (!countries) {
 			return (
-				<div className="loaders">
+				<div className='loaders'>
 				<Loader
 					style={{
 						borderTopColor: 'transparent',
@@ -60,11 +54,6 @@ class LandingContainer extends Component {
 
 		return (
 			<Landing
-				onClickCountry={this.onClickCountry}
-				toggleModal={this.toggleModal}
-				openModal={this.openModal}
-				closeModal={this.closeModal}
-				modalIsOpen={this.state.modalIsOpen}
 				countries={countries}
 			/>
 		)

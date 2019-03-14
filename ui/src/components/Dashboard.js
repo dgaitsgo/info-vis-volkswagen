@@ -40,16 +40,6 @@ const rankModels = ({ configurations, compareMode }) => {
 
 class Dashboard extends Component {
 
-	constructor(props)
-	{
-		super(props)
-
-		this.state = {
-
-		}
-	}
-
-
 	getInterpolations = ({ model, phase, compareMode}) => {
 
 			if (model.wltp.length) {
@@ -102,6 +92,7 @@ class Dashboard extends Component {
 								key={`infoCard_${i}`}
 								ranking={i}
 								model={ currModel }
+								
 								compareMode={ compareMode }
 								compareUnit={ null }
 								openConfiguration={ openConfiguration }

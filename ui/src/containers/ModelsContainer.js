@@ -4,7 +4,7 @@ import axios from 'axios'
 import Redirect from 'react-router-dom/Redirect'
 import Model from '../components/Model'
 import Modal from 'react-modal'
-import { Heading, Loader, Section, Container, Button, Columns } from "react-bulma-components/full"
+import { Heading, Loader, Section, Container, Button, Columns } from 'react-bulma-components/full'
 import '../style/model.css'
 import isEmpty from 'lodash/isEmpty'
 
@@ -27,6 +27,7 @@ class ModelsContainer extends Component {
 	}
 
     componentDidMount() {
+		window.scrollTo(0, 0)
 
 		const urlData = this.props.location.pathname.split('/')
 
@@ -161,7 +162,7 @@ class ModelsContainer extends Component {
 				</div>
 				<br />
 				<div className={compareButtonClassName}>
-					<Button className="is-medium" disabled={isEmpty(selectedModels)} onClick={ this.toModelsCompare }>
+					<Button className='is-medium' disabled={isEmpty(selectedModels)} onClick={ this.toModelsCompare }>
 						Done
 					</Button>
 				</div>

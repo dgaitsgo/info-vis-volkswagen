@@ -87,6 +87,7 @@ class CompareContainer extends Component {
 	}
 
 	async componentDidMount() {
+		window.scrollTo(0, 0)
 
 		const urlData = this.props.location.pathname.split('/')
 		const selectedModels = JSON.parse(decodeURIComponent(urlData[4]))
@@ -94,7 +95,6 @@ class CompareContainer extends Component {
 		try {
 			
 			const ls = getLocalStorage('vw_okapi')
-			console.log('selected models', selectedModels)
 			const configurationsArr = await this.loadConfigs(ls, selectedModels)
 			let configurations = {}
 
@@ -143,6 +143,7 @@ class CompareContainer extends Component {
 			ls
 		} = this.state
 
+		console.log('configurations', configurations)
 		const urlData = this.props.location.pathname.split('/')
 
 		if (loading)
@@ -163,7 +164,14 @@ class CompareContainer extends Component {
 			)
 		}
 
-		console.log('config is', configurations)
+		let renderBarChart = false
+		Object.keys(configurations).forEach( modelId => {
+			if (configurations[modelId].wltp.length)
+				renderBarChart = true
+		})
+
+		console.log('shouldRenderBartChart', renderBarChart)
+
 		const carNames = Object.keys(configurations).map(modelId => configurations[modelId].model.name)
 
 		return (
@@ -182,9 +190,6 @@ class CompareContainer extends Component {
 								</span>
 							)}.
 							The WLTP driving cycle is divided into four parts with different average speeds: low, medium, high and extra high. Each part contains a variety of driving phases, stops, acceleration and braking phases. For a certain car type, each powertrain configuration is tested with WLTP for the car’s lightest (most economical) and heaviest (least economical) version.</p>
-					{/* <Heading size={5} className='has-text-centered'> */}
-						{/* Emissions Data */}
-					{/* </Heading> */}
 					<div className='button-wrapper'>
 						<div>
 							<span><strong>Compare by: </strong></span>
@@ -207,11 +212,15 @@ class CompareContainer extends Component {
 							</label>
 						</div>
 					</div>
-					<BarChart
-						configurations={ configurations }
-						compareMode={ compareMode }
-						phases={ this.phases }
-					/>
+					{
+						renderBarChart 
+						? <BarChart
+							configurations={ configurations }
+							compareMode={ compareMode }
+							phases={ this.phases }
+						/>
+						: null
+					}
 					<hr className='divider'/>
 					<Heading size={4} className='has-text-centered'>
 						Model Ranking

@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
 import { Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
-import { Loader } from 'react-bulma-components/full'
+import { Loader, Image } from 'react-bulma-components/full'
 import { debounce } from 'lodash'
+import SlideShow from 'react-image-show'
+import noImage from '../res/carIcon.png'
 import DEBOUNCE_TIME from '../constants/debounceTime'
 
 import '../style/options.css'
 
 const Tags = ({ selectedOptions, flatChoices, removeOption }) => {
+
+	if(!selectedOptions)
+		return null
 
 	return (
 		<div className='tags-wrapper'>
@@ -17,7 +22,7 @@ const Tags = ({ selectedOptions, flatChoices, removeOption }) => {
 					return (
 						<div className='tag description-tag' key={`tag_${i}`}>
 							{flatChoices[option.id] && flatChoices[option.id].choiceDescription}
-							<span onClick={ debounce(() => removeOption(option.id), DEBOUNCE_TIME) } className='tag-close'><i className="fas fa-times"></i></span>
+							<span onClick={ debounce(() => removeOption(option.id), DEBOUNCE_TIME) } className='tag-close'><i className='fas fa-times'></i></span>
 						</div>
 					)
 				})
@@ -94,7 +99,7 @@ class Options extends Component {
 	getChoicesOfCategory = categoryId => {
 
 		const { currentConfig, allChoices } = this.props
-		const selectedOptionsArr = currentConfig.selectedOptions.map( option => option.id)
+		const selectedOptionsArr = currentConfig.selectedOptions ? currentConfig.selectedOptions.map( option => option.id) : []
 
 		return (
 			allChoices.filter( choice => choice.id === categoryId).map( choice => {
@@ -145,6 +150,8 @@ class Options extends Component {
 
 		const model = currentConfig.model
 
+		console.log('current config', currentConfig)
+
 		return (
 			<Modal
 				isOpen={isOpen}
@@ -167,7 +174,13 @@ class Options extends Component {
 				<Heading size={6} className='has-text-centered'>
 					{model.type.name}
 				</Heading>
-				<img src='https://images.hgmsites.net/med/2019-audi-a4_100656485_m.jpg' alt='test'/>
+				{ currentConfig.images && currentConfig.images.length 
+					? <SlideShow
+						images={currentConfig.images.map( imageObj => imageObj.url)}
+						indicators thumbnails fixedImagesHeight infinite
+					/> 
+					: <Image src={noImage}/>
+				}
 				<input
 					type='text'
 					className='input-category-search'

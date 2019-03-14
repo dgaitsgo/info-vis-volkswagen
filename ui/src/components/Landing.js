@@ -1,7 +1,7 @@
 import React from 'react'
 import emoji from '../modules/countryFlag'
 import { NavLink } from 'react-router-dom'
-import { Container, Columns, Heading, Section } from "react-bulma-components/full"
+import { Container, Columns, Heading, Section } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import '../style/landing.css'
 
@@ -19,7 +19,7 @@ const Country = ({ name, countryCode }) => {
 	)
 }
 
-const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries }) => {
+const Landing = ({ countries }) => {
 
 	return (
 		<div className='landing-wrapper'>
@@ -28,7 +28,7 @@ const Landing = ({ onClickCountry, closeModal, openModal, modalIsOpen, countries
 					<Heading size={4} className='has-text-centered'>
 						Choose Your Country
 					</Heading>
-					<Columns className="is-centered">
+					<Columns className='is-centered'>
 						{countries.map(({ countryCode, name }, i) => {
 							const to = {
 								pathname : `/explore/${countryCode}`,
