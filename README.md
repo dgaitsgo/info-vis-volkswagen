@@ -14,7 +14,7 @@ We took three weeks to finish the project. We worked with the popular JavaScript
 
 - Insights in:
 	-  [Frontend](#frontend)
-	-  [UX/UI Design and Styling](#ux/xi design and styling)
+	-  [UX/UI Design and Styling](#ux/ui design and styling)
 	-  [Backend](#backend)
 
 ## Setup
