@@ -81,7 +81,7 @@ class Okapi {
         return (
             axios ({
                 method : 'get',
-                url : `${apiURL}/configurations/${configId}/options?resolvetrue`,
+                url : `${apiURL}/configurations/${configId}/options?resolve=true`,
                 headers : this.defaultHeaders(token)
             })
         )
