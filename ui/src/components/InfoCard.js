@@ -92,7 +92,7 @@ class InfoCard extends Component {
 									{ ranking === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
 									{ ranking === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 									{ ranking === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-									{ `NO ${ranking + 1}.`} { model.model.name.toUpperCase() }
+									{ `${ranking + 1}.`} { model.model.name }
 								</Heading>
 								<Heading size={5} className='average-wrapper'> {`${average} ${compareUnit}` }</Heading>
 							</div>
@@ -102,7 +102,7 @@ class InfoCard extends Component {
 					<Card.Content className="carInfo">
 						<Columns>
 							<Columns.Column>
-								<Image src={carThumbnail}/>
+								<Image src={model.images.length ? model.images[3].url : carThumbnail}/>
 							</Columns.Column>
 							<Columns.Column>
 								<div className='data-wrapper'>

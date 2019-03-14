@@ -13,7 +13,7 @@ import {
   } from 'react-vis'
   import '../style/barChart.css'
 
-  const ratio = .4;
+  const ratio = 1;
   class BarChart extends Component{
 
 	constructor (props) {

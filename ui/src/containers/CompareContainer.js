@@ -173,18 +173,30 @@ class CompareContainer extends Component {
 		}
 
 		console.log('config is', configurations)
+		const carNames = Object.keys(configurations).map(modelId => configurations[modelId].model.name)
 
 		return (
 			<div className='compare-container-wrapper'>
 				<Section>
 					<Container className="compareContain">
 					<Heading size={4} className='has-text-centered'>
-						Model Comparison
+						Model Emissions Comparison
 					</Heading>
-					<p>The WLTP driving cycle is divided into four parts with different average speeds: low, medium, high and extra high. Each part contains a variety of driving phases, stops, acceleration and braking phases. For a certain car type, each powertrain configuration is tested with WLTP for the car’s lightest (most economical) and heaviest (least economical) version.</p>
+					<p>We're looking at WLTP data for the cars you selected:&nbsp;
+						{carNames.map( (name, i) =>
+								<span key={`car_name_${i}`}>
+									<strong>
+										{`${name}${i < carNames.length - 1 ? ', ' : ''}`}
+									</strong>
+								</span>
+							)}.
+							The WLTP driving cycle is divided into four parts with different average speeds: low, medium, high and extra high. Each part contains a variety of driving phases, stops, acceleration and braking phases. For a certain car type, each powertrain configuration is tested with WLTP for the car’s lightest (most economical) and heaviest (least economical) version.</p>
+					{/* <Heading size={5} className='has-text-centered'> */}
+						{/* Emissions Data */}
+					{/* </Heading> */}
 					<div className='button-wrapper'>
 						<div>
-							<span><strong>Sort by: </strong></span>
+							<span><strong>Compare by: </strong></span>
 							<label className='field'>CO<sub>2</sub> Emissions
 								<input
 									onChange={() => this.setCompareMode('CO2')}
@@ -204,9 +216,6 @@ class CompareContainer extends Component {
 							</label>
 						</div>
 					</div>
-					<Heading size={5} className='has-text-centered'>
-						Bar Chart Title Goes Here
-					</Heading>
 					<BarChart
 						configurations={ configurations }
 						compareMode={ compareMode }

@@ -22,7 +22,9 @@
 	text-align:-webkit-center;
 }
 .button-wrapper{
-    text-align: right;
+		margin-top: 2rem;
+		margin-bottom: 2rem;
+    text-align: left;
 }
 .compare-model-name {
 	position: relative;
