@@ -3,8 +3,8 @@
 Information visualization for Volkswagen Coding Competition - hosted on `www.IT-Talents.de`
 
 ## Introduction
-This project is the submission for the "Information Visualization" competition by Volkswagen of Sebastian Kunz, David Gaitsgory and Jessica Liu. Given the data catalog of the VW-Group, ascessible through the OKAPI provided by Volkswagen, visualize the data in an accessible and user friendly way and proposing a graphical insight about the versatility of the productdata.
-We took three weeks to finish the project. We worked with the popular JavaScript framework react.
+This project is the submission for the "Information Visualization" competition by Volkswagen of David Gaitsgory, Sebastian Kunz and Jessica Liu. Given the data catalog of the VW-Group, ascessible through the OKAPI provided by Volkswagen, visualize the data in an accessible and user friendly interface and proposing a graphical insight about the versatility of the productdata.
+We took three weeks to finish the project. We worked with the popular JavaScript framework reactJS.
 
 -  [Setup](#setup)
 
@@ -32,17 +32,21 @@ Visit `www.vwg-okapi-client.de` and explore our website!
 4.  `npm start` or `yarn start`
 
 #### WINDOWS
-fuck keine ahnung alda
+
+1.  `git clone https://github.com/dgaitsgo/info-vis-volkswagen`
+2.  `cd info-vis-volkswagen/ui`
+3.  `npm install` or `yarn install` -> missing npm or yarn ?
+4.  `npm start` or `yarn start`
 
 ## The concept
-configure car and compare car's wltp data
+Let users configure car and compare car's wltp data
 
 ## Who we are
 David Gaitsgory, Sebastian Kunz, Jessica Liu 
 
 All of us study at 42 Silicon Valley in California, USA.
 
-## Frontend - Sebastian Kunz
+## Frontend
 We designed the user experience to be linear.
 
 Generally speaking the frontend is divided in three main parts.
@@ -76,7 +80,9 @@ Just like for the the Model Selection we make use of a debouncer to prevent floa
 
 ### Styling and Design
 
-### backend
+For Styling and Design, we had searched different websites' car configuration.  
+
+### Backend
 origin-cross
 
 ### No Data Found / Missing image
