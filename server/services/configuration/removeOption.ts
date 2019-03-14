@@ -1,24 +1,30 @@
 export {}
 
 const Okapi = require('../Okapi')
-const apiURL = require('../../constants/apiURL')
 const sendJSON = require('../../helpers/sendJSON')
-const express = require('express')
 const app = require('../app/app')
 
 app.get('/api/removeOption', async (req, res, next) => {
 
-    const { token, configId, optionId } = req.query
-    
+    const { configId, optionId, token } = req.query
+   
+    console.log('removing', optionId, 'from', configId)
+ 
     try {
-        
-        const optionsRes = Okapi.removeOption(configId, optionId, token)
-        const options = optionsRes.data.data 
-        
-        sendJSON(res, { options })
+       
+	const nextOptionsRes = await Okapi.removeOption(configId, optionId, token)
+	if (nextOptionsRes.data) {
+	
+		console.log('next option res', nextOptionsRes.data) 
+        	sendJSON(res, { options : nextOptionsRes.data.data })
+	}
+
+	throw ('Could not remove option')
 
     } catch (e) {
 
+	console.log('wtf error', e)
+	
         next(new Error(e))
     }
 })

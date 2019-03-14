@@ -30,7 +30,7 @@ class Okapi {
                 method : 'post',
                 url : `${apiURL}/configurations/${configId}/options`,
                 headers : this.defaultHeaders(token),
-                data : { id : optionId.id }
+                data : { id : optionId }
             })
         )
     }
@@ -39,9 +39,8 @@ class Okapi {
         return (
             axios ({
                 method : 'delete',
-                url : `${apiURL}/configurations/${configId}/options`,
+                url : `${apiURL}/configurations/${configId}/options/${optionId}`,
                 headers : this.defaultHeaders(token),
-                data : { id : optionId }
             })
         )
     }

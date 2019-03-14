@@ -2,14 +2,11 @@ export {}
 
 const Okapi = require('../Okapi')
 const sendJSON = require('../../helpers/sendJSON')
-const express = require('express')
 const app = require('../app/app')
 
 app.get('/api/addOption', async (req, res, next) => {
 
     const { configId, optionId, token } = req.query
-
-    console.log('wo so much options', configId, optionId)
 
     try {
 
@@ -21,8 +18,11 @@ app.get('/api/addOption', async (req, res, next) => {
             sendJSON(res, { options : nextOptionsRes.data.data })
         }
     
+	throw ('Could not add option')
+
     }  catch (e) {
 
         next(new Error(e))
-	}
+
+   }
 })
