@@ -2,6 +2,7 @@ import React from 'react'
 import { Heading, Columns, Card } from 'react-bulma-components/full'
 import debounce  from 'lodash/debounce'
 import '../style/model.css'
+import DEBOUNCE_TIME from '../constants/debounceTime'
 
 const Model = ({id, name, onClick, selected, src}) => {
 
@@ -18,7 +19,7 @@ const Model = ({id, name, onClick, selected, src}) => {
     return (
 		<div className='model-wrapper'>
         <Columns.Column>
-			<Card className={modelClassName} onClick={ debounce(() => onClick({ id, name }), 200) }>
+			<Card className={modelClassName} onClick={ debounce(() => onClick({ id, name }), DEBOUNCE_TIME) }>
 				<Card.Content>
 					<div>
 					<Heading className={headingClassName} size={5}>{ name }</Heading>

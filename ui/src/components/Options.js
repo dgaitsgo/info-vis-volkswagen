@@ -3,6 +3,7 @@ import { Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import { Loader } from 'react-bulma-components/full'
 import { debounce } from 'lodash'
+import DEBOUNCE_TIME from '../constants/debounceTime'
 
 import '../style/options.css'
 
@@ -16,7 +17,7 @@ const Tags = ({ selectedOptions, flatChoices, removeOption }) => {
 					return (
 						<div className='tag description-tag' key={`tag_${i}`}>
 							{flatChoices[option.id] && flatChoices[option.id].choiceDescription}
-							<span onClick={ debounce(() => removeOption({ id: option.id }), 1000) } className='tag-close'><i className="fas fa-times"></i></span>
+							<span onClick={ debounce(() => removeOption(option.id), DEBOUNCE_TIME) } className='tag-close'><i className="fas fa-times"></i></span>
 						</div>
 					)
 				})
@@ -100,8 +101,8 @@ class Options extends Component {
 
 				return (choice.valid.map( valid => {
 					const isSelected = selectedOptionsArr.includes(valid.id)
-					const delayedAdd = debounce(() => this.props.addOption(valid.id), 300)
-					const delayedRemove = debounce(() => this.props.removeOption(valid.id), 300)
+					const delayedAdd = debounce(() => this.props.addOption(valid.id), DEBOUNCE_TIME)
+					const delayedRemove = debounce(() => this.props.removeOption(valid.id), DEBOUNCE_TIME) 
 					return (
 						<div
 							className={`choice valid ${isSelected ? 'selected' : ''}`}

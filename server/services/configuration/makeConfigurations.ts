@@ -32,11 +32,14 @@ app.post('/api/makeConfigurations', async(req, res, next) => {
 		//for all the new configs
 		const defaultOptions = await Promise.all(configIds.map( async (configId, i) => {
 
+			console.log('adding option', models[i].type.id)
 			// add type option
-            await Okapi.addOption(configId, models[i].type.id, token)
+			// await Okapi.addOption(configId, models[i].type.id, token)
 
 			//get all of the options to complete the build
 			const optionsToSetRes = await Okapi.resolveOptions(configId, token)
+
+			console.log('setting opptions for', configId, optionsToSetRes.data)
 			const optionIds = optionsToSetRes.data.data.map(option => ({ id : option.id }))
 			const defaultOptionsRes = await Okapi.replaceOptions(configId, optionIds, token)
 			const defaultOptions = defaultOptionsRes.data.data
@@ -46,18 +49,18 @@ app.post('/api/makeConfigurations', async(req, res, next) => {
 			return (defaultOptions)
 		}))
 
-		// console.log('default options[0]', defaultOptions[0])
-		const wltpResults = await Promise.all(configIds.map(configId => Okapi.getWLTP(configId, token)))
+		console.log('default options[0]', defaultOptions[0])
+		const wltpResults = await Promise.all(configIds.map(configId => Okapi.getWLTP(configId, token).catch(e => e)))
 
-		// console.log('wltp [0]', wltpResults[0].data)
-        const imageResults = await Promise.all(configIds.map(configId => Okapi.getImages(configId, token)))
+		console.log('wltp [0]', wltpResults[0])
+        	const imageResults = await Promise.all(configIds.map(configId => Okapi.getImages(configId, token).catch(e => e)))
 
-		// console.log('images [0]', imageResults[0].data)
+		console.log('images [0]', imageResults.map(ir => ir && ir.data ? ir.data : 'error'))
 		const newConfigurations = models.map( (model, i : number) => ({
 			model,
 			configId : configIds[i],
 			wltp  : wltpResults[i].data.data,
-			images : imageResults[i].data.data,
+			images : imageResults[i] && imageResults[i].data ? imageResults[i].data.data : [],
 			selectedOptions : defaultOptions[i],
 			defaultOptions : defaultOptions[i],
 			expirationDate : addDays(new Date(), 1),
@@ -69,6 +72,8 @@ app.post('/api/makeConfigurations', async(req, res, next) => {
 		sendJSON(res, { newConfigurations })
 	
 	} catch (e) {
+
+		console.log('fuckgin error : ', e)
 		
 		next(new Error(e))
 	}

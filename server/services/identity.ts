@@ -34,10 +34,8 @@ app.use( async (req, res, next) => {
 
 	const now = new Date()
 
-	console.log(Identity.findOne)
-
     //find latest token
-    let token = await Identity.findOne().sort({ createdAt : -1 }) as unknown as Identity
+	let token = await Identity.findOne().sort({ createdAt : -1 }) as unknown as Identity
 
 	if (!token || !token.access_token || isAfter(now, token.expirationDate)) {
 
