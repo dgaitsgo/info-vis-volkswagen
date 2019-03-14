@@ -1,10 +1,11 @@
+export {}
+
 const axios = require('axios')
-const app = require('./app')
 const sendJSON = require('../helpers/sendJSON')
-
 const apiURL = 'https://api.productdata.vwgroup.com/v2'
+const app = require('../services/app/app')
 
-const defaultHeaders = access_token => ({
+const defaultHeaders = (access_token) => ({
 	headers: {
 		'Authorization': 'bearer ' + access_token,
 		'Accept' : 'application/json',
@@ -32,24 +33,25 @@ const apiEndpoints = {
 
 Object.keys(apiSchema).forEach(key => {
 
-    app.get(`/api/${key}`, (req, res) => {
+    app.get(`/api/${key}`, (req, res, next) => {
 
-        const _args = apiSchema[key].map(paramKey => req.query[paramKey])
+        const _args = apiSchema[key].map(( paramKey ) => req.query[paramKey])
 
         reqProductData(
             req,
-            res,
+			res,
+			next,
             apiEndpoints[key].apply(null, _args),
             key
         )
     })
 })
 
-const reqProductData = async (req, res, url, key) => {
+const reqProductData = async (req, res, next, url, key) => {
 
-	const _token = req.query.token
-	console.log('token in countries', _token)
-	const token = typeof(_token) === 'string' ? JSON.parse(_token) : _token
+	const { token } = req.query
+
+	console.log(token)
 
 	try {
 
@@ -58,16 +60,8 @@ const reqProductData = async (req, res, url, key) => {
 
 		sendJSON(res, { token, [key] : data })
 
-	} catch (err) {
-
-		const { status, statusText } = err.response
-
-		console.error(status, statusText)
-
-		res.status(status).send({
-			error : true,
-			message: statusText,
-			userMessage : `Could not get ${key}`
-		})
+	} catch (e) {
+		
+		next(new Error(e))
 	}
 }

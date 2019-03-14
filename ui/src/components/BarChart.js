@@ -7,7 +7,6 @@ import {
 	VerticalGridLines,
 	HorizontalGridLines,
 	VerticalBarSeries,
-	VerticalBarSeriesCanvas,
 	Hint,
 	makeVisFlexible,
 	ChartLabel,
@@ -26,22 +25,23 @@ import {
 			width: 0
 		}
 	}
-	getInterpolations = ({ defaultModels, phase, compareMode}) => {
-		return Object.keys(defaultModels).map((modelId, i) => {
-			const model = defaultModels[modelId]
-			console.log(model);
-			if (model.model.wltp.length) {
-				const currentInterps = model.model.wltp[0].interpolations
+	getInterpolations = ({ configurations, phase, compareMode}) => {
+		return Object.keys(configurations).map((modelId, i) => {
+			const model = configurations[modelId]
+
+			console.log('model is', model)
+			if (model.wltp.length) {
+				const currentInterps = model.wltp[0].interpolations
 					.filter(interp => interp.value_type === compareMode && interp.phase === phase)
 					.map( interp => interp.value)
 					return ({
 						value: currentInterps,
-						name: model.model.name
+						name: model.name
 					})
 			} else {
 				return ({
 					value: null,
-					name: model.model.name
+					name: model.name
 				})
 			}
 		})
@@ -71,7 +71,7 @@ import {
 
 	render() {
 		const {
-			defaultModels,
+			configurations,
 			compareMode,
 			phases
 		} = this.props
@@ -89,7 +89,7 @@ import {
 				style: {line: {stroke: '#939393', strokeWidth: '1px'}}
 			  };
 
-		const dataSets = phases.map(phase => this.getInterpolations( { defaultModels, compareMode, phase: phase.key}))
+		const dataSets = phases.map(phase => this.getInterpolations( { configurations, compareMode, phase: phase.key}))
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
 		const { value } = this.state
 		const FlexibleXYPlot = makeVisFlexible(XYPlot)

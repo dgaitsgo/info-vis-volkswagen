@@ -1,85 +1,151 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import getLocalStorage from '../modules/localStorage'
+import Redirect from 'react-router-dom/Redirect'
 import { Loader, Section, Container, Heading } from 'react-bulma-components/full'
 import Dashboard from '../components/Dashboard'
 import BarChart from '../components/BarChart'
 import OptionsContainer from './OptionsContainer'
+import isBefore from 'date-fns/is_before'
+import addDays from 'date-fns/add_days'
 
 import '../style/compareContainer.css'
 
 class CompareContainer extends Component {
 
     constructor(props) {
-		super(props)
-        this.state = {
-			defaultModels : null,
-			compareMode : 'CO2',
-			modalIsOpen: false,
-			isTyping: true,
-			modalContent: {},
-		}
+			super(props)
+			this.state = {
+				configurations : null,
+				compareMode : 'CO2',
+				modalIsOpen: false,
+				modalContent: {},
+				ls : null,
+				loading: true,
+				error: false
+			}
 
-		this.phases = [
-			{ key : 'LOW', color : '#4caf50', label : 'Low' },
-			{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
-			{ key : 'HIGH', color : '#ff9800', label : 'High' },
-			{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' },
-			{ key : 'COMBINED', color : '#1565c0', label : 'Combined' }
-		]
+			this.phases = [
+				{ key : 'LOW', color : '#4caf50', label : 'Low' },
+				{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
+				{ key : 'HIGH', color : '#ff9800', label : 'High' },
+				{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' },
+				{ key : 'COMBINED', color : '#1565c0', label : 'Combined' }
+			]
+
+			this.loadConfigs = this.loadConfigs.bind(this)
+	}
+
+	async loadConfigs(ls, selectedModels) {
+
+		let localConfigs = []
+		let remoteConfigs = []
+
+		const selectedModelsArr = Object.keys(selectedModels).map(
+			key => ({
+				id: key,
+				name : selectedModels[key].modelName,
+				type : {
+					id : selectedModels[key].type.id,
+					name : selectedModels[key].type.name
+			}}))
+
+			try {
+				// - Look for configs based on type id in local storage
+				const ls_configResults = await Promise.all(
+					selectedModelsArr.map(model =>
+						ls.find({ selector : { _id : model.type.id } })) )
+				
+				// - Triage which exist in local storage, which need to be fetched
+				ls_configResults.forEach( ({ docs }, i) =>
+					docs.length && isBefore(docs[0].expirationDate, addDays(new Date(), 1))
+					? localConfigs.push(docs[0])
+					: remoteConfigs.push(selectedModelsArr[i]))
+
+				if (remoteConfigs.length) {
+					// - Fetch remote configurations
+					const remoteConfigsRes = await axios.post('/api/makeConfigurations', remoteConfigs)
+					const remoteConfigsData = remoteConfigsRes.data
+
+					// - Save them to local storage
+					remoteConfigs = remoteConfigsData.newConfigurations.map(remoteConfig => ({
+						_id : remoteConfig.model.type.id,
+						...remoteConfig
+					}))
+				
+					await ls.bulkDocs(remoteConfigs)
+				}
+				
+				//reassociate types and models
+				const finalConfigs = [...remoteConfigs, ...localConfigs]
+				
+				return (finalConfigs)
+
+			} catch (e) {
+				return (e)
+			}
 	}
 
 	async componentDidMount() {
 
 		const urlData = this.props.location.pathname.split('/')
 		const selectedModels = JSON.parse(decodeURIComponent(urlData[4]))
-		const selectedModelsIds = Object.keys(selectedModels).map( key => ({ id: key, name: selectedModels[key].modelName, typeId: selectedModels[key].type.id}))
 
-		const defaultModelsRes = await axios.get('/api/defaultModels', {
-			params : {
-				models: selectedModelsIds
-			}
-		})
+		try {
+			
+			const ls = getLocalStorage('vw_okapi')
+			console.log('selected models', selectedModels)
+			const configurationsArr = await this.loadConfigs(ls, selectedModels)
+			let configurations = {}
 
-		let defaultModelsArr = defaultModelsRes.data
-		let defaultModels = {}
+			configurationsArr.forEach(config => {
+				
+				configurations[config.model.id] = {
+					model : config.model,
+					configId : config.configId,
+					type : selectedModels[config.model.id].type,
+					selectedOptions : config.selectedOptions,
+					defaultOptions : config.defaultOptions,
+					build : config.build,
+					wltp : config.wltp,
+					images : config.images
+				}
+			})
 
-		//reassociate types and models
-		defaultModelsArr.forEach( (model, i) =>
-			defaultModels[model.model_id] =  {
-				model,
-				type : selectedModels[model.model_id].type
-		})
-		this.setState({ defaultModels })
+			this.setState({ ls, configurations })
+
+		} catch (e) {
+
+			this.setState({ loading: false, error : e })
+
+		}
 	}
 
 	setCompareMode = compareMode => this.setState({ compareMode })
 
 	closeModal = () => this.setState({ modalIsOpen: false })
-
-	openConfiguration = ({ modelId, modelName, typeName, typeId }) => {
-		this.setState({ modalIsOpen: true,
-			model: {
-				name: modelName,
-				id: modelId,
-				type: {
-					name: typeName,
-					id: typeId
-				},
-			} })
-	}
+	
+	openConfiguration = nextConfig =>
+		this.setState ({
+			modalIsOpen: true,
+			currentConfig : nextConfig
+		})
 
 	render() {
 
 		const {
-			defaultModels,
+			configurations,
 			compareMode,
 			modalIsOpen,
-			model
+			currentConfig,
+			loading,
+			error,
+			ls
 		} = this.state
 
 		const urlData = this.props.location.pathname.split('/')
 
-		if (!defaultModels)
+		if (loading)
 			return (
 				<div className='loaders'>
 					<Loader
@@ -99,6 +165,15 @@ class CompareContainer extends Component {
 					message={'Getting configurations...'} />
 				</div>
 			)
+		
+		if (error) {
+			return (
+				<Redirect to='/not-found' />
+			)
+		}
+
+		console.log('config is', configurations)
+
 		return (
 			<div className='compare-container-wrapper'>
 				<Section>
@@ -133,7 +208,7 @@ class CompareContainer extends Component {
 						Bar Chart Title Goes Here
 					</Heading>
 					<BarChart
-						defaultModels={ defaultModels }
+						configurations={ configurations }
 						compareMode={ compareMode }
 						phases={ this.phases }
 					/>
@@ -142,18 +217,19 @@ class CompareContainer extends Component {
 						Model Ranking
 					</Heading>
 					<Dashboard
-						defaultModels={ defaultModels }
+						configurations={ configurations }
 						compareMode={ compareMode }
 						openConfiguration= { this.openConfiguration }
 						phases={ this.phases }
 					/>
 					{modalIsOpen &&
 						<OptionsContainer
+							ls={ls}
+							currentConfig={currentConfig}
 							isOpen={modalIsOpen}
 							closeModal={ this.closeModal }
-							model={model}
 							countryCode={ urlData[2] }
-							defaultOptions={defaultModels[model.id].model.defaultOptions}
+							selectedOptions={ configurations[currentConfig.model.id].selectedOptions.map( option => option.id) }
 						/>}
 					</Container>
 				</Section>

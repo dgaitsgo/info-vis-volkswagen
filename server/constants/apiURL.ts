@@ -1,0 +1,1 @@
+module.exports = 'https://api.productdata.vwgroup.com/v2'

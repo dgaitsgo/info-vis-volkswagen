@@ -6,7 +6,7 @@ import Model from '../components/Model'
 import Modal from 'react-modal'
 import { Heading, Loader, Section, Container, Button, Columns } from "react-bulma-components/full"
 import '../style/model.css'
-import { isEmtpty } from 'lodash/isEmpty'
+import isEmpty from 'lodash/isEmpty'
 
 class ModelsContainer extends Component {
 
@@ -96,7 +96,7 @@ class ModelsContainer extends Component {
 		const {
 			selectedModels
 		} = this.state
-		if (!isEmtpty(selectedModels))
+		if (!isEmpty(selectedModels))
 			this.setState({ redirectToCompare: true })
 	}
 
@@ -170,7 +170,7 @@ class ModelsContainer extends Component {
 				</div>
 				<br />
 				<div className={compareButtonClassName}>
-					<Button className="is-medium" disabled={isEmtpty(selectedModels)} onClick={ this.toModelsCompare }>
+					<Button className="is-medium" disabled={isEmpty(selectedModels)} onClick={ this.toModelsCompare }>
 						Done
 					</Button>
 				</div>

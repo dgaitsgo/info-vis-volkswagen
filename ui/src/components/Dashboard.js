@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { sortBy } from 'lodash'
 import InfoCard from './InfoCard'
-import MissingCard from '../components/MissingCard'
+import MissingCard from './MissingCard'
+
+import sortBy from 'lodash/sortBy'
 
 import '../style/dashboard.css'
 
@@ -9,15 +10,15 @@ const sum = (accumulator, currentValue) => accumulator + currentValue
 
 const average = array => array.reduce(sum) / array.length
 
-const rankModels = ({ defaultModels, compareMode }) => {
+const rankModels = ({ configurations, compareMode }) => {
 
-	const averageModelMap = Object.keys(defaultModels).map( (modelId, i) => {
+	const averageModelMap = Object.keys(configurations).map( (modelId, i) => {
 
-		const model = defaultModels[modelId]
+		const model = configurations[modelId]
 
-		if (model.model.wltp.length) {
+		if (model.wltp.length) {
 
-			const currentInterps = model.model.wltp[0].interpolations.filter(interp => interp.value_type === compareMode)
+			const currentInterps = model.wltp[0].interpolations.filter(interp => interp.value_type === compareMode)
 			if (currentInterps.length) {
 				const interpAverage = average(currentInterps.map( item => item.value ))
 
@@ -51,9 +52,9 @@ class Dashboard extends Component {
 
 	getInterpolations = ({ model, phase, compareMode}) => {
 
-			if (model.model.wltp.length) {
+			if (model.wltp.length) {
 
-				const currentInterps = model.model.wltp[0].interpolations
+				const currentInterps = model.wltp[0].interpolations
 					.filter(interp => interp.value_type === compareMode && interp.phase === phase.key)
 					.map( interp => interp.value)
 
@@ -78,7 +79,7 @@ class Dashboard extends Component {
 	render () {
 
 		const {
-			defaultModels,
+			configurations,
 			compareMode,
 			phases,
 			openConfiguration,
@@ -91,7 +92,7 @@ class Dashboard extends Component {
 			{
 				rankedModels.map( (rankedModel, i) => {
 
-					const currModel = defaultModels[rankedModel.modelId]
+					const currModel = configurations[rankedModel.modelId]
 					const hasWltpData = rankedModel.average !== null
 					const avg = hasWltpData ? rankedModel.average.toFixed(2) : null
 

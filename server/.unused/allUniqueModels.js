@@ -1,5 +1,5 @@
 const axios = require('axios')
-const app = require('./app')
+const app = require('../services/app/app')
 const apiURL = require('../constants/apiURL')
 const sendJSON = require('../helpers/sendJSON')
 

@@ -12,7 +12,7 @@ const Tags = ({ selectedOptions, flatChoices, removeOption }) => {
 		<div className='tags-wrapper'>
 			{selectedOptions.map( (option, i) => {
 					if (!flatChoices[option.id])
-						console.log('missing option is', flatChoices[option.id])
+						console.log('missing option is', option.id)
 					return (
 						<div className='tag description-tag' key={`tag_${i}`}>
 							{flatChoices[option.id] && flatChoices[option.id].choiceDescription}
@@ -41,8 +41,7 @@ class Options extends Component {
 	}
 
 	handleSearchChange = (event) => {
-		const { currentConfig } = this.props
-		const allChoices = currentConfig.choices
+		const { allChoices } = this.props
 
 		let searchedCategories = allChoices.filter( category => {
 			const label = category.description.length ? category.description : category.id
@@ -65,9 +64,11 @@ class Options extends Component {
 	}
 
 	getCategories = allCategories => {
+		
 		const { selectedCategories } = this.state
 
 		return allCategories.map( (category, i) => {
+
 			const label = category.description.length ? category.description : category.id
 			const isSelected = selectedCategories.includes(category.id)
 			const treeCategoryClassName = isSelected
@@ -91,20 +92,21 @@ class Options extends Component {
 
 	getChoicesOfCategory = categoryId => {
 
-		const { currentConfig } = this.props
+		const { currentConfig, allChoices } = this.props
 		const selectedOptionsArr = currentConfig.selectedOptions.map( option => option.id)
-		const allChoices = currentConfig.choices
 
 		return (
 			allChoices.filter( choice => choice.id === categoryId).map( choice => {
 
 				return (choice.valid.map( valid => {
 					const isSelected = selectedOptionsArr.includes(valid.id)
+					const delayedAdd = debounce(() => this.props.addOption(valid.id), 300)
+					const delayedRemove = debounce(() => this.props.removeOption(valid.id), 300)
 					return (
 						<div
 							className={`choice valid ${isSelected ? 'selected' : ''}`}
 							key={ valid.id }
-							onClick={ debounce(() => this.props.addOption( valid.id ), 1000) }
+							onClick={ isSelected ? delayedRemove : delayedAdd }
 						>
 							&bull; {valid.description}
 						</div>
@@ -130,7 +132,10 @@ class Options extends Component {
 			isOpen,
 			closeModal,
 			currentConfig,
-			removeOption
+			removeOption,
+			allChoices,
+			flatChoices,
+			loading
 		} = this.props
 
 		const {
@@ -139,12 +144,21 @@ class Options extends Component {
 
 		const model = currentConfig.model
 
-
 		return (
 			<Modal
 				isOpen={isOpen}
 				onRequestClose={closeModal}
 			>
+			{loading && 
+				<Modal className='loading-modal'
+					overlayClassName='loading-modal-overlay'
+					isOpen={true}>
+					<div className='loader-message-wrapper'>
+						<div>{loading}</div>
+						<Loader message='Loading options for your configuration' />
+					</div>
+				</Modal>
+			}
 			<div className='modal-header-wrapper'>
 				<Heading size={4} className='has-text-centered'>
 					Configure Your {model.name}
@@ -160,7 +174,8 @@ class Options extends Component {
 					placeholder='Search for a category'
 				/>
 				<Tags
-					flatChoices={ this.props.flatChoices }
+					
+					flatChoices={ flatChoices }
 					selectedOptions={ currentConfig.selectedOptions }
 					removeOption={ removeOption }
 				/>
@@ -170,15 +185,14 @@ class Options extends Component {
 				<Columns className='tree-wrapper has-text-centered'>
 					<Columns.Column className='tree-category-wrapper'>
 						<Heading size={6}> Categories </Heading>
-						{this.getCategories(searchedCategories ? searchedCategories : currentConfig.choices)}
+						{this.getCategories(searchedCategories ? searchedCategories : allChoices )}
 					</Columns.Column>
 				</Columns>
 			}
 			</div>
 			<div className='button-panel'>
-				<Button onClick={ this.cancelConfiguration } className='configure-button'>Cancel</Button>
 				<Button onClick={ this.restoreConfiguration } className='configure-button'>Restore</Button>
-				<Button onClick={ this.applyConfiguration } className='configure-button'>Apply</Button>
+				<Button onClick={ this.applyConfiguration } className='configure-button'>Done</Button>
 			</div>
 			</Modal>
 		)
@@ -188,12 +202,13 @@ class Options extends Component {
 
 		const {
 			currentConfig,
+			allChoices
 		} = this.props
 
 		return (
-			currentConfig
-			? this.modalContent()
-			: <Loader message='Loading configuration and choices' />
+			currentConfig && allChoices
+				? this.modalContent()
+				: <Loader message='Loading options for your configuration' />
 		)
 	}
 
@@ -201,13 +216,17 @@ class Options extends Component {
 
 		const {
 			isOpen,
-			closeModal
+			closeModal,
+			error
 		} = this.props
+
+		console.log('fucking error now', error)
 
 		return (
 			<Modal
 				isOpen={isOpen}
 				onRequestClose={closeModal}>
+				{error && error.message}
 				{this.getModalContent()}
 			</Modal>
 		)

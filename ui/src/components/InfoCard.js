@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
 import { Button, Card, Heading, Image, Columns } from 'react-bulma-components/full'
 
 import '../style/dashboard.css'
@@ -76,7 +75,7 @@ class InfoCard extends Component {
 			compareMode
 		} = this.props
 
-		const wltpData = model.model.wltp[0]
+		const wltpData = model.wltp[0]
 		const generalData = wltpData.general_data.values[0]
 
 		//get the current Unit of selected compare mode
@@ -139,14 +138,8 @@ class InfoCard extends Component {
 								</div>
 								<Button
 									className='configure-button'
-									onClick= { () =>
-										openConfiguration({
-											modelId: model.model.model_id,
-											modelName: model.model.name,
-											typeName: model.type.name,
-											typeId: model.type.id
-										})}
-									><i class="fas fa-hammer"></i> configure
+									onClick= { () => openConfiguration(model) } 
+								><i class="fas fa-hammer"></i>Configure
 								</Button>
 							</Columns.Column>
 						</Columns>

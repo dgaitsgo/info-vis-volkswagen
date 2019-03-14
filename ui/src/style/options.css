@@ -29,3 +29,24 @@
 .choice.invalid {
 	background-color: #bdbdbd;
 }
+.loading-modal * {
+    color: white;
+    font-size: 2em;
+    outline: none;
+}
+
+.loading-modal-overlay {
+    opacity: 0.8;
+    background-color: #f9f9f9 !important;
+    color: white !important;
+}
+
+.loading-modal > div {
+    color: white !important;
+}
+
+.loader-message-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
