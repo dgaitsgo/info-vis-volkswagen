@@ -2,7 +2,7 @@ import React from 'react'
 import { Heading, Columns, Card } from 'react-bulma-components/full'
 import debounce  from 'lodash/debounce'
 import '../style/model.css'
-import DEBOUNCE_TIME from '../constants/DEBOUNCE_TIME'
+import DEBOUNCE_TIME from '../constants/debounceTime'
 
 const Model = ({id, name, onClick, selected, src}) => {
 
