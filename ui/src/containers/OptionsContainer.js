@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Options from '../components/Options'
+import '../style/options.css'
 
 class OptionsContainer extends Component {
 
@@ -142,10 +143,10 @@ class OptionsContainer extends Component {
 			currentConfig.rev = rev
 			currentConfig._rev = rev
 
-			this.setState({ currentConfig })
+			this.setState({ currentConfig, loading : null })
 
 		} catch (e) {
-			this.setState({ loadiing : false, error : { e, message : 'Could not remove option.' } })
+			this.setState({ loading : null, error : { message : 'Could not remove option.' } })
 		}
 	}
 
@@ -196,12 +197,7 @@ class OptionsContainer extends Component {
 
 	}
 
-	flattenChoices () {
-
-		if (!this.state.currentConfig)
-			return null
-
-		const { choices } = this.state.currentConfig
+	flattenChoices (choices) {
 
 		let flatChoices = {}
 
