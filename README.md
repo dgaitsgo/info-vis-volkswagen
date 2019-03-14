@@ -14,10 +14,8 @@ We took three weeks to finish the project. We worked with the popular JavaScript
 
 - Insights in:
 	-  [Frontend](#frontend)
-	-  [Styling and Design](#styling-and-design)
+	-  [UX/UI Design and Styling](#UX/UI Design and Styling)
 	-  [Backend](#backend)
-
-
 
 ## Setup
 Visit `www.vwg-okapi-client.de` and explore our website!
@@ -47,7 +45,6 @@ David Gaitsgory, Sebastian Kunz, Jessica Liu
 All of us study at 42 Silicon Valley in California, USA.
 
 ## Frontend
-We designed the user experience to be linear.
 
 Generally speaking the frontend is divided in three main parts.
 1. Containers - making use of components and handling the state of the current page
@@ -78,9 +75,25 @@ Once you click the configure button a modal opens. If there are images for your 
 
 Just like for the the Model Selection we make use of a debouncer to prevent floads of network requests.
 
-### Styling and Design
+### UX/UI Design and Styling
 
-For Styling and Design, we had searched different websites' car configuration.  
+#### understand the needs
+We designed the user experience to be linear. After we read the documents on the OKPAI, and request our data from OKAPI. We figured out in order to create a car configuration, we have to let user select a country, brand, and model. For the car configuration, user can select choices of options, select or remove options, pictures of the current car, check configuration that is buildable, and get the wltp values of cars. 
+
+Base on those functions, we had drew several wireframes to make sure our user story is easy to understand. After the disscussion, we deceied to make five page:
+1. main page - introduce our website and let user know it's configuration website
+2. country selection page - show how many countries 
+3. brand selection page - show total brands under the country
+4. model and type selection page - show total model under the brand, and total type under each single model
+5. car comparesion page - show the result of multiple cars that user selected
+
+Whenever user want to go back any page, they can click Navigation Bar's list to go back.
+
+#### Style
+For Styling and Design, we had searched different websites' car configuration. We decieded to make webiste a nice, clear, simple and minimalism style. Also, it need to be look professional and reliable. It has to be a responsive website to allow user can modify their car on the phone. Most of users recently days are using their phone to browse website. 
+
+## Challenge
+The biggest challenge in this project is that not all the car's model and type has image. 
 
 ### Backend
 origin-cross
