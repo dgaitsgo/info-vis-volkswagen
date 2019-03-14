@@ -143,7 +143,6 @@ class CompareContainer extends Component {
 			ls
 		} = this.state
 
-		console.log('configurations', configurations)
 		const urlData = this.props.location.pathname.split('/')
 
 		if (loading)
@@ -169,8 +168,6 @@ class CompareContainer extends Component {
 			if (configurations[modelId].wltp.length)
 				renderBarChart = true
 		})
-
-		console.log('shouldRenderBartChart', renderBarChart)
 
 		const carNames = Object.keys(configurations).map(modelId => configurations[modelId].model.name)
 

@@ -19,7 +19,7 @@ const NoData = () => {
 	)
 }
 
-const MissingCard = ({ model, openConfiguration}) => {
+const MissingCard = ({ config, openConfiguration}) => {
 
 	return (
 		<Card className='card-wrapper missing-wrapper'>
@@ -27,10 +27,10 @@ const MissingCard = ({ model, openConfiguration}) => {
 				<div className='header-wrapper'>
 					<div className='header-card'>
 						<h1>
-							{ model.model.name }
+							{ config.config.name }
 						</h1>
 					</div>
-					<p className='typeName'>{model.type.name}</p>
+					<p className='typeName'>{config.type.name}</p>
 				</div>
 			</Card.Header>
 			<Card.Content>
@@ -39,10 +39,10 @@ const MissingCard = ({ model, openConfiguration}) => {
 					className='configure-button'
 					onClick= { () =>
 						openConfiguration({
-							modelId: model.model.model_id,
-							modelName: model.model.name,
-							typeName: model.type.name,
-							typeId: model.type.id
+							configId: config.config.config_id,
+							configName: config.config.name,
+							typeName: config.type.name,
+							typeId: config.type.id
 						})}
 					> configure
 				</Button>

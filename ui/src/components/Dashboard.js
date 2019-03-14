@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import InfoCard from './InfoCard'
 import MissingCard from './MissingCard'
-
 import sortBy from 'lodash/sortBy'
-
 import '../style/dashboard.css'
 
 const sum = (accumulator, currentValue) => accumulator + currentValue
 
 const average = array => array.reduce(sum) / array.length
 
-const rankModels = ({ configurations, compareMode }) => {
+const rankModels = ({ configurations, compareMode}) => {
 
 	const averageModelMap = Object.keys(configurations).map( (modelId, i) => {
 
@@ -82,7 +80,7 @@ class Dashboard extends Component {
 			{
 				rankedModels.map( (rankedModel, i) => {
 
-					const currModel = configurations[rankedModel.modelId]
+					const currConfig = configurations[rankedModel.modelId]
 					const hasWltpData = rankedModel.average !== null
 					const avg = hasWltpData ? rankedModel.average.toFixed(2) : null
 
@@ -91,7 +89,7 @@ class Dashboard extends Component {
 							<InfoCard
 								key={`infoCard_${i}`}
 								ranking={i}
-								model={ currModel }
+								config={ currConfig }
 								
 								compareMode={ compareMode }
 								compareUnit={ null }
@@ -106,7 +104,7 @@ class Dashboard extends Component {
 						return (
 							<MissingCard
 								key={`missingCard_${i}`}
-								model={ currModel }
+								config={ currConfig }
 								hasWltpData={ hasWltpData }
 								openConfiguration={ openConfiguration }
 							/>

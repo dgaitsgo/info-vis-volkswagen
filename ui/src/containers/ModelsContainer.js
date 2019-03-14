@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ContentLoader from 'react-content-loader'
 import axios from 'axios'
 import Redirect from 'react-router-dom/Redirect'
 import Model from '../components/Model'
@@ -15,12 +14,10 @@ class ModelsContainer extends Component {
 		super(props)
 
         this.state = {
-			models: null,
 			selectedModels: {},
 			modalIsOpen: false,
 			modalContent: null,
 			modelImages: null,
-			loadingConfigurations : false,
 			modelsLoading: true,
 			redirectToCompare: false
         }
@@ -93,10 +90,8 @@ class ModelsContainer extends Component {
 	closeModal = () => this.setState({ modalIsOpen: false })
 
 	toModelsCompare = () => {
+		const {selectedModels} = this.state
 
-		const {
-			selectedModels
-		} = this.state
 		if (!isEmpty(selectedModels))
 			this.setState({ redirectToCompare: true })
 	}
@@ -107,7 +102,6 @@ class ModelsContainer extends Component {
 			models,
 			selectedModels,
 			modelsLoading,
-			loadingConfigurations,
 			modalIsOpen,
 			modalContent,
 			redirectToCompare
@@ -146,7 +140,6 @@ class ModelsContainer extends Component {
 					Select Models
 				</Heading>
 				<div className='models-body'>
-					{loadingConfigurations && <ContentLoader />}
 					<Columns className='is-centered'>
 						{models.map(({ id, name }, i) => {
 							return (
