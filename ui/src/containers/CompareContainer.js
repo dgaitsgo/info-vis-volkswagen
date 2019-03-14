@@ -112,7 +112,7 @@ class CompareContainer extends Component {
 				}
 			})
 
-			this.setState({ ls, configurations })
+			this.setState({ ls, configurations, loading: false })
 
 		} catch (e) {
 

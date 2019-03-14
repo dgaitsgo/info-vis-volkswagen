@@ -139,7 +139,7 @@ class InfoCard extends Component {
 								<Button
 									className='configure-button'
 									onClick= { () => openConfiguration(model) } 
-								><i class="fas fa-hammer"></i>Configure
+								><i className="fas fa-hammer"></i>Configure
 								</Button>
 							</Columns.Column>
 						</Columns>

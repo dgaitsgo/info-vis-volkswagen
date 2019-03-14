@@ -27,21 +27,20 @@ import {
 	}
 	getInterpolations = ({ configurations, phase, compareMode}) => {
 		return Object.keys(configurations).map((modelId, i) => {
-			const model = configurations[modelId]
+			const config = configurations[modelId]
 
-			console.log('model is', model)
-			if (model.wltp.length) {
-				const currentInterps = model.wltp[0].interpolations
+			if (config.wltp.length) {
+				const currentInterps = config.wltp[0].interpolations
 					.filter(interp => interp.value_type === compareMode && interp.phase === phase)
 					.map( interp => interp.value)
 					return ({
 						value: currentInterps,
-						name: model.name
+						name: config.model.name
 					})
 			} else {
 				return ({
 					value: null,
-					name: model.name
+					name: config.model.name
 				})
 			}
 		})
@@ -82,18 +81,21 @@ import {
 			{title: 'High',color: '#ff9800', strokeWidth: 20},
 			{title: 'Extra High',color: '#f44336', strokeWidth: 20},
 			{title: 'Combined',color: '#1565c0', strokeWidth: 20}
-			];
+		]
 		
 		const axisProps = {
-				tickSizeInner: 0,
-				style: {line: {stroke: '#939393', strokeWidth: '1px'}}
-			  };
+			tickSizeInner: 0,
+			style: {line: {stroke: '#939393', strokeWidth: '1px'}}
+		}
 
 		const dataSets = phases.map(phase => this.getInterpolations( { configurations, compareMode, phase: phase.key}))
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
 		const { value } = this.state
+		//if you use flexibleXY you can't use animation
 		const FlexibleXYPlot = makeVisFlexible(XYPlot)
-			  //if you use flexibleXY you can't use animation
+
+		console.log('normalized datasets', normalizedDataSets)
+			
 		return (
 			<div className='bar-chart-wrapper'>
 			<DiscreteColorLegend orientation="horizontal" items={ITEMS}/>
