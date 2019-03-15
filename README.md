@@ -2,7 +2,7 @@
 
 
 # Information Visualization by Volkswagen
-Information visualization for Volkswagen Coding Competition - hosted on `www.IT-Talents.de`
+Information visualization for Volkswagen Coding Competition - hosted on [`www.IT-Talents.de`](https://www.it-talents.de/)
 
 ## Introduction
 This project is the submission for the "Information Visualization" competition by Volkswagen of David Gaitsgory, Sebastian Kunz and Jessica Liu. We were tasked to visualize the catalog  of the VW-Group, made accessible through the OKAPI. We took three weeks to finish the project and worked with the classic JavaScript MERN stack.
@@ -18,14 +18,16 @@ This project is the submission for the "Information Visualization" competition b
 - [Suggestions for OKAPI](#suggestions-for-okapi)
 
 ## Setup
-Visit `www.vwg-okapi-client.de` and explore our website!
+We are hosting our product live on [`www.vwg-okapi-client.de`](www.vwg-okapi-client.de) so you don't have to deal with an annoying setup process. The source code can be found in this GitHub repository.
 
-1.  `git clone https://github.com/dgaitsgo/info-vis-volkswagen`
-2.  `cd info-vis-volkswagen/ui`
+### MAC OS / LINUX
+
+1.  `git clone https://github.com/dgaitsgo/info-vis-volkswagen.git`
 3.  Setup you environment variables by opening `/server/nodemon.json`
 4. In order to request data from OKAPI, you'll need to add your own credentials to the `CLIENT_ID` and `CLIENT_SECRET` fields inside the file.
-5.  `npm install`
-6.  `npm start`
+5. Make sure you are in `info-vis-volkswagen/ui` and then:
+6.  Install the node_modules: `npm install`  (this might take some time)
+7.  Start the development server: `npm start`
 
 ## About Us
 We three are students at 42 Silicon Valley in Fremont, California. Regarding this project we split up the workload into three main sectors.
@@ -52,6 +54,7 @@ Generally speaking the frontend is divided in three main parts.
 ### Landing Page
 Entering our website or clicking on the VW-Group logo, located in the top left corner, you are presented an interactive 3D force-graph. It illustrates the network of the VW-Group and points out the relationships between the brands and models. You can hover over the spheres to see the label or drag them around and play with the physics.
 The graph itself is made with the force-graph component that was ported to react. We gathered all the possible models of a brand that exist across countries and stored them in a JSON.
+
 ### Country Selection
 With a click on the "Explore the Possibilities" title on the landing page or "Country" field of the navigation bar you are asked to select a country. The selected country determines the brands you can choose and the language of descriptions on the [configure page](#configure-your-model).
 We use the received ISO 3166-2 codes to give each country its corresponding flag. Once you click on one of the flags your country is selected and move on to the [Brand Selection](#brand-selection).
@@ -68,7 +71,7 @@ The bar chart offers a quick overview on how the the different models compare ag
 Each selected model has its unique card. The card header specifies the model name, type name, place in the ranking and the average of all the WLTP categories combined of the selected compare mode (CO2 consumption or fuel consumption). In the card body a preview of the current model configuration, car weight, fuel type, CO2 consumption, fuel consumption and the tire classification are presented. In case there is no WLTP data the card says "No Data Found" [click here](#no-data-found) to read more about why there isn't always WLTP data. To see more detailed information about the CO2 consumption, fuel consumption or tire classification you can click on the arrow. Depending on the selected compare mode the cards are sorted, so that the model with the least CO2 emissions/fuel consumption are ranked as the best. In case you want to change the configuration of a model click its "configure" button. To see how you can configure your model click [here](#configure-your-model).
 
 ### Configure your model
-Once you click the configure button a modal opens. Below that you can see all the selected options, that are currently part of the configuration. Clicking the small 'X' removes the option from the configuration. You can manually browse through the categories or search for categories via the search bar. You can select and deselect choices for your configuration as you wish. When you hit done we check wether your custom configuration is buildable and distinct. In case your configuration is not buildable we mark choices in red that you simply have to deselect to get a buildable configuration. Only a buildable and distinct configuration can lead to images and WLTP data.
+Once you click the configure button a modal opens. Below that you can see all the selected options, that are currently part of the configuration. Clicking the small 'X' removes the option from the configuration. You can manually browse through the categories or search for categories via the search bar. You can select and deselect choices for your configuration as you wish. When you hit done we check wether your custom configuration is buildable and distinct. In case your configuration is not buildable we mark choices in red that you simply have to deselect to get a buildable configuration. Only a buildable and distinct configuration can lead to images and WLTP data. Please be aware that this feature is not fully implemented yet and need further development.
 
 ## Backend
 

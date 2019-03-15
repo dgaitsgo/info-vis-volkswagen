@@ -4,7 +4,7 @@ import React from 'react'
 import Location from 'react-app-location'
 import { Route, Switch } from 'react-router-dom'
 
-// validation 
+// validation
 import * as Yup from 'yup'
 import isUUID from 'is-uuid'
 
@@ -21,17 +21,8 @@ const InstanceOfValidateError = val => (val && val.name && val.name === 'Validat
 const charactersLong = n =>
 	 Yup.string().test('len', `String must be ${n} chars long.`, val => val.length === n)
 
-const matchExactString = str =>
-	Yup.string().test('exact', `String must equal ${str}.`, val => val === val)
-
 const _isUUID = () =>
 	Yup.string().test('is uuid', `String must be a uuid`, val => isUUID.v5(val))
-
-const isArrayOf = (arr, fn) =>
-	arr instanceof Array && 
-		arr.map(item => fn(item))
-		   .filter(InstanceOfValidateError)
-		   .length === 0
 
 const TypeSchema = () =>
 	Yup.object().shape({
@@ -46,13 +37,13 @@ const SelectedModelSchema = () =>
 	})
 
 const testModelArray = () =>
-	
+
 	Yup.string().test('is array', `Value must be of instance String`, val => {
 
 		const decodedURI = decodeURIComponent(val)
-		
+
 		try {
-			
+
 			const obj = JSON.parse(decodedURI)
 			const objKeys = Object.keys(obj)
 			const noInvalidTypes = objKeys.map(key => SelectedModelSchema().isValidSync(obj[key])).filter(InstanceOfValidateError).length === 0

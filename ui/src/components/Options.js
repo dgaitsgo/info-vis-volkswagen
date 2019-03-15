@@ -53,7 +53,6 @@ class Options extends Component {
 		const { openedCategories } = this.state
 		const {
 			allChoices,
-			currentConfig,
 			selectedOptions,
 			invalidOptions
 		} = this.props
@@ -84,10 +83,10 @@ class Options extends Component {
 
 				const allChoicesInCat = category.invalid.concat(category.valid)
 
-				if (allChoicesInCat.filter( choice => selectedOptions.indexOf(choice.id) != -1).length)
+				if (allChoicesInCat.filter( choice => selectedOptions.indexOf(choice.id) !== -1).length)
 					hasSelectedOptions = true
 
-				if (allChoicesInCat.filter(choice => invalidOptions.indexOf(choice.id) != -1 ).length) {
+				if (allChoicesInCat.filter(choice => invalidOptions.indexOf(choice.id) !== -1 ).length) {
 					hasInvalidOptions = true
 				}
 			})
@@ -116,7 +115,6 @@ class Options extends Component {
 	getChoicesOfCategory = categoryId => {
 
 		const {
-			currentConfig,
 			allChoices,
 			toggleOption,
 			selectedOptions,
@@ -158,7 +156,6 @@ class Options extends Component {
 
 		const {
 			currentConfig,
-			mode
 		} = this.props
 
 		const { build } = currentConfig
@@ -179,11 +176,9 @@ class Options extends Component {
 			isOpen,
 			closeModal,
 			currentConfig,
-			removeOption,
 			allChoices,
 			flatChoices,
 			loading,
-			restoreOptions,
 			selectedOptions,
 			invalidOptions,
 			error
@@ -301,7 +296,6 @@ class Options extends Component {
 		const {
 			isOpen,
 			closeModal,
-			error
 		} = this.props
 
 		return (

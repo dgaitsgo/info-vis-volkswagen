@@ -1,6 +1,4 @@
 import React from 'react'
-import debounce from 'lodash/debounce'
-import DEBOUNCE_TIME from '../constants/debounceTime'
 import '../style/options.css'
 
 const Tags = ({ selectedOptions, flatChoices, removeOption }) => {

@@ -1,9 +1,9 @@
-	
+
 .detailed-interpolation-wrapper{
         overflow-y: hidden;
         /* max-height: 0%; approximate max height */
 }
-    
+
 .detailed-interpolation-wrapper.open{
         max-width: 100%;
         transition-property: all;
@@ -46,7 +46,7 @@
 
 .info-front-wrapper{
 	text-align: center;
-} 
+}
 
 
 .infosubtitle-tire{
@@ -75,7 +75,6 @@
 }
 
 .configure-panel {
-	width: 100%;
 	text-align: center;
 	margin: 20px;
 
@@ -90,7 +89,7 @@
 	}
 	.info-front-wrapper{
 		text-align: left;
-	} 
+	}
 	.configure-panel{
 		margin: 0px;
 	}
