@@ -1,11 +1,11 @@
 
 
-# Information Visualization Competition by Volkswagen
-Information visualization for Volkswagen Coding Competition - hosted on [`www.IT-Talents.de`](https://www.it-talents.de/)
+
+# Information Visualization by Volkswagen
+Information visualization for Volkswagen Coding Competition - hosted on `www.IT-Talents.de`
 
 ## Introduction
-This project is the submission for the "Information Visualization" competition by Volkswagen of David Gaitsgory, Sebastian Kunz and Jessica Liu. Given the data catalog of the VW-Group, accessible through the OKAPI provided by Volkswagen, visualize the data in an accessible and user friendly interface and proposing a graphical insight about the versatility of the productdata.
-We spent three weeks to finish the project. We worked with the popular JavaScript framework reactJS.
+This project is the submission for the "Information Visualization" competition by Volkswagen of David Gaitsgory, Sebastian Kunz and Jessica Liu. We were tasked to visualize the catalog  of the VW-Group, made accessible through the OKAPI. We took three weeks to finish the project and worked with the classic JavaScript MERN stack.
 
 - [Setup](#setup)
 - [Concept](#concept)
@@ -14,27 +14,24 @@ We spent three weeks to finish the project. We worked with the popular JavaScrip
 - [Backend](#backend)
 - [Testing](#testing)
 - [Room for Improvements](#room-for-improvements)
+- [Improvements to OKAPI](#improvements-to-okapi)
+- [Suggestions for OKAPI](#suggestions-for-okapi)
 
 ## Setup
 Visit `www.vwg-okapi-client.de` and explore our website!
 
-### Deploy a development Server
-
-#### MAC OS / LINUX
-
 1.  `git clone https://github.com/dgaitsgo/info-vis-volkswagen`
 2.  `cd info-vis-volkswagen/ui`
-3.  `npm install` or `yarn install` -> missing npm or yarn ?
-4.  `npm start` or `yarn start`
-
-#### DOCKER
+3.  Setup you environment variables by opening `/server/nodemon.json`
+4. In order to request data from OKAPI, you'll need to add your own credentials to the `CLIENT_ID` and `CLIENT_SECRET` fields inside the file.
+5.  `npm install`
+6.  `npm start`
 
 ## About Us
 We three are students at 42 Silicon Valley in Fremont, California. Regarding this project we split up the workload into three main sectors.
 1. UX/UI Design and Styling - Jessica Liu
 2. Frontend - Sebastian Kunz
 3. Backend - David Gaitsgory
-
 Obviously everybody contributed in every sector and we finished this project as a team and not as three individuals.
 
 ## UX/UI Design and Styling
@@ -42,18 +39,9 @@ Obviously everybody contributed in every sector and we finished this project as 
 ### Concept
 After getting familiar with the OKAPI and its flow, we decided on a linear user experience. Each page narrows the possibilities and finally leads to a page where you can compare and configure your selected models.
 
-Based on those functions, we had drew several wireframes to make sure our user story is easy to understand. After the disscussion, we deceied to make five page:
-1. main page - introduce our website and let user know it's configuration website
-2. country selection page - show how many countries
-3. brand selection page - show total brands under the country
-4. model and type selection page - show total model under the brand, and total type under each single model
-5. car comparesion page - show the result of multiple cars that user selected and configurate their own car
-
-Whenever user want to go back any page, they can click Navigation Bar's options to go back.
-
 ### Style
 Our website follows a minimalistic, and easy to follow style, matching the simple user story. We picked plain colors like black, white, grey and blue tones.
-We put a lot of effort into responsive web design and mobile compatibility. Due to the great amount of mobile traffic nowadays, this was an important feature for us.
+We put a lot of effort into responsive web design and mobile compatibility, because of the rising mobile traffic these days.
 
 ## Frontend
 Generally speaking the frontend is divided in three main parts.
@@ -63,8 +51,7 @@ Generally speaking the frontend is divided in three main parts.
 
 ### Landing Page
 Entering our website or clicking on the VW-Group logo, located in the top left corner, you are presented an interactive 3D force-graph. It illustrates the network of the VW-Group and points out the relationships between the brands and models. You can hover over the spheres to see the label or drag them around and play with the physics.
-The graph itself is made with the force-graph component that was ported to react. We gathered all the possible models of a brand that exist across countries and stored them in a JSON. Therefore the used data is not live. We made this decision, because grabbing all the models of all countries is extremely expensive regarding the performance of our application. Also updating the data is not a big deal. Whenever a new model is published we can simply add it to the JSON.
-
+The graph itself is made with the force-graph component that was ported to react. We gathered all the possible models of a brand that exist across countries and stored them in a JSON.
 ### Country Selection
 With a click on the "Explore the Possibilities" title on the landing page or "Country" field of the navigation bar you are asked to select a country. The selected country determines the brands you can choose and the language of descriptions on the [configure page](#configure-your-model).
 We use the received ISO 3166-2 codes to give each country its corresponding flag. Once you click on one of the flags your country is selected and move on to the [Brand Selection](#brand-selection).
@@ -81,11 +68,7 @@ The bar chart offers a quick overview on how the the different models compare ag
 Each selected model has its unique card. The card header specifies the model name, type name, place in the ranking and the average of all the WLTP categories combined of the selected compare mode (CO2 consumption or fuel consumption). In the card body a preview of the current model configuration, car weight, fuel type, CO2 consumption, fuel consumption and the tire classification are presented. In case there is no WLTP data the card says "No Data Found" [click here](#no-data-found) to read more about why there isn't always WLTP data. To see more detailed information about the CO2 consumption, fuel consumption or tire classification you can click on the arrow. Depending on the selected compare mode the cards are sorted, so that the model with the least CO2 emissions/fuel consumption are ranked as the best. In case you want to change the configuration of a model click its "configure" button. To see how you can configure your model click [here](#configure-your-model).
 
 ### Configure your model
-Once you click the configure button a modal opens. Below that you can see all the selected options, that are currently part of the configuration. Clicking the small 'X' removes the option from the configuration. You can manually browse through the categories or search for categories via the search bar. When you click on a category it shows you all the valid and invalid (grey background) choices that you can make. Already selected choices are highlighted.
-
-Just like for the the Model Selection we make use of a debouncer to prevent floads of network requests.
-
-
+Once you click the configure button a modal opens. Below that you can see all the selected options, that are currently part of the configuration. Clicking the small 'X' removes the option from the configuration. You can manually browse through the categories or search for categories via the search bar. You can select and deselect choices for your configuration as you wish. When you hit done we check wether your custom configuration is buildable and distinct. In case your configuration is not buildable we mark choices in red that you simply have to deselect to get a buildable configuration. Only a buildable and distinct configuration can lead to images and WLTP data.
 
 ## Backend
 
@@ -100,7 +83,7 @@ The backend can be split into several main services :
 One authenticates to Okapi through the use of a JSON Web Token, generated as a seed from client credentials. The token has to be included in every subsequent request and refreshed every hour. With its middleware design, we can define a function in Express to load and check the validity of a token or otherwise request and save a new one.
 
 ### Product Data
-To avoid CORS conundrums, we created an API to sit on top of the OKAPI. All requests from client hit the client's origin and our API makes requests on behalf of the client. While this breaks the convenient E-TAGS mechanism OKAPI includes in its headers, we nonetheless set the appropriate cache headers on our end to prevent unnecessary requests. Okapi is structured in such a way that it was easy to declaratively duplicate its endpoints.
+To avoid CORS conundrums, we created an API to sit on top of the OKAPI. All requests from client hit the client's origin and our API makes requests on behalf of the client. While this breaks the convenient E-TAGS mechanism OKAPI includes in its headers, we nonetheless set the appropriate cache headers on our end to prevent unnecessary requests. OKAPI is structured in such a way that it was easy to declaratively duplicate its endpoints.
 
 ### Default Configurations
 To reiterate the goal of our project, we convinced an internal auditing tool that would allow stakeholder to discover which vehicles had which data and which did not. One key datapoint by which the OKAPI could be audited is WLTP data.
@@ -112,40 +95,10 @@ Currently, in order to get a WLTP value for a given vehicle, one has to specify 
 3. Make the configuration a distinct build by setting the options
 4. Finally, obtain the WLTP values
 
-At the moment, many vehicles in the OKAPI database do not have WLTP values. All four requests have to be performed in order to know whether a model has this data or not. Likewise, our app has a comparison feature for models within a brand. If a user selects all of the cars for let's say Audi in Germany, we'll need 4 * 32 or 128 requests to know if a model has WLTP or data or not. Repeated over a number of users, we can imagine how much of a burden this could post on the API. Cacheing cannot save us as a configuration is unique every time it is requested for a model.
-There's only four steps, so eliminating just one of them means 25% less work. What we did was imagine a new service that could be integrated into the OKAPI : Default configurations for models.
-
-### Custom Configuration
-
-### Thumbnails
-The goal of this service is to efficiently display photos of models for to help a user in
-choosing which models to compare. While it's clear on the front end on how to efficiently
-load image data (lazy-loading, ensuring sizes are never larger than how they'll appear on the page) we were initially unsure of how to set up the backend to make for a fluid user experiences. We wondered which methods would be faster, which would take less resources and what's more important for the user. We set up a few experiments to see, starting with the simplest to make sure we didn't prematurely optimize.
-When a user accesses a brand, get a list of configurations and check if we already have a default configuration for the vehicle. If so, load its image URLS.
-
-How API works :
-- In order to get a photo, a configuration must be a buildable model
-- A buildable model means a model for a which a certain minimum of options are added
-- The API allow for a model to be undefined and resolve which options need to be added for the car to be buildable
-
-Gotchyas :
-- The images are quite large
-
-Solution :
-- Save configurations as so :
-	id, expiration_date, delete_link, self_link, choices_links, model_id, brand_id, links_to_images, thumbnail
+At the moment, many vehicles in the OKAPI database do not have WLTP values. All four requests have to be performed in order to know whether a model has this data or not. Likewise, our app has a comparison feature for models within a brand. If a user selects all of the cars for let's say Audi in Germany, we'll need 4 * 32 (amount of models) or 128 requests to know if a model has WLTP or data or not. Repeated over a number of users, we can imagine how much of a burden this could post on the API. Cacheing cannot save us as a configuration is unique every time it is requested for a model.
+There's only four steps, so eliminating just one of them means 25% less work. What we did was imagine a new service that could be integrated into the OKAPI : [Default configurations for models](#default-configuration-endpoint-and-thumbnail-endpoint).
 
 ### Error Handling
-
-### Rooms for Improvement (Product Data API)
-- choices/options terminology
-- configurations/configuration typo
-- countryCode, country_code
-- default/base configurations to get images/emissions data easier
-- Make Request Body/Parameters headers clearer
-- Ability to filter by vehicle type (not just brand)
-- Image for a model
-
 
 ### No Data Found / Missing image
 
@@ -153,15 +106,11 @@ At the current state of OKAPI only Audi models support images. We do not have an
 The "No Data Found" messages appears when we could not find WLTP data for that model.
 In the OKAPI documentation VW writes "Please be advised, that currently not for all models within OKAPI, WLTP values can be provided. As soon as the homologation for all vehicles has been conducted, WLTP values will be available for all combinations via OKAPI.".
 
-### Client sided routing
-
-DONT OPEN THE NAVIGATION FILE PLLLLLLLLLLLLLLLLEAAAAAAAAAAAAAAASE ITS THE FINEST SPAGETTTTT
-
 ## Testing
 We started the project one week before the original deadline. Therefore we had to write code as fast as possible. When the time extension was announced most of our logic was already finished. Since we didn't begin with TDD (Test-Driven-Development), in the first place it didn't make sense to us to write unit-test just for the sake of satisfying the grading criteria. We decided to invested our time in refining the codebase and implementing more features rather than writing automated test for code that we already manually tested. Even tho we can not prove it in the form of code, we can guarantee that we tested our features rigorously.  For the next project we would like to start with TDD from the beginning and cover our code base with detailed automated tests.
 
 ## Room for improvements
--more than one brand
+Due to time constraints we had to limit the user to only select one brand of a country. However this simplifies the user story and doesn't overwhelm the user with too much information. The second thing we would like to improve is the configure service. There is only one more thing that we did not have time to finish. And that is updating the WLTP data and images based on the new configuration. Besides that we are very happy with our product.
 
 
 ## Improvements to OKAPI
@@ -183,14 +132,13 @@ In addition to that it would be helpful if the provided response schema in the d
 One more thing that got us very confused was that type_id something.
 
 ## Suggestions for OKAPI
+Here are some possible features we would like to see in OKAPI.
 
 ### Organize Models by categories
-As of now when you request models of a brand you receive a code, id and name. It would be great if you add more information to the object. For example add a category like SUV, Coupé, ... so that the user can filter models, that he is not interested in. This would greatly improve the user accessibility.
+As of now when you request models of a brand you receive a code, id and name. It would be great if you add more information to the object. For example add a category like SUV, Coupé, ... so that the user can filter out models, that he is not interested in. This would greatly improve the user experience.
 
-### Default Configuration Endpoint / Thumbnail endpoint
-We implemented a custom endpoint that generates a default configuration, so that we can show the user some WLTP data and an image, without forcing them to make a buildable and distinct car first. When choosing your models, due to the insane amount of API calls, it is not practical to generate a default configuration for every single model of a brand and then fetch the images. It would be great if there is some sort of default configuration endpoint or thumbnail endpoint. These endpoints are great when you want to get an approximate of the WLTP data or a first impression if the style of the car interests you.
+### Default Configuration Endpoint and Thumbnail endpoint
+We implemented a custom endpoint that generates a default configuration, so that we can show the user some WLTP data and an image, without forcing them to make a buildable and distinct car first. When choosing your models, due to the insane amount of API calls, it is not practical to generate a default configuration for every single model of a brand and then fetch the images. It would be great if there is some sort of default configuration endpoint or thumbnail endpoint. These endpoints are great when you want to get an approximate of the WLTP data or a first impression on the model. From there on you can customize your car for your personal needs.
 
 ### 3D Models Endpoint
 Yes. This does sound unrealistic and we don't expect you to actually make a 3D model endpoint. But wouldn't it be awesome to have access to 3D models? We imagine so. In addition to images, it would be great to provide a 3D file format that one could use to amaze the user.
-
-
