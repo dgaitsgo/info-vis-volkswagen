@@ -34,7 +34,7 @@ app.post('/api/makeConfigurations', async(req, res, next) => {
 
 			console.log('adding option', models[i].type.id)
 			// add type option
-			// await Okapi.addOption(configId, models[i].type.id, token)
+			//await Okapi.addOption(configId, models[i].type.id, token)
 
 			//get all of the options to complete the build
 			const optionsToSetRes = await Okapi.resolveOptions(configId, token)
