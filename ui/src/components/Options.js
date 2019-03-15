@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import { Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import { Loader } from 'react-bulma-components/full'
-import { debounce } from 'lodash'
-// import SlideShow from 'react-image-show'
-// import noImage from '../res/carIcon.png'
-import DEBOUNCE_TIME from '../constants/debounceTime'
 import Tags from './Tags'
 
 import '../style/options.css'
@@ -18,6 +14,7 @@ class Options extends Component {
 		super(props)
 
 		this.state = {
+
 			//All categories filterd by the search bar
 			searchedCategories: null,
 
@@ -37,10 +34,10 @@ class Options extends Component {
 	}
 
 	onCategoryClick = ({ categoryId }) => {
+		
 		let { openedCategories } = this.state
 
-		if (!openedCategories.includes(categoryId))
-		{
+		if (!openedCategories.includes(categoryId)) {
 			openedCategories.push(categoryId)
 			this.setState({ openedCategories })
 		} else {
@@ -52,7 +49,7 @@ class Options extends Component {
 	getCategories = allCategories => {
 		
 		const { openedCategories } = this.state
-		const { allChoices, currentConfig } = this.props
+		const { allChoices, currentConfig, selectedOptions } = this.props
 
 		if (!allCategories || allCategories.length === 0 ) {
 			return (
@@ -74,10 +71,13 @@ class Options extends Component {
 			const label = category.description.length ? category.description : category.id
 			const isSelected = openedCategories.includes(category.id)
 			const categoryChoices = allChoices.filter( choice => choice.id === category.id)
-			const selectedOptionsArr = currentConfig.selectedOptions ? currentConfig.selectedOptions.map( option => option.id) : []
+			
 			let hasSelectedOptions = false
 			categoryChoices.forEach( category => {
-				if (category.valid.filter( valid => selectedOptionsArr.includes(valid.id)).length)
+
+				const allChoicesInCat = category.invalid.concat(category.valid)
+
+				if (allChoicesInCat.filter( choice => selectedOptions.indexOf(choice.id) != -1).length)
 					hasSelectedOptions = true
 			})
 
@@ -98,37 +98,26 @@ class Options extends Component {
 
 	getChoicesOfCategory = categoryId => {
 
-		const { currentConfig, allChoices } = this.props
-		const selectedOptionsArr = currentConfig.selectedOptions ? currentConfig.selectedOptions.map( option => option.id) : []
+		const { currentConfig, allChoices, toggleOption, selectedOptions } = this.props
 
 		return (
-			allChoices.filter( choice => choice.id === categoryId).map( choice => {
 
-				return (choice.valid.map( valid => {
-					const isSelected = selectedOptionsArr.includes(valid.id)
-					const delayedAdd = debounce(() => this.props.addOption(valid.id), DEBOUNCE_TIME)
-					const delayedRemove = debounce(() => this.props.removeOption(valid.id), DEBOUNCE_TIME) 
+			allChoices.filter( choice => choice.id === categoryId).map( category => {
+
+				const allChoicesInCat = category.valid.concat(category.invalid)
+
+				return (allChoicesInCat.map(choice => {
+
+					const isSelected = selectedOptions.indexOf(choice.id) !== -1
 
 					return (
-						<div
-							className={`choice valid ${isSelected ? 'selected' : ''}`}
-							key={ valid.id }
-							onClick={ isSelected ? delayedRemove : delayedAdd }
-						>
-							&bull; {valid.description ? valid.description : <i>(No Description)</i>}
+						<div className={`choice valid ${isSelected ? 'selected' : ''}`}
+							key={ choice.id }
+							onClick={ () => toggleOption(choice.id) }>
+							&bull; {choice.description ? choice.description : <i>(No Description)</i>}
 						</div>
 					)
-				}).concat(choice.invalid.map( invalid => {
-					return (
-						<div
-							key={ invalid.id }
-							className='choice invalid'
-						>
-							&bull; {invalid.description ? invalid.description : <i>(No Description)</i>}
-						</div>
-					)
-					}))
-				)
+				}))
 			})
 		)
 	}
@@ -160,7 +149,8 @@ class Options extends Component {
 			allChoices,
 			flatChoices,
 			loading,
-			restoreOptions
+			restoreOptions,
+			selectedOptions
 		} = this.props
 
 		const {
@@ -223,10 +213,9 @@ class Options extends Component {
 				{ this.renderStatusBar() }
 				<p className='category-title' size={6}> Categories </p>
 				<Tags
-					
 					flatChoices={ flatChoices }
-					selectedOptions={ currentConfig.selectedOptions }
-					removeOption={ removeOption }
+					removeOption={ this.props.toggleOption }
+					selectedOptions={ selectedOptions }
 				/>
 				
 			</div>
@@ -242,7 +231,7 @@ class Options extends Component {
 			</div>
 			<div className='button-panel'>
 				<Button onClick={ restoreOptions } className='configure-button'>Restore</Button>
-				<Button onClick={ closeModal } className='configure-button'>Done</Button>
+				<Button onClick={ this.props.onDone } className='configure-button'>Done</Button>
 			</div>
 			</Modal>
 		)

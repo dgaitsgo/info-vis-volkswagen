@@ -24,16 +24,212 @@ class CompareContainer extends Component {
 			error: false
 		}
 
-			this.phases = [
-				{ key : 'LOW', color : '#4caf50', label : 'Low' },
-				{ key : 'MEDIUM', color : '#fdd835', label : 'Medium' },
-				{ key : 'HIGH', color : '#ff9800', label : 'High' },
-				{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' },
-				{ key : 'COMBINED', color : '#1565c0', label : 'Combined' }
-			]
+		this.loadingEnum = {
+			CONFIG : 'Checking config...',
+			CHOICES : 'Loading choices...',
+			ADD : 'Adding option...',
+			REMOVE : 'Removing option...',
+			BUILD : 'Checking build...',
+			RESTORE : 'Restoring configuration...',
+		}
+
+		this.handleAddOption = this.handleAddOption.bind(this)
+		this.handleRemoveOption = this.handleRemoveOption.bind(this)
+		this.handleRestoreOptions = this.handleRestoreOptions.bind(this)
+
+		this.preHandleRestoreOptions = this.preHandleRestoreOptions.bind(this)
+		this.preHandleAddOption = this.preHandleAddOption.bind(this)
+		this.preHandleRemoveOption = this.preHandleRemoveOption.bind(this)
+	
+		this.refreshConfig = this.refreshConfig.bind(this)
+
+		this.phases = [
+			{ key : 'LOW', color : '#4caf50', label : 'Low' },
+			{ key : 'MEDIUM', color : '#fdd835', label : 'Medium' },
+			{ key : 'HIGH', color : '#ff9800', label : 'High' },
+			{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' },
+			{ key : 'COMBINED', color : '#1565c0', label : 'Combined' }
+		]
 
 		this.loadConfigs = this.loadConfigs.bind(this)
 	}
+
+	getWltp = configId =>
+		axios.get('/api/wltp', {
+			params : {
+				configId
+			}
+		})
+
+	getImages = configId =>
+		axios.get('/api/images', {
+			params : {
+				configId
+			}
+		})
+
+	restoreOptions = (configId, optionIds) =>
+		axios.get('/api/restoreOptions', {
+			params : {
+				configId,
+				optionIds : JSON.stringify(optionIds)
+			}
+		})
+
+	configChoices = (configId) =>
+		axios.get('/api/configChoices', {
+			params : {
+				configId
+			}
+		})
+
+	createConfig = (modelId, options) =>
+		axios.get('/api/newConfiguration', {
+			params : {
+				model_id : modelId,
+				options
+			}
+		})
+
+	checkBuild = configId =>
+		axios.get('/api/checkBuild', {
+			params : {
+				configId
+			}
+		})
+
+	removeOption = (configId, optionId) =>
+		axios.get('/api/removeOption', {
+			params : {
+				configId,
+				optionId
+			}
+		})
+
+	addOption = (configId, optionId) =>
+		axios.get('/api/addOption', {
+			params : {
+				configId,
+				optionId
+			}
+		})
+
+	//After every option change, 
+	async refreshConfig(currentConfig) {
+
+		const { ls } = this.state
+
+		//check build status
+		const buildRes = await this.checkBuild(currentConfig.configId)
+		const build = buildRes.data.build
+
+		currentConfig.build = build
+
+		//if valid build
+		if (build.buildable && build.distinct) {
+			
+			//get images
+			const imagesRes = await this.getImages(currentConfig.configId)
+			currentConfig.images = imagesRes.data.images
+
+			//get wltp
+			const wltpRes = await this.getWltp(currentConfig.configId)
+			currentConfig.wltp = wltpRes.data.wltp	
+
+		} else {
+
+			currentConfig.images = []
+			currentConfig.wltp = []
+		}
+
+		//save to local storage
+		const rev = await ls.insert(currentConfig)
+
+		currentConfig.rev = rev
+		currentConfig._rev = rev
+
+		this.setState({
+			loading : false,
+			currentConfig,
+		})
+	}
+
+	async preHandleAddOption(optionId) {
+		this.setState({ loading : this.loadingEnum.ADD }, () => this.handleAddOption(optionId))
+	}
+
+	async handleAddOption(optionId) {
+
+		let { currentConfig } = this.state
+
+		try {
+
+			//Add option
+			const nextOptionsRes = await this.addOption(currentConfig.configId, optionId)
+			const nextOptions = nextOptionsRes.data.options
+
+			//update selected options
+			currentConfig.selectedOptions = nextOptions
+
+			this.refreshConfig(currentConfig)
+
+		} catch (e) {
+
+			this.setState({ loading : null, error : { message : 'Could not add option.' } })
+		}
+	}
+
+	async preHandleRemoveOption(optionId) {
+		this.setState({ loading : this.loadingEnum.REMOVE }, () => this.handleRemoveOption(optionId))
+	}
+
+	async handleRemoveOption(optionId) {
+	
+		let { currentConfig } = this.state
+
+		try {
+
+			//remove option
+			const nextOptionsRes = await this.removeOption(currentConfig.configId, optionId)
+			const nextOptions = nextOptionsRes.data.options
+		
+			//update next options
+			currentConfig.selectedOptions = nextOptions
+
+			this.refreshConfig(currentConfig)
+
+		} catch (e) {
+
+			this.setState({ loading : null, error : { message : 'Could not remove option.' } })
+		}
+	}
+
+	async preHandleRestoreOptions() {
+		this.setState({ loading : this.loadingEnum.RESTORE }, () => this.handleRestoreOptions())
+	}
+
+	async handleRestoreOptions() {
+
+		let { currentConfig } = this.state
+
+		try {
+
+			//replace options
+			const nextOptionsRes = await this.restoreOptions(currentConfig.configId, currentConfig.defaultOptions)
+			const nextOptions = nextOptionsRes.data.options
+
+			// update current config
+			currentConfig.selectedOptions = nextOptions
+			currentConfig.defaultOptions = nextOptions
+
+			this.refreshConfig(currentConfig)
+
+		} catch (e) {
+
+			this.setState({ loading: false, error : { e, message : 'Could not restore configuration.' } })	
+		}
+	}
+
 
 	async loadConfigs(ls, selectedModels) {
 
@@ -130,7 +326,7 @@ class CompareContainer extends Component {
 			modalIsOpen: true,
 			currentConfig : nextConfig
 		})
-
+	
 	render() {
 
 		const {
@@ -231,6 +427,9 @@ class CompareContainer extends Component {
 						{modalIsOpen &&
 							<OptionsContainer
 								ls={ls}
+								addOption={this.preHandleAddOption}
+								removeOption={this.preHandleRemoveOption}
+								restoreOptions={this.preHandleRestoreOptions}
 								currentConfig={currentConfig}
 								isOpen={modalIsOpen}
 								closeModal={ this.closeModal }
