@@ -8,7 +8,7 @@ import tire from '../res/tire.png'
 import co2 from '../res/co2.png'
 import '../style/card.css'
 
-const ShowMoreInformation = ({ data, enabled}) => {
+const ShowMoreInformation = ({ data, enabled, compareMode}) => {
 	const interpolationClassName = enabled
 		? 'detailed-interpolation-wrapper open'
 		: 'detailed-interpolation-wrapper'
@@ -17,7 +17,7 @@ const ShowMoreInformation = ({ data, enabled}) => {
 			{data.map( (entry, i) => {
 				return (
 					<div className='more-interpolation' key={i}>
-						<span> <font color={`${entry.phase.color}`}> {entry.phase.label} </font> {entry.value.toFixed(2)} </span>
+						<span> <font color={`${entry.phase.color}`}> {entry.phase.label} </font> {entry.value.toFixed(2) + (compareMode === 'CO2' ? ' g/km' : ' l/100km')}  </span>
 					</div>
 				)
 			})}
@@ -137,7 +137,8 @@ class InfoCard extends Component {
 							</span> 
 							{ showMoreEmissions
 								? <ShowMoreInformation key={ranking}
-									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CO2', phase}))} />
+									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CO2', phase}))}
+									compareMode={ compareMode} />
 								: null } 
 						</Columns.Column>
 						<Columns.Column className='info-wrapper'>
