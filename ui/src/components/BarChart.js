@@ -7,10 +7,11 @@ import {
 	VerticalGridLines,
 	HorizontalGridLines,
 	VerticalBarSeries,
+	Crosshair,
 	Hint,
 	makeVisFlexible,
 	ChartLabel,
-  } from 'react-vis'
+} from 'react-vis'
   import '../style/barChart.css'
 
   const ratio = .4;
@@ -47,12 +48,16 @@ import {
 	}
 
 	_forgetValue = () => {
+
+		console.log('wt the fu')
+
 		this.setState({
 			value: null
 		})
 	}
 
 	_rememberValue = value => {
+
 		this.setState({value: value.y})
 	}
 	componentDidMount(){
@@ -64,6 +69,47 @@ import {
 	}
 	updateWindowDimensions = () =>{
 		this.setState({width: window.innerHeight, height:window.innerHeight});
+	}
+
+	renderToolTip = value => {
+
+		const parent = window.document.querySelector('#bar-chart-wrapper')
+
+		if (parent) {
+
+			const bounding = parent.getBoundingClientRect()
+
+			console.log(bounding.left, bounding.right, bounding.top, bounding.bottom)
+
+			const clientX = window.event.clientX
+			const clientY = window.event.clientY 
+			const tolerance = 100
+			let inside = false
+			console.log('client x,y ', clientX, clientY)
+
+			console.log('scroll x, y', window.scrollX, window.scrollY)
+
+			if (clientX > bounding.left + tolerance && clientX < bounding.right - tolerance && clientY > bounding.top + tolerance && clientY < bounding.bottom - tolerance) {
+				inside = true
+			}
+
+			return (
+				<div className='bar-chart-hint'
+					value={ value }
+					style={
+						{
+							position: 'absolute',
+							top : bounding.top,
+							left : window.event.clientX - bounding.left,
+							fontSize: 14,
+							display: inside ? 'inline' : 'none',
+							text: {display: 'none'},
+							value: {color: 'red'}
+						}}>
+							<p>value: {Number(value).toFixed(2) }</p>
+				</div>
+			)
+		}
 	}
 
 	
@@ -97,7 +143,7 @@ import {
 		console.log('normalized datasets', normalizedDataSets)
 			
 		return (
-			<div className='bar-chart-wrapper'>
+			<div id='bar-chart-wrapper' className='bar-chart-wrapper'>
 			<DiscreteColorLegend orientation="horizontal" items={ITEMS}/>
 				<FlexibleXYPlot
 				margin={this.props.margin}
@@ -114,7 +160,10 @@ import {
 							data={dataSet}
 							key={i}
 							onValueMouseOver={this._rememberValue}
-							// onValueMouseOut={this._forgetValue}
+							onMouseLeave={this._forgetValue}
+							onSeriesMouseOut={this._forgetValue}
+							onValueMouseOut={this._forgetValue}
+							
 						/>
 					}) }
 					{/* : Fuel Comminsion(g/km)} */}
@@ -124,14 +173,7 @@ import {
 						yPercent={0.82}
 						//style={{transform: 'rotate(-90)',textAnchor:'end'}}
 						/>
-					{value ? <Hint value={ value } style={{
-							fontSize: 14,
-							text: {display: 'none'},
-							value: {color: 'red'}}}>
-							<div>
-								<p>value: {value}</p>
-							</div>
-					</Hint> : null}
+						{ this.renderToolTip(value) }
 				</FlexibleXYPlot>
 			</div>
 		)
