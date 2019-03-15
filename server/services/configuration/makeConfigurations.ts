@@ -1,5 +1,4 @@
 export {}
-
 const Okapi = require('../Okapi')
 const apiURL = require('../../constants/apiURL')
 const sendJSON = require('../../helpers/sendJSON')
