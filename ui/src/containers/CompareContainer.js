@@ -169,6 +169,8 @@ class CompareContainer extends Component {
 				renderBarChart = true
 		})
 
+		console.log('configurations', configurations)
+
 		const carNames = Object.keys(configurations).map(modelId => configurations[modelId].model.name)
 
 		return (
@@ -235,7 +237,7 @@ class CompareContainer extends Component {
 							isOpen={modalIsOpen}
 							closeModal={ this.closeModal }
 							countryCode={ urlData[2] }
-							selectedOptions={ configurations[currentConfig.model.id].selectedOptions.map( option => option.id) }
+							selectedOptions={ console.log(currentConfig) || configurations[currentConfig.model.id].selectedOptions.map( option => option.id) }
 						/>}
 					</Container>
 				</Section>
