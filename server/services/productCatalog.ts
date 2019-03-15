@@ -17,8 +17,8 @@ const apiSchema = {
 	'countries' : [],
 	'brands' : ['countryCode'],
 	'models' : ['countryCode', 'brand_id'],
-    'brandTypes' : ['countryCode', 'brand_id'],
-    'modelTypes' : ['countryCode', 'model_id'],
+	'brandTypes' : ['countryCode', 'brand_id'],
+        'modelTypes' : ['countryCode', 'model_id'],
 	'typeOptions' : ['countryCode', 'type_id'],
 }
 
@@ -39,8 +39,8 @@ Object.keys(apiSchema).forEach(key => {
 
         reqProductData(
             req,
-			res,
-			next,
+	    res,
+	    next,
             apiEndpoints[key].apply(null, _args),
             key
         )
@@ -50,7 +50,6 @@ Object.keys(apiSchema).forEach(key => {
 const reqProductData = async (req, res, next, url, key) => {
 
 	const { token } = req.query
-
 	console.log(token)
 
 	try {
@@ -61,7 +60,8 @@ const reqProductData = async (req, res, next, url, key) => {
 		sendJSON(res, { token, [key] : data })
 
 	} catch (e) {
-		
+
+		console.log(e)		
 		next(new Error(e))
 	}
 }
