@@ -9,6 +9,7 @@ import {
 	VerticalBarSeries,
 	makeVisFlexible,
 	ChartLabel,
+	Hint
 } from 'react-vis'
 import '../style/barChart.css'
 
@@ -90,6 +91,7 @@ class BarChart extends Component{
 
 		//if you use flexibleXY you can't use animation
 		const FlexibleXYPlot = makeVisFlexible(XYPlot)
+		const { value } = this.state
 
 		return (
 			<div id='bar-chart-wrapper' className='bar-chart-wrapper'>
@@ -117,6 +119,15 @@ class BarChart extends Component{
 						xPercent={0.00}
 						yPercent={0.88}
 						/>
+						{value ? <Hint value={ value } 
+						style={{
+							fontSize: 14,
+							text: {display: 'none'},
+							value: {color: 'red'}}}>
+							<div className='bar-chart-hint'>
+								<p>value: {value}</p>
+							</div>
+					</Hint> : null}
 				</FlexibleXYPlot>
 			</div>
 		)

@@ -27,3 +27,13 @@
 .bar-chart-hint p  {
     color: white;
 }
+
+@media only screen and (max-width : 760px) {
+    .bar-chart-hint {
+        position: relative;
+        top: -15px;
+        left: 80px;
+        width: 220px;
+        padding: 5px;
+    }
+}
