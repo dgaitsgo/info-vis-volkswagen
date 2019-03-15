@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Button, Card, Heading, Image } from 'react-bulma-components/full'
 
 import SlideShow from 'react-image-show'
+import ReactTooltip from 'react-tooltip'
 import noImage from '../res/carIcon.png'
 import tire from '../res/tire.png'
 import co2 from '../res/co2.png'
@@ -118,15 +119,18 @@ class InfoCard extends Component {
 					<div className='data-wrapper'>
 						<div className='satic-info-wrapper'>
 							{/* weight */}
-							<span><i className='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}</span> 
+							<span><i data-tip='Weight' className='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}</span> 
+							<ReactTooltip place='top' type='dark' clickable={true}/>
 							{/* fuel type */}
-							<span><i className='fas fa-gas-pump'></i> {wltpData.fuel_types}</span>
+							<span><i data-tip='Fuel Type' className='fas fa-gas-pump'></i> {wltpData.fuel_types}</span>
+							<ReactTooltip place='top' type='dark' clickable={true}/>
 						</div>
 						<div className='dynamic-info-wrapper'>
 							{/* Detailed Emissions */}
 							<span className='compare-model-value'> 
 								<span onClick={ this.setShowMoreEmissions }>
-									<Image className='icon-info-img' src={co2} />
+									<Image data-tip='CO2 Emission' className='icon-info-img' src={co2} />
+									<ReactTooltip place='top' type='dark' clickable={true}/>
 									<span className='infosubtitle-emission'> Detailed emissions </span>
 									<i className={showMoreEmissions ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
 								</span> 
@@ -135,7 +139,8 @@ class InfoCard extends Component {
 							{/* Detailed Consumption */}
 							<span>
 								<span onClick={ this.setShowMoreConsumption }>
-									<i className='fas fa-tint'/>
+									<i data-tip='Fuel Consumption' className='fas fa-tint'/>
+									<ReactTooltip place='top' type='dark' clickable={true}/>
 									<span className='infosubtitle-consumption'>Detailed consumption </span>
 									<i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
 								</span>
@@ -143,7 +148,8 @@ class InfoCard extends Component {
 							{/* Tire Classification */}
 							<span className='tire-data-wrapper'>
 								<span onClick={ this.setShowMoreTire } className='tire-header'>
-									<Image className='icon-info-img' src={tire} />
+									<Image data-tip='Tire Class' className='icon-info-img' src={tire} />
+									<ReactTooltip place='top' type='dark' clickable={true}/>
 									<span className='infosubtitle-tire'> Tire Classification </span>
 									<i className={showMoreTire ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
 								</span>
