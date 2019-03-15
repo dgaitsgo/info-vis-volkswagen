@@ -126,19 +126,10 @@ display: block;
 	margin-top: 5px;
 }
 
-
-.infosubtitle-tire{
-	margin-left: 20px;
-}
-.infosubtitle-consumption{
-	margin-left: 5px;
-}
 .compareContain{
 	width:800px;
 }
-.carInfo{
-	padding: 50px;
-}
+
 @media only screen and (max-width : 760px) {
 	.typeName{
 		padding-left: 30px;

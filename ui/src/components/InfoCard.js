@@ -5,6 +5,7 @@ import SlideShow from 'react-image-show'
 import noImage from '../res/carIcon.png'
 import tire from '../res/tire.png'
 import co2 from '../res/co2.png'
+import '../style/card.css'
 
 const ShowMoreInformation = ({ data, enabled}) => {
 	const interpolationClassName = enabled
@@ -91,21 +92,21 @@ class InfoCard extends Component {
 								{ ranking === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
 								{ ranking === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 								{ ranking === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-								{ `${ranking + 1}.`} { config.model.name }
+								{`${ranking + 1}.`} {config.model.name}
 							</Heading>
 							<Heading size={5} className='average-wrapper'> {`${average} ${compareUnit}` }</Heading>
 						</div>
 						<p className='typeName'>{config.type.name}</p>
 					</div>
 				</Card.Header>
-				<Card.Content className='carInfo'>
+				<Card.Content className='car-info'>
 					<div className='image-wrapper'>
 						{ config.images && config.images.length 
 							? <SlideShow
 								images={config.images.map( imageObj => imageObj.url)}
 								width='700px'
 								imagesWidth='625px'
-								imagesHeight='450px'
+								imagesHeight='351px'
 								imagesHeightMobile='56vw'
 								thumbnailsWidth='600px'
 								thumbnailsHeight='12vw'
@@ -115,51 +116,59 @@ class InfoCard extends Component {
 						}
 					</div>
 					<div className='data-wrapper'>
-						{/* weight */}
-						<div><i className='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}</div> 
-						{/* fuel type */}
-						<div><i className='fas fa-gas-pump'></i> {wltpData.fuel_types}</div>
-						{/* Detailed Emissions */}
-						<div className='compare-model-value'> 
-							<span onClick={ this.setShowMoreEmissions }>
-								<Image className='icon-info-img' src={co2} />
-								<span className='infosubtitle-emission'> Detailed emissions</span>
-								<i className={showMoreEmissions ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
-							</span> 
+						<div className='satic-info-wrapper'>
+							{/* weight */}
+							<span><i className='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}</span> 
+							{/* fuel type */}
+							<span><i className='fas fa-gas-pump'></i> {wltpData.fuel_types}</span>
+						</div>
+						<div className='dynamic-info-wrapper'>
+							{/* Detailed Emissions */}
+							<span className='compare-model-value'> 
+								<span onClick={ this.setShowMoreEmissions }>
+									<Image className='icon-info-img' src={co2} />
+									<span className='infosubtitle-emission'> Detailed emissions </span>
+									<i className={showMoreEmissions ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
+								</span> 
+								
+							</span>
+							{/* Detailed Consumption */}
+							<span>
+								<span onClick={ this.setShowMoreConsumption }>
+									<i className='fas fa-tint'/>
+									<span className='infosubtitle-consumption'>Detailed consumption </span>
+									<i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
+								</span>
+							</span>
+							{/* Tire Classification */}
+							<span className='tire-data-wrapper'>
+								<span onClick={ this.setShowMoreTire } className='tire-header'>
+									<Image className='icon-info-img' src={tire} />
+									<span className='infosubtitle-tire'> Tire Classification </span>
+									<i className={showMoreTire ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
+								</span>
+							</span>
+						</div>
+						<div className='more-information-wrapper'>
 							{ showMoreEmissions
 								? <ShowMoreInformation key={ranking}
 									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CO2', phase}))} />
 								: null } 
-						</div>
-						{/* Detailed Consumption */}
-						<div>
-							<span onClick={ this.setShowMoreConsumption }>
-								<i className='fas fa-tint'/>
-								<span className='infosubtitle-consumption'>Detailed consumption</span>
-								<i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
-							</span>
 							{ showMoreConsumption
 								? <ShowMoreInformation 
 									key={ranking}
 									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CONSUMPTION', phase}))}
 								/>: null }
-						</div>
-						{/* Tire Classification */}
-						<div className='tire-data-wrapper'>
-							<span onClick={ this.setShowMoreTire } className='tire-header'>
-								<Image className='icon-info-img' src={tire} />
-								<span className='infosubtitle-tire'> Tire Classification </span>
-								<i className={showMoreTire ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
-							</span>
 							{ showMoreTire
 								? <ShowMoreTireInformation wltpData={ wltpData }/> 
 								: null }
 						</div>
 					</div>
-					<Button className='configure-button' onClick= { () => openConfiguration(config) } >
-						<i className='fas fa-hammer'></i>
-						Configure
-					</Button>
+					<div className='configure-panel'>
+						<Button className='configure-button' onClick= { () => openConfiguration(config) } >
+							<i className='fas fa-hammer'></i> Configure
+						</Button>
+					</div>
 				</Card.Content>
 			</Card>
 		)

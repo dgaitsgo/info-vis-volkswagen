@@ -58,3 +58,53 @@
 		margin-bottom: 1rem;
 	}
 }
+
+.car-info{
+	padding: 50px;
+}
+
+.infosubtitle-tire{
+	margin-left: 20px;
+	cursor: pointer;
+}
+
+.infosubtitle-consumption{
+	margin-left: 9px;
+	cursor: pointer;
+}
+
+.infosubtitle-emission{
+	cursor: pointer;
+	margin-left: 20px;
+}
+
+.data-wrapper {
+	margin: 50px
+}
+
+.configure-button {
+	width: 50%;
+	margin: 0 auto;
+	display: inline-block;
+}
+
+.configure-panel {
+	width: 100%;
+	text-align: center;
+}
+
+.dynamic-info-wrapper {
+	margin-bottom: 10px;
+}
+
+.more-information-wrapper {
+	display: flex;
+}
+
+.satic-info-wrapper {
+	width: 40%;
+	margin: 0 auto;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+}

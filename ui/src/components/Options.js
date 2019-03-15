@@ -150,8 +150,6 @@ class Options extends Component {
 
 		const model = currentConfig.model
 
-		console.log('current config', currentConfig)
-
 		return (
 			<Modal
 				isOpen={isOpen}
@@ -177,7 +175,7 @@ class Options extends Component {
 				{ currentConfig.images && currentConfig.images.length 
 					? <SlideShow
 						images={currentConfig.images.map( imageObj => imageObj.url)}
-						indicators thumbnails fixedImagesHeight infinite
+						indicators fixedImagesHeight infinite
 					/> 
 					: <Image src={noImage}/>
 				}
@@ -233,8 +231,6 @@ class Options extends Component {
 			closeModal,
 			error
 		} = this.props
-
-		console.log('fucking error now', error)
 
 		return (
 			<Modal
