@@ -54,7 +54,7 @@ class CompareContainer extends Component {
 				const ls_configResults = await Promise.all(
 					selectedModelsArr.map(model =>
 						ls.find({ selector : { _id : model.type.id } })) )
-				
+
 				// - Triage which exist in local storage, which need to be fetched
 				ls_configResults.forEach( ({ docs }, i) =>
 					docs.length && isBefore(docs[0].expirationDate, addDays(new Date(), 1))
@@ -71,13 +71,13 @@ class CompareContainer extends Component {
 						_id : remoteConfig.model.type.id,
 						...remoteConfig
 					}))
-				
+
 					await ls.bulkDocs(remoteConfigs)
 				}
-				
+
 				//reassociate types and models
 				const finalConfigs = [...remoteConfigs, ...localConfigs]
-				
+
 				return (finalConfigs)
 
 			} catch (e) {
@@ -93,13 +93,13 @@ class CompareContainer extends Component {
 		const selectedModels = JSON.parse(decodeURIComponent(urlData[4]))
 
 		try {
-			
+
 			const ls = getLocalStorage('vw_okapi')
 			const configurationsArr = await this.loadConfigs(ls, selectedModels)
 			let configurations = {}
 
 			configurationsArr.forEach(config => {
-				
+
 				configurations[config.model.id] = {
 					model : config.model,
 					configId : config.configId,
@@ -124,7 +124,7 @@ class CompareContainer extends Component {
 	setCompareMode = compareMode => this.setState({ compareMode })
 
 	closeModal = () => this.setState({ modalIsOpen: false })
-	
+
 	openConfiguration = nextConfig =>
 		this.setState ({
 			modalIsOpen: true,
@@ -139,7 +139,6 @@ class CompareContainer extends Component {
 			modalIsOpen,
 			currentConfig,
 			loading,
-			error,
 			ls,
 			urlData
 		} = this.state
@@ -182,7 +181,7 @@ class CompareContainer extends Component {
 								)}.
 							If you don't know about WLTP read more about it <a rel='noopener noreferrer' target='_blank' href='http://wltpfacts.eu/what-is-wltp-how-will-it-work/'>here</a>.
 						</p>
-						{ renderBarChart 
+						{ renderBarChart
 							? <div className='button-wrapper'>
 								<div>
 									<span><strong>Compare by: </strong></span>
