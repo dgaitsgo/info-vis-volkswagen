@@ -125,7 +125,7 @@ class BarChart extends Component{
 							text: {display: 'none'},
 							value: {color: 'red'}}}>
 							<div className='bar-chart-hint'>
-								<p>value: {value}</p>
+								<p>value: {Number(value).toFixed(2) + (compareMode === 'CO2' ? ' g/km' : ' l/100km')} </p>
 							</div>
 					</Hint> : null}
 				</FlexibleXYPlot>
