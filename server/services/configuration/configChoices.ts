@@ -15,8 +15,8 @@ app.get('/api/configChoices', async(req, res, next) => {
 		const choicesRes = await Okapi.configChoices(configId, token)
 		const { data } = choicesRes
 
-        sendJSON(res, { choices : data.data })
-        
+        	sendJSON(res, { choices : data.data })
+	        
     } catch (err) {
 
         next(new Error(err))
