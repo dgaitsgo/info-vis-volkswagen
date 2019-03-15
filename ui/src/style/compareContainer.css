@@ -131,32 +131,20 @@ background-color: #2196F3;
 	width:800px;
 }
 
-.info-wrapper{
-	/* text-align: center; */
-}
-.infosubtitle-emission{
-	margin-left: 20px;
-}
-.infosubtitle-consumption{
-	margin-left: 5px;
-}
-.infosubtitle-tire{
-	margin-left: 20px;
-}
 
-@media only screen and (max-width : 760px) {
+@media only screen and (max-width : 768px) {
 	.typeName{
 		padding-left: 30px;
 		padding-bottom: 20px;
 		padding-right: 30px;
 	}
-	.image{
+	.image-wrapper .image{
 		width: 100%;
 	}
 	.iconInfoImg{
 		width:16px;
 	}
-	.compareContain{
+	.container-wrapper{
 		width:100%;
 	}
 }
