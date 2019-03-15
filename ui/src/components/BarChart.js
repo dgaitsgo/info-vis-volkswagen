@@ -7,14 +7,12 @@ import {
 	VerticalGridLines,
 	HorizontalGridLines,
 	VerticalBarSeries,
-	Crosshair,
-	Hint,
 	makeVisFlexible,
 	ChartLabel,
 } from 'react-vis'
 import '../style/barChart.css'
 
-const ratio = .4;
+const ratio = .5;
 class BarChart extends Component{
 
 	constructor (props) {
@@ -61,23 +59,23 @@ class BarChart extends Component{
 	}
 	updateWindowDimensions = () => this.setState({width: window.innerHeight, height:window.innerHeight})
 
-	renderToolTip = value => {
-
+	renderToolTip = ({value, compareMode}) => {
+		
 		const parent = window.document.querySelector('#bar-chart-wrapper')
 
 		if (parent) {
 
 			const bounding = parent.getBoundingClientRect()
 
-			console.log(bounding.left, bounding.right, bounding.top, bounding.bottom)
+		//	console.log(bounding.left, bounding.right, bounding.top, bounding.bottom)
 
 			const clientX = window.event.clientX
 			const clientY = window.event.clientY 
 			const tolerance = 100
 			let inside = false
-			console.log('client x,y ', clientX, clientY)
+		//	console.log('client x, y ', clientX, clientY)
 
-			console.log('scroll x, y', window.scrollX, window.scrollY)
+		//	console.log('scroll x, y', window.scrollX, window.scrollY)
 
 			if (clientX > bounding.left + tolerance && clientX < bounding.right - tolerance && clientY > bounding.top + tolerance && clientY < bounding.bottom - tolerance) {
 				inside = true
@@ -96,13 +94,23 @@ class BarChart extends Component{
 							text: {display: 'none'},
 							value: {color: 'red'}
 						}}>
-							<p>value: {Number(value).toFixed(2) }</p>
+							<p>value: {Number(value).toFixed(2) + (compareMode === 'CO2' ? ' g/km' : ' l/100km')} </p>
 				</div>
 			)
 		}
 	}
 
-	
+	phasesToLegendItems = () => {
+		const { phases } = this.props
+
+		return phases.map( phase => {
+			return ({
+				title: phase.label,
+				color: phase.color,
+				strokeWidth: 20
+			})
+		})
+	}
 
 	render() {
 		const {
@@ -134,8 +142,8 @@ class BarChart extends Component{
 				xType='ordinal' >
 					<VerticalGridLines />
 					<HorizontalGridLines />
-					<XAxis {...axisProps} tickFormat={String}/>
-					<YAxis {...axisProps} tickFormat={(d) => d}/>
+					<XAxis tickFormat={String} left={0}/>
+					<YAxis {...axisProps}/>
 					{ normalizedDataSets.map( (dataSet, i) => {
 						return <VerticalBarSeries
 							className="vertical-bar-series-example"
@@ -143,19 +151,16 @@ class BarChart extends Component{
 							data={dataSet}
 							key={i}
 							onValueMouseOver={this._rememberValue}
-							onMouseLeave={this._forgetValue}
-							onSeriesMouseOut={this._forgetValue}
 							onValueMouseOut={this._forgetValue}
-							
 						/>
 					}) }
 					<ChartLabel text={compareMode === 'CO2' ? 'g/km' : 'l/100km'}
 						className='alt-y-label'
-						xPercent={0.04}
-						yPercent={0.82}
+						xPercent={0.00}
+						yPercent={-0.05}
 						//style={{transform: 'rotate(-90)',textAnchor:'end'}}
 						/>
-						{ this.renderToolTip(value) }
+						{ this.renderToolTip({value, compareMode}) }
 				</FlexibleXYPlot>
 			</div>
 		)

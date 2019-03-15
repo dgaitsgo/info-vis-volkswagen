@@ -41,6 +41,9 @@
 .tire-wrapper{
 	margin-left: 25px;
 }
+.image-wrapper{
+	text-align: center;
+}
 /* @keyframes slideDown {
 	0%{
 		transform: translateY(-100px)
@@ -59,7 +62,7 @@
 	}
 }
 
-.car-info{
+/* .car-info{
 	padding: 50px;
 }
 
@@ -82,16 +85,7 @@
 	margin: 50px
 }
 
-.configure-button {
-	width: 50%;
-	margin: 0 auto;
-	display: inline-block;
-}
 
-.configure-panel {
-	width: 100%;
-	text-align: center;
-}
 
 .dynamic-info-wrapper {
 	margin-bottom: 10px;
@@ -107,4 +101,15 @@
 	margin-bottom: 10px;
 	display: flex;
 	justify-content: space-between;
+} */
+
+.configure-button {
+	width: 50%;
+	margin: 0 auto;
+	display: inline-block;
+}
+
+.configure-panel {
+	width: 100%;
+	text-align: center;
 }

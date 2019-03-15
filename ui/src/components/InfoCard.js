@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Card, Heading, Image } from 'react-bulma-components/full'
+import { Button, Card, Heading, Image, Columns } from 'react-bulma-components/full'
 
 import SlideShow from 'react-image-show'
 import noImage from '../res/carIcon.png'
@@ -115,14 +115,16 @@ class InfoCard extends Component {
 							: <Image src={noImage}/>
 						}
 					</div>
-					<div className='data-wrapper'>
-						<div className='satic-info-wrapper'>
+					<Columns className='data-wrapper'>
+						<Columns.Column>
 							{/* weight */}
 							<span><i className='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}</span> 
+						</Columns.Column>
+						<Columns.Column>
 							{/* fuel type */}
 							<span><i className='fas fa-gas-pump'></i> {wltpData.fuel_types}</span>
-						</div>
-						<div className='dynamic-info-wrapper'>
+						</Columns.Column>
+						<Columns.Column>
 							{/* Detailed Emissions */}
 							<span className='compare-model-value'> 
 								<span onClick={ this.setShowMoreEmissions }>
@@ -132,14 +134,27 @@ class InfoCard extends Component {
 								</span> 
 								
 							</span>
+							{ showMoreEmissions
+								? <ShowMoreInformation key={ranking}
+									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CO2', phase}))} />
+								: null } 
+						</Columns.Column>
 							{/* Detailed Consumption */}
-							<span>
+						<Columns.Column>
+						<span>
 								<span onClick={ this.setShowMoreConsumption }>
 									<i className='fas fa-tint'/>
 									<span className='infosubtitle-consumption'>Detailed consumption </span>
 									<i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
 								</span>
 							</span>
+							{ showMoreConsumption
+								? <ShowMoreInformation 
+									key={ranking}
+									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CONSUMPTION', phase}))}
+								/>: null }
+						</Columns.Column>
+						<Columns.Column>
 							{/* Tire Classification */}
 							<span className='tire-data-wrapper'>
 								<span onClick={ this.setShowMoreTire } className='tire-header'>
@@ -148,27 +163,20 @@ class InfoCard extends Component {
 									<i className={showMoreTire ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
 								</span>
 							</span>
-						</div>
-						<div className='more-information-wrapper'>
-							{ showMoreEmissions
-								? <ShowMoreInformation key={ranking}
-									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CO2', phase}))} />
-								: null } 
-							{ showMoreConsumption
-								? <ShowMoreInformation 
-									key={ranking}
-									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CONSUMPTION', phase}))}
-								/>: null }
 							{ showMoreTire
 								? <ShowMoreTireInformation wltpData={ wltpData }/> 
 								: null }
-						</div>
-					</div>
+						</Columns.Column>
+						{/* <div className='more-information-wrapper'>
+							
+						</div> */}
+					</Columns>
 					<div className='configure-panel'>
 						<Button className='configure-button' onClick= { () => openConfiguration(config) } >
 							<i className='fas fa-hammer'></i> Configure
 						</Button>
 					</div>
+					
 				</Card.Content>
 			</Card>
 		)

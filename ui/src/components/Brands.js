@@ -1,6 +1,5 @@
 import React from 'react'
-import { Columns } from "react-bulma-components/full"
-import { Box } from "react-bulma-components/full"
+import { Columns, Box } from "react-bulma-components/full"
 import { withRouter } from 'react-router-dom'
 
 // importing brand logos
