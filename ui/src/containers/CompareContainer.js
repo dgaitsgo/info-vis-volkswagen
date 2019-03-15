@@ -169,74 +169,76 @@ class CompareContainer extends Component {
 				renderBarChart = true
 		})
 
+		console.log('configurations', configurations)
+
 		const carNames = Object.keys(configurations).map(modelId => configurations[modelId].model.name)
 
 		return (
 			<div className='compare-container-wrapper'>
 				<Section>
-					<Container className="compareContain">
-					<Heading size={4} className='has-text-centered'>
-						Model Emissions Comparison
-					</Heading>
-					<p>We're looking at WLTP data for the cars you selected:&nbsp;
-						{carNames.map( (name, i) =>
-								<span key={`car_name_${i}`}>
-									<strong>
-										{`${name}${i < carNames.length - 1 ? ', ' : ''}`}
-									</strong>
-								</span>
-							)}.
-							The WLTP driving cycle is divided into four parts with different average speeds: low, medium, high and extra high. Each part contains a variety of driving phases, stops, acceleration and braking phases. For a certain car type, each powertrain configuration is tested with WLTP for the car’s lightest (most economical) and heaviest (least economical) version.</p>
-					<div className='button-wrapper'>
-						<div>
-							<span><strong>Compare by: </strong></span>
-							<label className='field'>CO<sub>2</sub> Emissions
-								<input
-									onChange={() => this.setCompareMode('CO2')}
-									className='is-checkradio'
-									type='radio'
-									checked={compareMode === 'CO2'}
-								/>
-								<span className='checkmark'></span>
-							</label>
-							<label className='field'>Fuel Consumption
-								<input
-									onChange={() => this.setCompareMode('CONSUMPTION')}
-									className='is-checkradio'
-									type='radio'
-									checked={compareMode === 'CONSUMPTION'} />
+					<Container className='container-wrapper'>
+						<Heading size={4} className='has-text-centered'>
+							Model Emissions Comparison
+						</Heading>
+						<p>We're looking at WLTP data for the cars you selected:&nbsp;
+							{carNames.map( (name, i) =>
+									<span key={`car_name_${i}`}>
+										<strong>
+											{`${name}${i < carNames.length - 1 ? ', ' : ''}`}
+										</strong>
+									</span>
+								)}.
+								The WLTP driving cycle is divided into four parts with different average speeds: low, medium, high and extra high. Each part contains a variety of driving phases, stops, acceleration and braking phases. For a certain car type, each powertrain configuration is tested with WLTP for the car’s lightest (most economical) and heaviest (least economical) version.</p>
+						<div className='button-wrapper'>
+							<div>
+								<span><strong>Compare by: </strong></span>
+								<label className='field'>CO<sub>2</sub> Emissions
+									<input
+										onChange={() => this.setCompareMode('CO2')}
+										className='is-checkradio'
+										type='radio'
+										checked={compareMode === 'CO2'}
+									/>
 									<span className='checkmark'></span>
-							</label>
+								</label>
+								<label className='field'>Fuel Consumption
+									<input
+										onChange={() => this.setCompareMode('CONSUMPTION')}
+										className='is-checkradio'
+										type='radio'
+										checked={compareMode === 'CONSUMPTION'} />
+										<span className='checkmark'></span>
+								</label>
+							</div>
 						</div>
-					</div>
-					{
-						renderBarChart 
-						? <BarChart
+						{
+							renderBarChart 
+							? <BarChart
+								configurations={ configurations }
+								compareMode={ compareMode }
+								phases={ this.phases }
+							/>
+							: null
+						}
+						<hr className='divider'/>
+						<Heading size={4} className='has-text-centered'>
+							Model Ranking
+						</Heading>
+						<Dashboard
 							configurations={ configurations }
 							compareMode={ compareMode }
+							openConfiguration= { this.openConfiguration }
 							phases={ this.phases }
 						/>
-						: null
-					}
-					<hr className='divider'/>
-					<Heading size={4} className='has-text-centered'>
-						Model Ranking
-					</Heading>
-					<Dashboard
-						configurations={ configurations }
-						compareMode={ compareMode }
-						openConfiguration= { this.openConfiguration }
-						phases={ this.phases }
-					/>
-					{modalIsOpen &&
-						<OptionsContainer
-							ls={ls}
-							currentConfig={currentConfig}
-							isOpen={modalIsOpen}
-							closeModal={ this.closeModal }
-							countryCode={ urlData[2] }
-							selectedOptions={ configurations[currentConfig.model.id].selectedOptions.map( option => option.id) }
-						/>}
+						{modalIsOpen &&
+							<OptionsContainer
+								ls={ls}
+								currentConfig={currentConfig}
+								isOpen={modalIsOpen}
+								closeModal={ this.closeModal }
+								countryCode={ urlData[2] }
+								selectedOptions={ console.log(currentConfig) || configurations[currentConfig.model.id].selectedOptions.map( option => option.id) }
+							/>}
 					</Container>
 				</Section>
 			</div>
