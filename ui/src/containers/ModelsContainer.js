@@ -24,6 +24,7 @@ class ModelsContainer extends Component {
 	}
 
     componentDidMount() {
+
 		window.scrollTo(0, 0)
 
 		const urlData = this.props.location.pathname.split('/')
@@ -39,15 +40,7 @@ class ModelsContainer extends Component {
 			models.sort( (a, b) => a.name > b.name ? 1 : -1)
 			this.setState({ models, modelsLoading: false })
 		}).catch(err => {
-			const to = {
-				pathname : '/server-error',
-				query : {
-					err
-				}
-			}
-			return (
-				<Redirect to={to} />
-			)
+			this.setState({ error : err, message : 'Could not find thos models.' })
 		})
     }
 
@@ -104,17 +97,25 @@ class ModelsContainer extends Component {
 			modelsLoading,
 			modalIsOpen,
 			modalContent,
-			redirectToCompare
+			redirectToCompare,
+			error
 		} = this.state
 
-		if (redirectToCompare){
+		if (redirectToCompare) {
 			const encodedURL = encodeURIComponent((JSON.stringify(selectedModels)))
+
+			// const pathname =
 
 			return <Redirect to={{
 				pathname : `${this.props.location.pathname}/${encodedURL}`,
 				params : {  encodedURL }
 			}} />
 		}
+
+		if ( error )
+			return (
+				<Redirect to={ { pathname : '/server-error', params : error.message } } />
+		)
 
         if (modelsLoading)
 			return (
@@ -131,6 +132,7 @@ class ModelsContainer extends Component {
 		const compareButtonClassName = selectedModels
 			? 'compare-button has-text-centered active'
 			: 'compare-button has-text-centered'
+
 
         return (
 			<div className='models-wrapper'>
