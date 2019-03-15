@@ -134,13 +134,13 @@ class OptionsContainer extends Component {
 
 		// get next choices
 		const configChoicesRes = await this.configChoices(currentConfig.configId)
-		const choices = configChoicesRes.data.choices
-		const flatChoices = this.flattenChoices(choices)
+		const allChoices = configChoicesRes.data.choices
+		const flatChoices = this.flattenChoices(allChoices)
 
 		this.setState({
 			loading : false,
 			currentConfig,
-			choices,
+			allChoices,
 			flatChoices
 		})
 	}

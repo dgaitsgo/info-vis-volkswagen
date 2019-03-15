@@ -34,7 +34,7 @@ const MissingCard = ({ config, openConfiguration}) => {
 					<NoData/>
 					<Button
 						className='configure-button'
-						onClick= { () => openConfiguration({configId: config.model.config_id, configName: config.model.name, typeName: config.type.name, typeId: config.type.id})}
+						onClick= { () => openConfiguration(config)}
 					><i className='fas fa-hammer'></i> Configure
 					</Button>
 				</div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { Loader } from 'react-bulma-components/full'
+import { Loader, Heading } from 'react-bulma-components/full'
 import Landing from '../components/Landing'
 import Redirect from 'react-router-dom/Redirect'
 
@@ -42,12 +42,13 @@ class LandingContainer extends Component {
 		if (!countries) {
 			return (
 				<div className='loaders'>
-				<Loader
-					style={{
-						borderTopColor: 'transparent',
-						boderRightColor: 'transparent',
-					}}
-				message={'Getting markets...'} />
+					<Loader
+						style={{
+							borderTopColor: 'transparent',
+							boderRightColor: 'transparent',
+						}}
+					/>
+					<Heading className='loader-msg' size={4}>Getting Markets...</Heading>
 				</div>
 			)
 		}

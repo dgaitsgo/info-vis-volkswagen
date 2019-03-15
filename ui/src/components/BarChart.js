@@ -48,7 +48,7 @@ class BarChart extends Component{
 	}
 
 	_forgetValue = () => this.setState({value: null})
-
+	
 	_rememberValue = value => this.setState({value: value.y})
 
 	componentDidMount(){
@@ -89,13 +89,12 @@ class BarChart extends Component{
 		const dataSets = phases.map(phase => this.getInterpolations( { configurations, compareMode, phase: phase.key}))
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
 
-		//if you use flexibleXY you can't use animation
 		const FlexibleXYPlot = makeVisFlexible(XYPlot)
 		const { value } = this.state
 
 		return (
 			<div id='bar-chart-wrapper' className='bar-chart-wrapper'>
-			<DiscreteColorLegend orientation="horizontal" items={legendItems}/>
+			<DiscreteColorLegend orientation='horizontal' items={legendItems}/>
 				<FlexibleXYPlot
 				margin={this.props.margin}
 				height={this.state.height * ratio}
@@ -106,7 +105,7 @@ class BarChart extends Component{
 					<YAxis {...axisProps}/>
 					{ normalizedDataSets.map( (dataSet, i) => {
 						return <VerticalBarSeries
-							className="vertical-bar-series-example"
+							className='vertical-bar-series-example'
 							color={ phases[i].color}
 							data={dataSet}
 							key={i}

@@ -6,6 +6,10 @@ import '../style/graph.css'
 
 class GraphContainer extends Component{
 
+    componentDidMount () {
+        window.scrollTo(0, 0)
+    }
+
     render(){
         return(
             <div className="graph-wrapper">
