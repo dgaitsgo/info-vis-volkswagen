@@ -1,8 +1,9 @@
 import React from 'react'
+import { Heading } from 'react-bulma-components/full'
 
 const NotFound = () => 
 	<div className='not-found-wrapper'>
-		404 Page not found
+		<Heading> 404 Page Not Found </Heading>
 	</div>
 
 export default NotFound

@@ -12,10 +12,10 @@ import {
 	makeVisFlexible,
 	ChartLabel,
 } from 'react-vis'
-  import '../style/barChart.css'
+import '../style/barChart.css'
 
-  const ratio = .4;
-  class BarChart extends Component{
+const ratio = .4;
+class BarChart extends Component{
 
 	constructor (props) {
 
@@ -26,6 +26,7 @@ import {
 			width: 0
 		}
 	}
+
 	getInterpolations = ({ configurations, phase, compareMode}) => {
 		return Object.keys(configurations).map((modelId, i) => {
 			const config = configurations[modelId]
@@ -47,29 +48,18 @@ import {
 		})
 	}
 
-	_forgetValue = () => {
+	_forgetValue = () => this.setState({value: null})
 
-		console.log('wt the fu')
+	_rememberValue = value => this.setState({value: value.y})
 
-		this.setState({
-			value: null
-		})
-	}
-
-	_rememberValue = value => {
-
-		this.setState({value: value.y})
-	}
 	componentDidMount(){
 		this.updateWindowDimensions();
-		window.addEventListener("resize", this.updateWindowDimensions);
+		window.addEventListener('resize', this.updateWindowDimensions)
 	}
 	componentWillMount(){
-		window.removeEventListener("resize", this.updateWindowDimensions);
+		window.removeEventListener('resize', this.updateWindowDimensions)
 	}
-	updateWindowDimensions = () =>{
-		this.setState({width: window.innerHeight, height:window.innerHeight});
-	}
+	updateWindowDimensions = () => this.setState({width: window.innerHeight, height:window.innerHeight})
 
 	renderToolTip = value => {
 
@@ -121,14 +111,8 @@ import {
 			phases
 		} = this.props
 
-		const ITEMS = [
-			{title: 'Low',color: '#4caf50', strokeWidth: 20},
-			{title: 'Medium',color: '#ffeb3b', strokeWidth: 20},
-			{title: 'High',color: '#ff9800', strokeWidth: 20},
-			{title: 'Extra High',color: '#f44336', strokeWidth: 20},
-			{title: 'Combined',color: '#1565c0', strokeWidth: 20}
-		]
-		
+		const legendItems = this.phasesToLegendItems()
+
 		const axisProps = {
 			tickSizeInner: 0,
 			style: {line: {stroke: '#939393', strokeWidth: '1px'}}
@@ -137,18 +121,17 @@ import {
 		const dataSets = phases.map(phase => this.getInterpolations( { configurations, compareMode, phase: phase.key}))
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
 		const { value } = this.state
+
 		//if you use flexibleXY you can't use animation
 		const FlexibleXYPlot = makeVisFlexible(XYPlot)
 
-		console.log('normalized datasets', normalizedDataSets)
-			
 		return (
 			<div id='bar-chart-wrapper' className='bar-chart-wrapper'>
 			<DiscreteColorLegend orientation="horizontal" items={ITEMS}/>
 				<FlexibleXYPlot
 				margin={this.props.margin}
 				height={this.state.height * ratio}
-				xType="ordinal" >
+				xType='ordinal' >
 					<VerticalGridLines />
 					<HorizontalGridLines />
 					<XAxis {...axisProps} tickFormat={String}/>
@@ -166,9 +149,8 @@ import {
 							
 						/>
 					}) }
-					{/* : Fuel Comminsion(g/km)} */}
-					<ChartLabel text="(l/100km)"
-						className="alt-y-label"
+					<ChartLabel text={compareMode === 'CO2' ? 'g/km' : 'l/100km'}
+						className='alt-y-label'
 						xPercent={0.04}
 						yPercent={0.82}
 						//style={{transform: 'rotate(-90)',textAnchor:'end'}}

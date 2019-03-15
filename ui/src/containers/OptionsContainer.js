@@ -192,11 +192,7 @@ class OptionsContainer extends Component {
 		const choices = configChoicesRes.data.choices
 		const flatChoices = this.flattenChoices(choices)
 
-		//scroll up to the top of the window
-		// ReactDom.findDOMNode(this).scrollIntoView()
-
 		this.setState({ allChoices : choices, flatChoices })
-
 	}
 
 	flattenChoices (choices) {

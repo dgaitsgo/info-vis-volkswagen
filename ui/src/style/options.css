@@ -5,6 +5,7 @@
 }
 
 .choice {
+	cursor: pointer;
 	width: 80%;
 	margin: 0 auto;
 	border-bottom: 1px solid rgb(168, 168, 168);
@@ -25,6 +26,7 @@
 }
 
 .choice.invalid {
+	cursor: not-allowed;
 	background-color: #bdbdbd;
 }
 
@@ -51,6 +53,7 @@
 }
 
 .tree-category {
+	cursor: pointer;
     width: 100%;
     padding: 10px;
 	border-bottom: 1px solid rgb(168, 168, 168);
@@ -79,7 +82,7 @@
 }
 
 .options-wrapper {
-	max-height: 42%;
+	max-height: 35%;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	padding: 1%;
@@ -102,6 +105,7 @@
 }
 
 .input-category-search:focus {
+	cursor: default;
 	width: 50%;
 }
 

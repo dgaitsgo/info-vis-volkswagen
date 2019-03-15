@@ -12,13 +12,16 @@ class BrandsContainer extends Component {
     constructor(props) {
 		super(props)
 
-        this.state = {
+		this.state = {
+
 			//all the brands that are available in the selected country
 			brands : null,
-        }
+		}
 	}
 
     componentDidMount() {
+		window.scrollTo(0, 0)
+
 		const countryCode = this.props.location.pathname.split('/')[2]
         axios.get('/api/brands', {
 			params : {

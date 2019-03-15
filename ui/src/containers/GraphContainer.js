@@ -14,12 +14,12 @@ class GraphContainer extends Component{
                         Explore the Possibilities
                     </Heading>
                 </NavLink>
-                <p className='graph-paragraph'>
-					Pick your favorite cars, customize them and compare their emissions data.
-					Click on the title to start your journey.
-				</p>
-             <Graph />
-             </div>
+                    <p className='graph-paragraph'>
+                        Pick your favorite cars, customize them and compare their emissions data.
+                        Click on the title to start your journey.
+                    </p>
+                <Graph />
+            </div>
         )
     }
 }

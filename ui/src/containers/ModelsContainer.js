@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import ContentLoader from 'react-content-loader'
 import axios from 'axios'
 import Redirect from 'react-router-dom/Redirect'
 import Model from '../components/Model'
 import Modal from 'react-modal'
-import { Heading, Loader, Section, Container, Button, Columns } from "react-bulma-components/full"
+import { Heading, Loader, Section, Container, Button, Columns } from 'react-bulma-components/full'
 import '../style/model.css'
 import isEmpty from 'lodash/isEmpty'
 
@@ -15,18 +14,17 @@ class ModelsContainer extends Component {
 		super(props)
 
         this.state = {
-			models: null,
 			selectedModels: {},
 			modalIsOpen: false,
 			modalContent: null,
 			modelImages: null,
-			loadingConfigurations : false,
 			modelsLoading: true,
 			redirectToCompare: false
         }
 	}
 
     componentDidMount() {
+		window.scrollTo(0, 0)
 
 		const urlData = this.props.location.pathname.split('/')
 
@@ -92,10 +90,8 @@ class ModelsContainer extends Component {
 	closeModal = () => this.setState({ modalIsOpen: false })
 
 	toModelsCompare = () => {
+		const {selectedModels} = this.state
 
-		const {
-			selectedModels
-		} = this.state
 		if (!isEmpty(selectedModels))
 			this.setState({ redirectToCompare: true })
 	}
@@ -106,7 +102,6 @@ class ModelsContainer extends Component {
 			models,
 			selectedModels,
 			modelsLoading,
-			loadingConfigurations,
 			modalIsOpen,
 			modalContent,
 			redirectToCompare
@@ -145,7 +140,6 @@ class ModelsContainer extends Component {
 					Select Models
 				</Heading>
 				<div className='models-body'>
-					{loadingConfigurations && <ContentLoader />}
 					<Columns className='is-centered'>
 						{models.map(({ id, name }, i) => {
 							return (
@@ -161,7 +155,7 @@ class ModelsContainer extends Component {
 				</div>
 				<br />
 				<div className={compareButtonClassName}>
-					<Button className="is-medium" disabled={isEmpty(selectedModels)} onClick={ this.toModelsCompare }>
+					<Button className='is-medium' disabled={isEmpty(selectedModels)} onClick={ this.toModelsCompare }>
 						Done
 					</Button>
 				</div>

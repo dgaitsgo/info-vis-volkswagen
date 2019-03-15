@@ -1,16 +1,8 @@
 import React from 'react'
 import Redirect from 'react-router-dom/Redirect'
 
-const Error = (err) => {
-
-	const to = {
-		pathname : '/server-error',
-		query : {
-			err
-		}
-	}
-
-	return (<Redirect to={to}/>)
+const Error = () => {
+	return <Redirect to={'/server-error'}/>
 }
 
 export default Error
