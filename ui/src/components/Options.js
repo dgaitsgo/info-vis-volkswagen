@@ -22,7 +22,7 @@ class Options extends Component {
 			searchedCategories: null,
 
 			//All categories that should display its choices
-			selectedCategories: [],
+			openedCategories: [],
 		}
 	}
 
@@ -37,21 +37,22 @@ class Options extends Component {
 	}
 
 	onCategoryClick = ({ categoryId }) => {
-		let { selectedCategories } = this.state
+		let { openedCategories } = this.state
 
-		if (!selectedCategories.includes(categoryId))
+		if (!openedCategories.includes(categoryId))
 		{
-			selectedCategories.push(categoryId)
-			this.setState({ selectedCategories })
+			openedCategories.push(categoryId)
+			this.setState({ openedCategories })
 		} else {
-			this.setState({ selectedCategories: selectedCategories.filter( elem => elem !== categoryId )})
+			this.setState({ openedCategories: openedCategories.filter( elem => elem !== categoryId )})
 		}
 
 	}
 
 	getCategories = allCategories => {
 		
-		const { selectedCategories } = this.state
+		const { openedCategories } = this.state
+		const { allChoices, currentConfig } = this.props
 
 		if (!allCategories || allCategories.length === 0 ) {
 			return (
@@ -67,15 +68,19 @@ class Options extends Component {
 		return allCategories.map( (category, i) => {
 
 			const label = category.description.length ? category.description : category.id
-			const isSelected = selectedCategories.includes(category.id)
-			const treeCategoryClassName = isSelected
-				? 'tree-category selected'
-				: 'tree-category'
+			const isSelected = openedCategories.includes(category.id)
+			const categoryChoices = allChoices.filter( choice => choice.id === category.id)
+			const selectedOptionsArr = currentConfig.selectedOptions ? currentConfig.selectedOptions.map( option => option.id) : []
+			let hasSelectedOptions = false
+			categoryChoices.forEach( category => {
+				if (category.valid.filter( valid => selectedOptionsArr.includes(valid.id)).length)
+					hasSelectedOptions = true
+			})
 
 			return (
 				<div className='category-wrapper' key={`category_wrapper${i}`}>
 					<div
-						className={ treeCategoryClassName }
+						className={ hasSelectedOptions ? 'tree-category selected' : 'tree-category' }
 						key={`category_${i}`}
 						onClick={() => this.onCategoryClick({ categoryId: category.id })}
 						><h1><i className={isSelected ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> { label }</h1>

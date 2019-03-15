@@ -1,8 +1,7 @@
 	
 .detailed-interpolation-wrapper{
         overflow-y: hidden;
-		/* max-height: 0%;  */
-		/* approximate max height */
+        /* max-height: 0%; approximate max height */
 }
     
 .detailed-interpolation-wrapper.open{
@@ -54,9 +53,23 @@
 	}
 }
 
-.data-wrapper{
-	margin: 20px;
+.infosubtitle-tire{
+	margin-left: 20px;
+	cursor: pointer;
+}
 
+.infosubtitle-consumption{
+	margin-left: 5px;
+	cursor: pointer;
+}
+
+.infosubtitle-emission{
+	margin-left: 20px;
+	cursor: pointer;
+}
+
+.data-wrapper {
+	margin: 20px
 }
 
 .configure-button {

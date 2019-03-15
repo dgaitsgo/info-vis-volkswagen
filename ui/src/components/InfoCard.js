@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Button, Card, Heading, Image, Columns } from 'react-bulma-components/full'
 
 import SlideShow from 'react-image-show'
+import ReactTooltip from 'react-tooltip'
 import noImage from '../res/carIcon.png'
 import tire from '../res/tire.png'
 import co2 from '../res/co2.png'
@@ -16,7 +17,7 @@ const ShowMoreInformation = ({ data, enabled, compareMode}) => {
 			{data.map( (entry, i) => {
 				return (
 					<div className='more-interpolation' key={i}>
-						<span> <font color={`${entry.phase.color}`}> {entry.phase.label} </font> {entry.value.toFixed(2)} {compareMode === 'CO2' ? ' l/100km' : ' g/km'} </span>
+						<span> <font color={`${entry.phase.color}`}> {entry.phase.label} </font> {entry.value.toFixed(2) + (compareMode === 'CO2' ? ' g/km' : ' l/100km')}  </span>
 					</div>
 				)
 			})}
@@ -116,36 +117,38 @@ class InfoCard extends Component {
 						}
 					</div>
 					<Columns className='data-wrapper is-center'>
-						<Columns.Column size="half" className="info-front-wrapper has-text-centered">
+						<Columns.Column size='half' className='info-front-wrapper has-text-centered'>
 							{/* weight */}
-							<span><i className='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}</span> 
+							<span><i data-tip='Weight' className='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}</span> 
+							<ReactTooltip place='top' type='dark' clickable={true}/>
 						</Columns.Column>
-						<Columns.Column size="half" className="info-front-wrapper has-text-centered">
+						<Columns.Column size='half' className='info-front-wrapper has-text-centered'>
 							{/* fuel type */}
-							<span><i className='fas fa-gas-pump'></i> {wltpData.fuel_types}</span>
+							<span><i data-tip='Fuel Type' className='fas fa-gas-pump'></i> {wltpData.fuel_types}</span>
+							<ReactTooltip place='top' type='dark' clickable={true}/>
 						</Columns.Column>
-						<Columns.Column className="info-wrapper">
+						<Columns.Column className='info-wrapper'>
 							{/* Detailed Emissions */}
-							<span className='compare-model-value'> 
-								<span onClick={ this.setShowMoreEmissions }>
-									<Image className='icon-info-img' src={co2} />
-									<span className='infosubtitle-emission'> Detailed emissions </span>
-									<i className={showMoreEmissions ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
-								</span> 
-								
-							</span>
+							<span onClick={ this.setShowMoreEmissions }>
+								<Image data-tip='CO2 Emission' className='icon-info-img' src={co2} />
+								<ReactTooltip place='top' type='dark' clickable={true}/>
+								<span className='infosubtitle-emission'> Detailed emissions </span>
+								<i className={showMoreEmissions ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
+							</span> 
 							{ showMoreEmissions
 								? <ShowMoreInformation key={ranking}
-									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CO2', phase}))} />
+									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CO2', phase}))}
+									compareMode={ compareMode} />
 								: null } 
-						</Columns.Column >
+						</Columns.Column>
+						<Columns.Column className='info-wrapper'>
 							{/* Detailed Consumption */}
-						<Columns.Column className="info-wrapper">
-								<span onClick={ this.setShowMoreConsumption }>
-									<i className='fas fa-tint'/>
-									<span className='infosubtitle-consumption'>Detailed consumption </span>
-									<i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
-								</span>
+							<span onClick={ this.setShowMoreConsumption }>
+								<i data-tip='Fuel Consumption' className='fas fa-tint'/>
+								<ReactTooltip place='top' type='dark' clickable={true}/>
+								<span className='infosubtitle-consumption'>Detailed consumption </span>
+								<i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
+							</span>
 							{ showMoreConsumption
 								? <ShowMoreInformation 
 									key={ranking}
@@ -157,7 +160,8 @@ class InfoCard extends Component {
 							{/* Tire Classification */}
 							<span className='tire-data-wrapper'>
 								<span onClick={ this.setShowMoreTire } className='tire-header'>
-									<Image className='icon-info-img' src={tire} />
+									<Image data-tip='Tire Class' className='icon-info-img' src={tire} />
+									<ReactTooltip place='top' type='dark' clickable={true}/>
 									<span className='infosubtitle-tire'> Tire Classification </span>
 									<i className={showMoreTire ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
 								</span>
@@ -166,8 +170,6 @@ class InfoCard extends Component {
 								? <ShowMoreTireInformation wltpData={ wltpData }/> 
 								: null }
 						</Columns.Column>
-						{/* <div className='more-information-wrapper'>
-						</div> */}
 					</Columns>
 					<div className='configure-panel'>
 						<Button className='configure-button' onClick= { () => openConfiguration(config) } >
