@@ -14,26 +14,26 @@ import '../style/compareContainer.css'
 class CompareContainer extends Component {
 
     constructor(props) {
-			super(props)
-			this.state = {
-				configurations : null,
-				compareMode : 'CO2',
-				modalIsOpen: false,
-				modalContent: {},
-				ls : null,
-				loading: true,
-				error: false
-			}
+		super(props)
+		this.state = {
+			configurations : null,
+			compareMode : 'CO2',
+			modalIsOpen: false,
+			modalContent: {},
+			ls : null,
+			loading: true,
+			error: false
+		}
 
-			this.phases = [
-				{ key : 'LOW', color : '#4caf50', label : 'Low' },
-				{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
-				{ key : 'HIGH', color : '#ff9800', label : 'High' },
-				{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' },
-				{ key : 'COMBINED', color : '#1565c0', label : 'Combined' }
-			]
+		this.phases = [
+			{ key : 'LOW', color : '#4caf50', label : 'Low' },
+			{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
+			{ key : 'HIGH', color : '#ff9800', label : 'High' },
+			{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' },
+			{ key : 'COMBINED', color : '#1565c0', label : 'Combined' }
+		]
 
-			this.loadConfigs = this.loadConfigs.bind(this)
+		this.loadConfigs = this.loadConfigs.bind(this)
 	}
 
 	async loadConfigs(ls, selectedModels) {
@@ -87,6 +87,7 @@ class CompareContainer extends Component {
 	}
 
 	async componentDidMount() {
+
 		window.scrollTo(0, 0)
 
 		const urlData = this.props.location.pathname.split('/')
@@ -108,11 +109,11 @@ class CompareContainer extends Component {
 					defaultOptions : config.defaultOptions,
 					build : config.build,
 					wltp : config.wltp,
-					images : config.images
+					images : config.images,
 				}
 			})
 
-			this.setState({ ls, configurations, loading: false })
+			this.setState({ ls, urlData, configurations, loading: false })
 
 		} catch (e) {
 
@@ -140,10 +141,9 @@ class CompareContainer extends Component {
 			currentConfig,
 			loading,
 			error,
-			ls
+			ls,
+			urlData
 		} = this.state
-
-		const urlData = this.props.location.pathname.split('/')
 
 		if (loading)
 			return (
@@ -156,12 +156,6 @@ class CompareContainer extends Component {
 					message={'Getting configurations...'} />
 				</div>
 			)
-		
-		if (error) {
-			return (
-				<Redirect to='/not-found' />
-			)
-		}
 
 		let renderBarChart = false
 		Object.keys(configurations).forEach( modelId => {

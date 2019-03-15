@@ -6,6 +6,7 @@ import Brands from '../components/Brands'
 import { NavLink } from 'react-router-dom'
 import { Section, Heading, Container, Columns } from "react-bulma-components/full"
 import '../style/brand.css'
+// import validatePath from '../../modules/validatePath'
 
 class BrandsContainer extends Component {
 
@@ -16,34 +17,38 @@ class BrandsContainer extends Component {
 
 			//all the brands that are available in the selected country
 			brands : null,
+			error: null
 		}
 	}
 
-    componentDidMount() {
-		window.scrollTo(0, 0)
+    async componentDidMount() {
 
-		const countryCode = this.props.location.pathname.split('/')[2]
-        axios.get('/api/brands', {
-			params : {
-				countryCode
-			}
-		}).then(res => this.setState({ brands: res.data.brands.data }))
-		.catch(err => {
-			const to = {
-				pathname : '/server-error',
-				query : {
-					err
+			window.scrollTo(0, 0)
+
+			try {
+
+				const countryCode = this.props.location.pathname.split('/')[2]
+	
+				const brandsRes = await axios.get('/api/brands', { params : { countryCode } })
+				
+				if (brandsRes && brandsRes.data) {
+					this.setState({ brands: brandsRes.data.brands.data })
 				}
+				
+		} catch ({ err, message }) {
+					this.setState({ error : { err, message } })
 			}
-			return (
-				<Redirect to={to} />
-			)
-		})
-    }
+		}
 
     render() {
 
-		const urlData = this.props.location.pathname.split('/')
+			const { error } = this.state
+		  const urlData = this.props.location.pathname.split('/')
+
+			if ( error )
+				return (
+					<Redirect to={ { pathname : '/server-error', params : error.message } } />
+				)
 
 		const {
             brands
