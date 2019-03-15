@@ -4,6 +4,7 @@ import Modal from 'react-modal'
 import { Loader } from 'react-bulma-components/full'
 import classnames from 'classnames'
 import Tags from './Tags'
+import ReactTooltip from 'react-tooltip'
 
 import '../style/options.css'
 
@@ -35,7 +36,7 @@ class Options extends Component {
 	}
 
 	onCategoryClick = ({ categoryId }) => {
-		
+
 		let { openedCategories } = this.state
 
 		if (!openedCategories.includes(categoryId)) {
@@ -48,7 +49,7 @@ class Options extends Component {
 	}
 
 	getCategories = allCategories => {
-		
+
 		const { openedCategories } = this.state
 		const {
 			allChoices,
@@ -76,7 +77,7 @@ class Options extends Component {
 			const label = category.description.length ? category.description : category.id
 			const isSelected = openedCategories.includes(category.id)
 			const categoryChoices = allChoices.filter( choice => choice.id === category.id)
-			
+
 			let hasSelectedOptions = false
 			let hasInvalidOptions = false
 			categoryChoices.forEach( category => {
@@ -155,7 +156,7 @@ class Options extends Component {
 
 	renderStatusBar = () => {
 
-		const { 
+		const {
 			currentConfig,
 			mode
 		} = this.props
@@ -204,7 +205,7 @@ class Options extends Component {
 					Sorry, we can't show you options for this configuration at the moment.
 				</div>
 			}
-			{loading && 
+			{loading &&
 				<Modal className='loading-modal'
 					overlayClassName='loading-modal-overlay'
 					style={{
@@ -222,7 +223,7 @@ class Options extends Component {
 						style={{
 							borderTopColor: 'transparent',
 							boderRightColor: 'transparent',
-						}} 
+						}}
 						message='Loading options for your configuration' />
 					</div>
 				</Modal>
