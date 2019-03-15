@@ -9,6 +9,7 @@ import {
 	VerticalBarSeries,
 	makeVisFlexible,
 	ChartLabel,
+	Hint
 } from 'react-vis'
 import '../style/barChart.css'
 
@@ -59,42 +60,6 @@ class BarChart extends Component{
 	}
 	updateWindowDimensions = () => this.setState({width: window.innerHeight, height:window.innerHeight})
 
-	renderToolTip = ({value, compareMode}) => {
-		
-		const parent = window.document.querySelector('#bar-chart-wrapper')
-
-		if (parent) {
-
-			const bounding = parent.getBoundingClientRect()
-
-			const clientX = window.event.clientX
-			const clientY = window.event.clientY 
-			const tolerance = 100
-			let inside = false
-
-			if (clientX > bounding.left + tolerance && clientX < bounding.right - tolerance && clientY > bounding.top + tolerance && clientY < bounding.bottom - tolerance) {
-				inside = true
-			}
-
-			return (
-				<div className='bar-chart-hint'
-					value={ value }
-					style={
-						{
-							position: 'absolute',
-							top : bounding.top,
-							left : window.event.clientX - bounding.left,
-							fontSize: 14,
-							display: inside ? 'inline' : 'none',
-							text: {display: 'none'},
-							value: {color: 'red'}
-						}}>
-					<p>value: {Number(value).toFixed(2) + (compareMode === 'CO2' ? ' g/km' : ' l/100km')} </p>
-				</div>
-			)
-		}
-	}
-
 	phasesToLegendItems = () => {
 		const { phases } = this.props
 
@@ -123,9 +88,9 @@ class BarChart extends Component{
 
 		const dataSets = phases.map(phase => this.getInterpolations( { configurations, compareMode, phase: phase.key}))
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
-		const { value } = this.state
 
 		const FlexibleXYPlot = makeVisFlexible(XYPlot)
+		const { value } = this.state
 
 		return (
 			<div id='bar-chart-wrapper' className='bar-chart-wrapper'>
@@ -151,9 +116,17 @@ class BarChart extends Component{
 					<ChartLabel text={compareMode === 'CO2' ? 'g/km' : 'l/100km'}
 						className='alt-y-label'
 						xPercent={0.00}
-						yPercent={-0.05}
-					/>
-					{ this.renderToolTip({value, compareMode}) }
+						yPercent={0.88}
+						/>
+						{value ? <Hint value={ value } 
+						style={{
+							fontSize: 14,
+							text: {display: 'none'},
+							value: {color: 'red'}}}>
+							<div className='bar-chart-hint'>
+								<p>value: {Number(value).toFixed(2) + (compareMode === 'CO2' ? ' g/km' : ' l/100km')} </p>
+							</div>
+					</Hint> : null}
 				</FlexibleXYPlot>
 			</div>
 		)

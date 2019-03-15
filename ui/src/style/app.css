@@ -32,7 +32,25 @@ a:hover{
   bottom: 0;
   right: 0;
 }
-
+.not-found-wrapper{
+  flex: 1;
+  opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 0.5s;
+}
+.not-found-wrapper .title{
+  text-align: center;
+  margin-top: 20%;
+}
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 .loader-msg{
   position:fixed;
   text-align: center;

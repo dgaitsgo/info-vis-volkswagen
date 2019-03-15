@@ -13,15 +13,27 @@
 }
 
 .bar-chart-hint {
-    display: none;
     padding: 1rem 2rem;
     background-color: #333333;
     border-radius: 0.3rem;
-    opacity: 0;
     transition: 1s;
     opacity: 1;
+    position: absolute;
+    top: -120px;
+    left: 540px;
+    width: 220px;
 }
 
 .bar-chart-hint p  {
     color: white;
+}
+
+@media only screen and (max-width : 760px) {
+    .bar-chart-hint {
+        position: relative;
+        top: -15px;
+        left: 80px;
+        width: 220px;
+        padding: 5px;
+    }
 }
