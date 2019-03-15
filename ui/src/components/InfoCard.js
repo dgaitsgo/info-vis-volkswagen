@@ -141,13 +141,11 @@ class InfoCard extends Component {
 						</Columns.Column >
 							{/* Detailed Consumption */}
 						<Columns.Column className="info-wrapper">
-						<span>
 								<span onClick={ this.setShowMoreConsumption }>
 									<i className='fas fa-tint'/>
 									<span className='infosubtitle-consumption'>Detailed consumption </span>
 									<i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
 								</span>
-							</span>
 							{ showMoreConsumption
 								? <ShowMoreInformation 
 									key={ranking}
