@@ -10,8 +10,5 @@ app.use( (err, req, res, next) => {
        [status, statusText, data] = err.response
     }
 
-    res.status(status || 500).send({
-        error: true,
-        message : statusText || 'Internal Service Error'
-    })
+    res.status(status || 500).end()
 })

@@ -86,6 +86,16 @@ class Okapi {
         )
     }
 
+    static recoverOptions(configId, token) {
+	return (
+	  axios({
+	    method : 'get',
+	    url : `${apiURL}/configurations/${configId}/options?recover=true`,
+ 	    headers : this.defaultHeaders(token)
+         })
+        )
+    }
+
     static getWLTP(configId, token) {
         return (
             axios ({
