@@ -14,12 +14,12 @@ class GraphContainer extends Component{
         return(
             <div className="graph-wrapper">
                 <NavLink to='/explore'>
-                    <Heading size={1} className='graph-title'>
-                        Explore the Possibilities
-                    </Heading>
+					<Heading size={1} className='graph-title'>
+						Explore the Possibilities
+					</Heading>
                 </NavLink>
                     <p className='graph-paragraph'>
-                        Pick your favorite cars, customize them and compare their emissions data.
+                        Pick your favorite models of a brand, customize and compare their emissions data.
                         Click on the title to start your journey.
                     </p>
                 <Graph />
