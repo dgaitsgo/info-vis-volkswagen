@@ -127,7 +127,7 @@ class BarChart extends Component{
 
 		return (
 			<div id='bar-chart-wrapper' className='bar-chart-wrapper'>
-			<DiscreteColorLegend orientation="horizontal" items={ITEMS}/>
+			<DiscreteColorLegend orientation="horizontal" items={legendItems}/>
 				<FlexibleXYPlot
 				margin={this.props.margin}
 				height={this.state.height * ratio}
