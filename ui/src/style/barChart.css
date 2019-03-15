@@ -11,3 +11,17 @@
 .rv-xy-plot__axis__ticks{
     transform:translate(45px, 0px);
 }
+
+.bar-chart-hint {
+    display: none;
+    padding: 1rem 2rem;
+    background-color: #333333;
+    border-radius: 0.3rem;
+    opacity: 0;
+    transition: 1s;
+    opacity: 1;
+}
+
+.bar-chart-hint p  {
+    color: white;
+}
