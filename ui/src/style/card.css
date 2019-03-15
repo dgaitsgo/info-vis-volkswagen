@@ -44,15 +44,10 @@
 	text-align: center;
 }
 
-@media only screen and (max-width : 760px) {
-	.header-card{
-		width: 100%;
-		display: block;
-	}
-	.average-wrapper {
-		margin-bottom: 1rem;
-	}
-}
+.info-front-wrapper{
+	text-align: center;
+} 
+
 
 .infosubtitle-tire{
 	margin-left: 20px;
@@ -60,7 +55,7 @@
 }
 
 .infosubtitle-consumption{
-	margin-left: 5px;
+	margin-left: 15px;
 	cursor: pointer;
 }
 
@@ -82,4 +77,21 @@
 .configure-panel {
 	width: 100%;
 	text-align: center;
+	margin: 20px;
+
+}
+@media only screen and (max-width : 760px) {
+	.header-card{
+		width: 100%;
+		display: block;
+	}
+	.average-wrapper {
+		margin-bottom: 1rem;
+	}
+	.info-front-wrapper{
+		text-align: left;
+	} 
+	.configure-panel{
+		margin: 0px;
+	}
 }

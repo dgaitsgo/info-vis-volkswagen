@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
-import { Loader, Image } from 'react-bulma-components/full'
+import { Loader } from 'react-bulma-components/full'
 import { debounce } from 'lodash'
-import SlideShow from 'react-image-show'
-import noImage from '../res/carIcon.png'
+// import SlideShow from 'react-image-show'
+// import noImage from '../res/carIcon.png'
 import DEBOUNCE_TIME from '../constants/debounceTime'
 import Tags from './Tags'
 
@@ -56,7 +56,16 @@ class Options extends Component {
 
 		if (!allCategories || allCategories.length === 0 ) {
 			return (
-				<Loader message='Loading options for your configuration' />
+				<Loader 
+				style={{
+					borderTopColor: 'transparent',
+					boderRightColor: 'transparent',
+					position: 'relative',
+					width: '200px',
+					height: '200px',
+					top: 0
+				}}
+				message='Loading options for your configuration' />
 			)
 		}
 
@@ -134,8 +143,9 @@ class Options extends Component {
 
 		return (
 			<div className='config-status-bar'>
-				<div className={`config-status ${build.buildable ? 'valid' : 'invalid'}`}>{build.buildable ? 'Buildable' : 'Not buildable'}</div>
-				<div className={`config-status ${build.distinct ? 'valid' : 'invalid'}`}>{build.distinct ? 'Distinct ' : 'Not distinct'}</div>
+				Check Status: &nbsp;
+				<span className={`config-status ${build.buildable ? 'valid' : 'invalid'}`}>{build.buildable ? 'Buildable' : 'Not buildable'}</span>&nbsp;/&nbsp;
+				<span className={`config-status ${build.distinct ? 'valid' : 'invalid'}`}>{build.distinct ? 'Distinct ' : 'Not distinct'}</span>
 			</div>
 		)
 	}
@@ -169,10 +179,24 @@ class Options extends Component {
 			{loading && 
 				<Modal className='loading-modal'
 					overlayClassName='loading-modal-overlay'
+					style={{
+						display: 'none',
+						height: '100%',
+						left: 0,
+						position: 'fixed',
+						top: 0,
+						width: '100%'
+					}}
 					isOpen={true}>
 					<div className='loader-message-wrapper'>
-						<div>{loading}</div>
-						<Loader message='Loading options for your configuration' />
+						<div class='loading-msg-wrapper'>{loading}</div>
+						<Loader
+						style={{
+							borderTopColor: 'transparent',
+							boderRightColor: 'transparent',
+							//position:'relative'
+						}} 
+						message='Loading options for your configuration' />
 					</div>
 				</Modal>
 			}
@@ -183,13 +207,13 @@ class Options extends Component {
 				<Heading size={6} className='has-text-centered'>
 					{model.type.name}
 				</Heading>
-				{ currentConfig.images && currentConfig.images.length 
+				{/* { currentConfig.images && currentConfig.images.length 
 					? <SlideShow
 						images={currentConfig.images.map( imageObj => imageObj.url)}
 						indicators fixedImagesHeight infinite
 					/> 
-					: <Image src={noImage}/>
-				}
+					: null
+				} */}
 				<input
 					type='text'
 					className='input-category-search'
@@ -197,18 +221,20 @@ class Options extends Component {
 					placeholder='Search for a category'
 				/>
 				{ this.renderStatusBar() }
+				<p className='category-title' size={6}> Categories </p>
 				<Tags
 					
 					flatChoices={ flatChoices }
 					selectedOptions={ currentConfig.selectedOptions }
 					removeOption={ removeOption }
 				/>
+				
 			</div>
 			<div className='options-wrapper'>
+			
 			{
-				<Columns className='tree-wrapper has-text-centered'>
+				<Columns className='tree-wrapper'>
 					<Columns.Column className='tree-category-wrapper'>
-						<Heading size={6}> Categories </Heading>
 						{this.getCategories(searchedCategories ? searchedCategories : allChoices )}
 					</Columns.Column>
 				</Columns>

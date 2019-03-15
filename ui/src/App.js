@@ -1,14 +1,9 @@
 import React, { Component } from 'react'
 import { Footer, Container, Content, Hero } from 'react-bulma-components/full';
-import { Route, withRouter, Switch } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import Navigation from './components/Navigation'
-import NotFound from './components/NotFound'
+import Routes from './modules/Routes'
 
-import GraphContainer from './containers/GraphContainer'
-import LandingContainer from './containers/LandingContainer'
-import BrandsContainer from './containers/BrandsContainer'
-import ModelsContainer from './containers/ModelsContainer'
-import CompareContainer from './containers/CompareContainer'
 import './style/app.css'
 
 class App extends Component {
@@ -33,20 +28,14 @@ class App extends Component {
 	}
 
 	render() {
+
 		const urlData = this.props.location.pathname.split('/')
 
 		const footerClass = urlData.length <= 2 && urlData[1] === '' ? '' : 'changed'
 			return (
 			<div className='main'>
 				<Navigation />
-				<Switch>
-					<Route exact path='/' component={ GraphContainer } />
-					<Route exact path='/explore' component= { LandingContainer } />
-					<Route exact path={`/explore/:countryCode`} component={ BrandsContainer} />
-					<Route exact path={`/explore/:countryCode/:brand_id`} component= { ModelsContainer } />
-					<Route exact path={`/explore/:countryCode/:brand_id/:model_string`} component= { CompareContainer } />
-					<Route component={ NotFound }/>
-				</Switch>
+					<Routes />
 				<Hero>
 					<Hero.Head renderAs='header' />
 						<Hero.Body />
