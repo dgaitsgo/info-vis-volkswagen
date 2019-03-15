@@ -1,7 +1,7 @@
 
 
 
-# Information Visualization by Volkswagen
+# Information Visualization Competition sponsored by Volkswagen
 Information visualization for Volkswagen Coding Competition - hosted on [`www.IT-Talents.de`](https://www.it-talents.de/)
 
 ## Introduction
@@ -18,16 +18,19 @@ This project is the submission for the "Information Visualization" competition b
 - [Suggestions for OKAPI](#suggestions-for-okapi)
 
 ## Setup
-We are hosting our product live on [`www.vwg-okapi-client.de`](www.vwg-okapi-client.de) so you don't have to deal with an annoying setup process. The source code can be found in this GitHub repository.
+We are hosting our product live on [`www.vwg-okapi-client.de`](http://www.vwg-okapi-client.de) so you don't have to deal with an annoying setup process. The source code can be found in this GitHub repository.
 
 ### MAC OS / LINUX
 
 1.  `git clone https://github.com/dgaitsgo/info-vis-volkswagen.git`
-3.  Setup you environment variables by opening `/server/nodemon.json`
-4. In order to request data from OKAPI, you'll need to add your own credentials to the `CLIENT_ID` and `CLIENT_SECRET` fields inside the file.
-5. Make sure you are in `info-vis-volkswagen/ui` and then:
-6.  Install the node_modules: `npm install`  (this might take some time)
-7.  Start the development server: `npm start`
+2.  Setup you environment variables by opening `/server/nodemon.json`
+3. In order to request data from OKAPI, you'll need to add your own credentials to the `CLIENT_ID` and `CLIENT_SECRET` fields inside the file.
+4. Make sure you are in `info-vis-volkswagen/ui` and then:
+5. Install the dependencies: `npm install`  (this might take some time)
+6. Likewise, isntall the dependencies for the server in `info-vis-volkswagen/server/`
+7. Start the server first via `npm start`
+8. Go back to `info-vis-volkswagen/ui` and start the development server with `npm start` again.
+
 
 ## About Us
 We three are students at 42 Silicon Valley in Fremont, California. Regarding this project we split up the workload into three main sectors.
@@ -101,7 +104,8 @@ Currently, in order to get a WLTP value for a given vehicle, one has to specify 
 At the moment, many vehicles in the OKAPI database do not have WLTP values. All four requests have to be performed in order to know whether a model has this data or not. Likewise, our app has a comparison feature for models within a brand. If a user selects all of the cars for let's say Audi in Germany, we'll need 4 * 32 (amount of models) or 128 requests to know if a model has WLTP or data or not. Repeated over a number of users, we can imagine how much of a burden this could post on the API. Cacheing cannot save us as a configuration is unique every time it is requested for a model.
 There's only four steps, so eliminating just one of them means 25% less work. What we did was imagine a new service that could be integrated into the OKAPI : [Default configurations for models](#default-configuration-endpoint-and-thumbnail-endpoint).
 
-### Error Handling
+### URL Validation
+Capturing paths with Regexes, even with exact matches, can often lead to invalid urls falling into routes, leaving applications confused and hanging. We implemented object and string validation (with Yup) which allowed us to declaratively specify routes that match to exact resources based on validated parameters. For example, OKAPI lets its users know that it uses UUID version 5 to generate unique identifiers. We can take advantage of this information by ensuring all query parameters match this exact pattern.
 
 ### No Data Found / Missing image
 
