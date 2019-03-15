@@ -10,12 +10,12 @@ class OptionsContainer extends Component {
 		super(props)
 
 		this.loadingEnum = {
-			CONFIG : 'Checking config',
-			CHOICES : 'Loading choices',
-			ADD : 'Adding option',
-			REMOVE : 'Removing option',
-			BUILD : 'Checking build',
-			RESTORE : 'Restoring configuration',
+			CONFIG : 'Checking config...',
+			CHOICES : 'Loading choices...',
+			ADD : 'Adding option...',
+			REMOVE : 'Removing option...',
+			BUILD : 'Checking build...',
+			RESTORE : 'Restoring configuration...',
 		}
 
 		this.state = {

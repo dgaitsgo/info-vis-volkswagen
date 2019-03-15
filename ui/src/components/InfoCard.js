@@ -117,12 +117,12 @@ class InfoCard extends Component {
 						}
 					</div>
 					<Columns className='data-wrapper is-center'>
-						<Columns.Column size='half' className='info-front-wrapper has-text-centered'>
+						<Columns.Column size='half' className='info-front-wrapper'>
 							{/* weight */}
 							<span><i data-tip='Weight' className='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}</span> 
 							<ReactTooltip place='top' type='dark' clickable={true}/>
 						</Columns.Column>
-						<Columns.Column size='half' className='info-front-wrapper has-text-centered'>
+						<Columns.Column size='half' className='info-front-wrapper'>
 							{/* fuel type */}
 							<span><i data-tip='Fuel Type' className='fas fa-gas-pump'></i> {wltpData.fuel_types}</span>
 							<ReactTooltip place='top' type='dark' clickable={true}/>
@@ -144,7 +144,7 @@ class InfoCard extends Component {
 						<Columns.Column className='info-wrapper'>
 							{/* Detailed Consumption */}
 							<span onClick={ this.setShowMoreConsumption }>
-								<i data-tip='Fuel Consumption' className='fas fa-tint'/>
+								<i data-tip='Fuel Consumption' className='fas fa-tint icon-info-img'/>
 								<ReactTooltip place='top' type='dark' clickable={true}/>
 								<span className='infosubtitle-consumption'>Detailed consumption </span>
 								<i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
@@ -153,9 +153,10 @@ class InfoCard extends Component {
 								? <ShowMoreInformation 
 									key={ranking}
 									data={ phases.map( phase => getInterpolations({ model: config, compareMode: 'CONSUMPTION', phase}))}
+									compareMode={compareMode}
 								/>: null }
 						</Columns.Column>
-						<Columns.Column>
+						<Columns.Column className="info-wrapper">
 							{/* Tire Classification */}
 							<span className='tire-data-wrapper'>
 								<span onClick={ this.setShowMoreTire } className='tire-header'>
