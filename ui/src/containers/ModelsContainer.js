@@ -120,11 +120,12 @@ class ModelsContainer extends Component {
 			return (
 				<div className='loaders'>
 					<Loader
-					style={{
-						borderTopColor: 'transparent',
-						boderRightColor: 'transparent',
-					}}
-					message={'Getting Models...'} />
+						style={{
+							borderTopColor: 'transparent',
+							boderRightColor: 'transparent',
+						}}
+					/>
+					<Heading className='loader-msg' size={4}>Getting Models...</Heading>
 				</div>
 			)
 

@@ -113,5 +113,6 @@
 }
 
 .description-tag {
+	cursor: pointer;
 	margin-right: 5px;
 }

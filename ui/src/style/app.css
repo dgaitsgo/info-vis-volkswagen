@@ -32,3 +32,15 @@ a:hover{
   bottom: 0;
   right: 0;
 }
+
+.loader-msg{
+  position:fixed;
+  text-align: center;
+  width: 300px;
+  height: 300px;
+  margin: auto;
+  top: 600px;
+  left: 0px;
+  bottom: 0;
+  right: 0;
+}

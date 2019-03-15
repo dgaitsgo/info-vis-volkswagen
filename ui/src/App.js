@@ -28,6 +28,10 @@ class App extends Component {
 		}
 	}
 
+	componentDidMount() {
+		window.scrollTo(0, 0)
+	}
+
 	render() {
 		const urlData = this.props.location.pathname.split('/')
 

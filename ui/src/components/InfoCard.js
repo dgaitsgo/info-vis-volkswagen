@@ -86,6 +86,7 @@ class InfoCard extends Component {
 
 		return (
 			<Card className='card-wrapper'>
+				<ReactTooltip place='top' type='dark' clickable={true}/>
 				<Card.Header>
 					<div className='header-wrapper'>
 						<div className='header-card'>
@@ -93,7 +94,7 @@ class InfoCard extends Component {
 								{ ranking === 0 && <span className='icon ranking gold'><i className='fas fa-trophy'></i></span> }
 								{ ranking === 1 && <span className='icon ranking silver'><i className='fas fa-trophy'></i></span> }
 								{ ranking === 2 && <span className='icon ranking bronze'><i className='fas fa-trophy'></i></span> }
-								{`${ranking + 1}.`} {config.model.name}
+								{ `${ranking + 1}.`} {config.model.name}
 							</Heading>
 							<Heading size={5} className='average-wrapper'> {`${average} ${compareUnit}` }</Heading>
 						</div>
@@ -113,25 +114,22 @@ class InfoCard extends Component {
 								thumbnailsHeight='12vw'
 								indicators thumbnails fixedImagesHeight infinite
 							/> 
-							: <Image src={noImage}/>
+							: <Image data-tip='OKAPI does not provide images for this model' src={noImage}/>
 						}
 					</div>
 					<Columns className='data-wrapper is-center'>
 						<Columns.Column size='half' className='info-front-wrapper has-text-centered'>
 							{/* weight */}
 							<span><i data-tip='Weight' className='fas fa-weight-hanging'></i> {generalData.value.toFixed(2)} {generalData.unit}</span> 
-							<ReactTooltip place='top' type='dark' clickable={true}/>
 						</Columns.Column>
 						<Columns.Column size='half' className='info-front-wrapper has-text-centered'>
 							{/* fuel type */}
 							<span><i data-tip='Fuel Type' className='fas fa-gas-pump'></i> {wltpData.fuel_types}</span>
-							<ReactTooltip place='top' type='dark' clickable={true}/>
 						</Columns.Column>
 						<Columns.Column className='info-wrapper'>
 							{/* Detailed Emissions */}
 							<span onClick={ this.setShowMoreEmissions }>
 								<Image data-tip='CO2 Emission' className='icon-info-img' src={co2} />
-								<ReactTooltip place='top' type='dark' clickable={true}/>
 								<span className='infosubtitle-emission'> Detailed emissions </span>
 								<i className={showMoreEmissions ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
 							</span> 
@@ -145,7 +143,6 @@ class InfoCard extends Component {
 							{/* Detailed Consumption */}
 							<span onClick={ this.setShowMoreConsumption }>
 								<i data-tip='Fuel Consumption' className='fas fa-tint'/>
-								<ReactTooltip place='top' type='dark' clickable={true}/>
 								<span className='infosubtitle-consumption'>Detailed consumption </span>
 								<i className={showMoreConsumption ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
 							</span>
@@ -160,7 +157,6 @@ class InfoCard extends Component {
 							<span className='tire-data-wrapper'>
 								<span onClick={ this.setShowMoreTire } className='tire-header'>
 									<Image data-tip='Tire Class' className='icon-info-img' src={tire} />
-									<ReactTooltip place='top' type='dark' clickable={true}/>
 									<span className='infosubtitle-tire'> Tire Classification </span>
 									<i className={showMoreTire ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i>
 								</span>

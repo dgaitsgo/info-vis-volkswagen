@@ -99,13 +99,14 @@ class Options extends Component {
 					const isSelected = selectedOptionsArr.includes(valid.id)
 					const delayedAdd = debounce(() => this.props.addOption(valid.id), DEBOUNCE_TIME)
 					const delayedRemove = debounce(() => this.props.removeOption(valid.id), DEBOUNCE_TIME) 
+
 					return (
 						<div
 							className={`choice valid ${isSelected ? 'selected' : ''}`}
 							key={ valid.id }
 							onClick={ isSelected ? delayedRemove : delayedAdd }
 						>
-							&bull; {valid.description}
+							&bull; {valid.description ? valid.description : <i>(No Description)</i>}
 						</div>
 					)
 				}).concat(choice.invalid.map( invalid => {
@@ -114,7 +115,7 @@ class Options extends Component {
 							key={ invalid.id }
 							className='choice invalid'
 						>
-							&bull; {invalid.description}
+							&bull; {invalid.description ? invalid.description : <i>(No Description)</i>}
 						</div>
 					)
 					}))
@@ -129,7 +130,7 @@ class Options extends Component {
 			currentConfig
 		} = this.props
 
-		const { build, wltp } = currentConfig
+		const { build } = currentConfig
 
 		return (
 			<div className='config-status-bar'>
@@ -149,7 +150,6 @@ class Options extends Component {
 			allChoices,
 			flatChoices,
 			loading,
-
 			restoreOptions
 		} = this.props
 
@@ -158,6 +158,8 @@ class Options extends Component {
 		} = this.state
 
 		const model = currentConfig.model
+
+		console.log('current congig', currentConfig)
 
 		return (
 			<Modal

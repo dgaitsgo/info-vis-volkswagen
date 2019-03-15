@@ -50,16 +50,15 @@ class BrandsContainer extends Component {
         } = this.state
 
         if (!brands) {
-            return (
-				<div className='loaders'>
-					<Loader
-					style={{
-						borderTopColor: 'transparent',
-						boderRightColor: 'transparent',
-					}}
-					message={'Getting brands...'} />
-				</div>
-            )
+          return <div className='loaders'>
+						<Loader
+							style={{
+								borderTopColor: 'transparent',
+								boderRightColor: 'transparent',
+							}}
+						/>
+						<Heading className='loader-msg' size={4}>Getting Brands...</Heading>
+					</div>
 		}
 		return (
 			<div className='brands-wrapper'>

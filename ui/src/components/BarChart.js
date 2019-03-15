@@ -47,7 +47,7 @@ class BarChart extends Component{
 	}
 
 	_forgetValue = () => this.setState({value: null})
-
+	
 	_rememberValue = value => this.setState({value: value.y})
 
 	componentDidMount(){
@@ -67,15 +67,10 @@ class BarChart extends Component{
 
 			const bounding = parent.getBoundingClientRect()
 
-		//	console.log(bounding.left, bounding.right, bounding.top, bounding.bottom)
-
 			const clientX = window.event.clientX
 			const clientY = window.event.clientY 
 			const tolerance = 100
 			let inside = false
-		//	console.log('client x, y ', clientX, clientY)
-
-		//	console.log('scroll x, y', window.scrollX, window.scrollY)
 
 			if (clientX > bounding.left + tolerance && clientX < bounding.right - tolerance && clientY > bounding.top + tolerance && clientY < bounding.bottom - tolerance) {
 				inside = true
@@ -94,7 +89,7 @@ class BarChart extends Component{
 							text: {display: 'none'},
 							value: {color: 'red'}
 						}}>
-							<p>value: {Number(value).toFixed(2) + (compareMode === 'CO2' ? ' g/km' : ' l/100km')} </p>
+					<p>value: {Number(value).toFixed(2) + (compareMode === 'CO2' ? ' g/km' : ' l/100km')} </p>
 				</div>
 			)
 		}
@@ -130,12 +125,11 @@ class BarChart extends Component{
 		const normalizedDataSets = dataSets.map( dataSet => dataSet.filter( dp => dp.value).map( dp => ({ x: dp.name, y: dp.value })))
 		const { value } = this.state
 
-		//if you use flexibleXY you can't use animation
 		const FlexibleXYPlot = makeVisFlexible(XYPlot)
 
 		return (
 			<div id='bar-chart-wrapper' className='bar-chart-wrapper'>
-			<DiscreteColorLegend orientation="horizontal" items={legendItems}/>
+			<DiscreteColorLegend orientation='horizontal' items={legendItems}/>
 				<FlexibleXYPlot
 				margin={this.props.margin}
 				height={this.state.height * ratio}
@@ -146,7 +140,7 @@ class BarChart extends Component{
 					<YAxis {...axisProps}/>
 					{ normalizedDataSets.map( (dataSet, i) => {
 						return <VerticalBarSeries
-							className="vertical-bar-series-example"
+							className='vertical-bar-series-example'
 							color={ phases[i].color}
 							data={dataSet}
 							key={i}
@@ -158,9 +152,8 @@ class BarChart extends Component{
 						className='alt-y-label'
 						xPercent={0.00}
 						yPercent={-0.05}
-						//style={{transform: 'rotate(-90)',textAnchor:'end'}}
-						/>
-						{ this.renderToolTip({value, compareMode}) }
+					/>
+					{ this.renderToolTip({value, compareMode}) }
 				</FlexibleXYPlot>
 			</div>
 		)
