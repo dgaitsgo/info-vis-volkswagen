@@ -10,11 +10,11 @@ const Tags = ({ selectedOptions, flatChoices, removeOption }) => {
 
 	return (
 		<div className='tags-wrapper'>
-			{selectedOptions.map( (option, i) => {
+			{selectedOptions.map( (optionId, i) => {
 					return (
 						<div className='tag description-tag' key={`tag_${i}`}>
-							{flatChoices[option.id] && flatChoices[option.id].choiceDescription ? flatChoices[option.id].choiceDescription : <i>(No Description)</i>}
-							<span onClick={ debounce(() => removeOption(option.id), DEBOUNCE_TIME) } className='tag-close'><i className='fas fa-times'></i></span>
+							{flatChoices[optionId] && flatChoices[optionId].choiceDescription ? flatChoices[optionId].choiceDescription : <i>(No Description)</i>}
+							<span onClick={ () => removeOption(optionId) } className='tag-close'><i className='fas fa-times'></i></span>
 						</div>
 					)
 				})

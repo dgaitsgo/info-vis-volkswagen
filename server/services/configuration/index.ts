@@ -7,5 +7,7 @@ module.exports = {
     wltp : require('./wltp'),
     addOption : require('./addOption'),
     removeOption : require('./removeOption'),
+    replaceOptions : require('./replaceOptions'),
+    recoverOptions : require('./recoverOptions'),
     restoreOptions : require('./restoreOptions')
 }

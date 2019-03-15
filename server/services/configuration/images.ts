@@ -12,8 +12,8 @@ app.get('/api/images', async (req, res, next) => {
 
 	try {
 
-        const imagesRes = await Okapi.getImages(configId, token)
-		const { data } = imagesRes 
+	        const imagesRes = await Okapi.getImages(configId, token)
+		const { data } = imagesRes
 
 		sendJSON(res, { images : data })
 
