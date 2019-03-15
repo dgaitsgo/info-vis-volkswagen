@@ -7,6 +7,7 @@ import {
 	VerticalGridLines,
 	HorizontalGridLines,
 	VerticalBarSeries,
+	Crosshair,
 	Hint,
 	makeVisFlexible,
 	ChartLabel,
@@ -60,17 +61,47 @@ class BarChart extends Component{
 	}
 	updateWindowDimensions = () => this.setState({width: window.innerHeight, height:window.innerHeight})
 
-	phasesToLegendItems = () => {
-		const { phases } = this.props
+	renderToolTip = value => {
 
-		return phases.map( phase => {
-			return ({
-				title: phase.label,
-				color: phase.color,
-				strokeWidth: 20
-			})
-		})
+		const parent = window.document.querySelector('#bar-chart-wrapper')
+
+		if (parent) {
+
+			const bounding = parent.getBoundingClientRect()
+
+			console.log(bounding.left, bounding.right, bounding.top, bounding.bottom)
+
+			const clientX = window.event.clientX
+			const clientY = window.event.clientY 
+			const tolerance = 100
+			let inside = false
+			console.log('client x,y ', clientX, clientY)
+
+			console.log('scroll x, y', window.scrollX, window.scrollY)
+
+			if (clientX > bounding.left + tolerance && clientX < bounding.right - tolerance && clientY > bounding.top + tolerance && clientY < bounding.bottom - tolerance) {
+				inside = true
+			}
+
+			return (
+				<div className='bar-chart-hint'
+					value={ value }
+					style={
+						{
+							position: 'absolute',
+							top : bounding.top,
+							left : window.event.clientX - bounding.left,
+							fontSize: 14,
+							display: inside ? 'inline' : 'none',
+							text: {display: 'none'},
+							value: {color: 'red'}
+						}}>
+							<p>value: {Number(value).toFixed(2) }</p>
+				</div>
+			)
+		}
 	}
+
 	
 
 	render() {
@@ -95,8 +126,8 @@ class BarChart extends Component{
 		const FlexibleXYPlot = makeVisFlexible(XYPlot)
 
 		return (
-			<div className='bar-chart-wrapper'>
-			<DiscreteColorLegend orientation='horizontal' items={legendItems}/>
+			<div id='bar-chart-wrapper' className='bar-chart-wrapper'>
+			<DiscreteColorLegend orientation="horizontal" items={legendItems}/>
 				<FlexibleXYPlot
 				margin={this.props.margin}
 				height={this.state.height * ratio}
@@ -106,31 +137,25 @@ class BarChart extends Component{
 					<XAxis {...axisProps} tickFormat={String}/>
 					<YAxis {...axisProps} tickFormat={(d) => d}/>
 					{ normalizedDataSets.map( (dataSet, i) => {
-						return (
-							<VerticalBarSeries
-								className='vertical-bar-series-example'
-								color={ phases[i].color}
-								data={dataSet}
-								key={i}
-								onValueMouseOver={this._rememberValue}
-								onValueMouseOut={this._forgetValue}
-							/>
-						)
+						return <VerticalBarSeries
+							className="vertical-bar-series-example"
+							color={ phases[i].color}
+							data={dataSet}
+							key={i}
+							onValueMouseOver={this._rememberValue}
+							onMouseLeave={this._forgetValue}
+							onSeriesMouseOut={this._forgetValue}
+							onValueMouseOut={this._forgetValue}
+							
+						/>
 					}) }
 					<ChartLabel text={compareMode === 'CO2' ? 'g/km' : 'l/100km'}
 						className='alt-y-label'
 						xPercent={0.04}
 						yPercent={0.82}
 						//style={{transform: 'rotate(-90)',textAnchor:'end'}}
-					/>
-					{value ? <Hint value={ value } style={{
-							fontSize: 14,
-							text: {display: 'none'},
-							value: {color: 'red'}}}>
-							<div>
-								<p>value: {value}</p>
-							</div>
-					</Hint> : null}
+						/>
+						{ this.renderToolTip(value) }
 				</FlexibleXYPlot>
 			</div>
 		)
