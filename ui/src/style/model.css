@@ -1,8 +1,9 @@
 .model{
+	cursor: pointer;
     width:330px;
-    height: 200px; 
+    height: 200px;
 }
-.headingModel{
+.heading-model{
     margin: 0;
     position: absolute;
     top: 50%;
@@ -13,7 +14,7 @@
 /* .headingModel:hover{
     color:rgb(100, 100, 100);
 } */
-.headingModel.selected{
+.heading-model.selected{
     margin: 0;
     position: relative;
     top: 0%;
@@ -28,13 +29,13 @@
 }
 @media only screen and (max-width : 760px) {
     .model-name{
-        width:100%; 
-        height: 50px; 
-        
+        width:100%;
+        height: 50px;
+
     }
     .model{
         width:100%;
-        height: 160px; 
+        height: 160px;
     }
 }
 .models-wrapper{
@@ -58,12 +59,10 @@
 		opacity: 1;
 	}
 }
-.typeNameBlock{
+.type-name-block{
     width: 100%;
-    /* height: 68px; */
-    /* padding: 10px; */
 }
-.typeNameBlock.selected{
+.type-name-block.selected{
     padding-top: 10px;
     border-top: 2px solid gray;
 }
@@ -74,9 +73,10 @@
     background-color: #bbdefb;
 }
 .type-elem{
+	cursor: pointer;
     width: 100%;
     padding: 10px;
-    border-bottom: 1px solid rgb(168, 168, 168); 
+    border-bottom: 1px solid rgb(168, 168, 168);
 }
 .type-elem:hover{
     background-color: #bbdefb;

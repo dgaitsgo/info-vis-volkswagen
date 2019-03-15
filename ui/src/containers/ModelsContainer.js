@@ -134,6 +134,7 @@ class ModelsContainer extends Component {
 			? 'compare-button has-text-centered active'
 			: 'compare-button has-text-centered'
 
+		const selectedModelsLength = Object.keys(selectedModels).length
 
         return (
 			<div className='models-wrapper'>
@@ -158,16 +159,16 @@ class ModelsContainer extends Component {
 				</div>
 				<br />
 				<div className={compareButtonClassName}>
-					<Button className='is-medium' disabled={isEmpty(selectedModels)} onClick={ this.toModelsCompare }>
+					<Button className='is-medium' disabled={selectedModelsLength === 0 || selectedModelsLength > 10} onClick={ this.toModelsCompare }>
 						Done
 					</Button>
 				</div>
 				</Container>
 				</Section>
 				<Modal
-						isOpen={modalIsOpen}
-						onRequestClose={this.closeModal}
-					>
+					isOpen={modalIsOpen}
+					onRequestClose={this.closeModal}
+				>
 					{modalContent &&
 						<div className='modal-compare-content-wrapper'>
 						<Heading size={4} className='has-text-centered'>

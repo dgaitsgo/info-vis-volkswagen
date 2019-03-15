@@ -6,7 +6,6 @@ import Brands from '../components/Brands'
 import { NavLink } from 'react-router-dom'
 import { Section, Heading, Container, Columns } from "react-bulma-components/full"
 import '../style/brand.css'
-// import validatePath from '../../modules/validatePath'
 
 class BrandsContainer extends Component {
 
@@ -28,13 +27,13 @@ class BrandsContainer extends Component {
 			try {
 
 				const countryCode = this.props.location.pathname.split('/')[2]
-	
+
 				const brandsRes = await axios.get('/api/brands', { params : { countryCode } })
-				
+
 				if (brandsRes && brandsRes.data) {
 					this.setState({ brands: brandsRes.data.brands.data })
 				}
-				
+
 		} catch ({ err, message }) {
 					this.setState({ error : { err, message } })
 			}

@@ -3,9 +3,8 @@ import { Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import { Loader } from 'react-bulma-components/full'
 import { debounce } from 'lodash'
-// import SlideShow from 'react-image-show'
-// import noImage from '../res/carIcon.png'
 import DEBOUNCE_TIME from '../constants/debounceTime'
+import ReactTooltip from 'react-tooltip'
 import Tags from './Tags'
 
 import '../style/options.css'
@@ -56,16 +55,15 @@ class Options extends Component {
 
 		if (!allCategories || allCategories.length === 0 ) {
 			return (
-				<Loader 
-				style={{
-					borderTopColor: 'transparent',
-					boderRightColor: 'transparent',
-					position: 'relative',
-					width: '200px',
-					height: '200px',
-					top: 0
-				}}
-				message='Loading options for your configuration' />
+				<div className='loaders'>
+					<Loader
+						style={{
+							borderTopColor: 'transparent',
+							boderRightColor: 'transparent',
+						}}
+					/>
+					<Heading className='loader-msg' size={4}>Getting Options...</Heading>
+				</div>
 			)
 		}
 
@@ -144,8 +142,9 @@ class Options extends Component {
 		return (
 			<div className='config-status-bar'>
 				Check Status: &nbsp;
-				<span className={`config-status ${build.buildable ? 'valid' : 'invalid'}`}>{build.buildable ? 'Buildable' : 'Not buildable'}</span>&nbsp;/&nbsp;
-				<span className={`config-status ${build.distinct ? 'valid' : 'invalid'}`}>{build.distinct ? 'Distinct ' : 'Not distinct'}</span>
+				<span data-tip='The buildable status indicates wether a configuration can be manufactured.' className={`config-status ${build.buildable ? 'valid' : 'invalid'}`}>{build.buildable ? 'Buildable' : 'Not buildable'}</span>&nbsp;/&nbsp;
+				<span data-tip='The distinct status indicates if there are several options, on how a car could be build.' className={`config-status ${build.distinct ? 'valid' : 'invalid'}`}>{build.distinct ? 'Distinct ' : 'Not distinct'}</span>
+				<ReactTooltip place='top' type='dark' clickable={true}/>
 			</div>
 		)
 	}
@@ -194,7 +193,6 @@ class Options extends Component {
 						style={{
 							borderTopColor: 'transparent',
 							boderRightColor: 'transparent',
-							//position:'relative'
 						}} 
 						message='Loading options for your configuration' />
 					</div>
@@ -207,13 +205,6 @@ class Options extends Component {
 				<Heading size={6} className='has-text-centered'>
 					{model.type.name}
 				</Heading>
-				{/* { currentConfig.images && currentConfig.images.length 
-					? <SlideShow
-						images={currentConfig.images.map( imageObj => imageObj.url)}
-						indicators fixedImagesHeight infinite
-					/> 
-					: null
-				} */}
 				<input
 					type='text'
 					className='input-category-search'
@@ -228,10 +219,8 @@ class Options extends Component {
 					selectedOptions={ currentConfig.selectedOptions }
 					removeOption={ removeOption }
 				/>
-				
 			</div>
 			<div className='options-wrapper'>
-			
 			{
 				<Columns className='tree-wrapper'>
 					<Columns.Column className='tree-category-wrapper'>
@@ -258,7 +247,15 @@ class Options extends Component {
 		return (
 			currentConfig && allChoices
 				? this.modalContent()
-				: <Loader message='Loading options for your configuration' />
+				: <div className='loaders'>
+					<Loader
+						style={{
+							borderTopColor: 'transparent',
+							boderRightColor: 'transparent',
+						}}
+					/>
+					<Heading className='loader-option-msg' size={4}>Getting Options...</Heading>
+				</div>
 		)
 	}
 
