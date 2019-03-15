@@ -12,9 +12,7 @@ app.get('/api/addOption', async (req, res, next) => {
 
         const nextOptionsRes = await Okapi.addOption(configId, optionId, token)
         
-        console.log('next option res', nextOptionsRes.status)
         if (nextOptionsRes.data) {
-            console.log('next option data', nextOptionsRes.data)
             sendJSON(res, { options : nextOptionsRes.data.data })
         }
     

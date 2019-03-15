@@ -15,6 +15,7 @@ class OptionsContainer extends Component {
 		}
 
 		this.state = {
+			currentConfig : this.props.currentConfig,
 			error : null,
 			isOpen : true,
 			loading: null,
@@ -24,8 +25,16 @@ class OptionsContainer extends Component {
 			invalidOptions : []
 		}
 
+		this.refreshConfig = this.refreshConfig.bind(this)
 		this.tryBuilding = this.tryBuilding.bind(this)
 	}
+
+	checkBuild = configId =>
+		axios.get('/api/checkBuild', {
+			params : {
+				configId
+			}
+		})
 
 	toggleOption = optionId => {
 
@@ -45,25 +54,100 @@ class OptionsContainer extends Component {
 				configId
 			}
 		})
-
-	recoverOptions = (configId, recoverOptions) =>
-		axios.get('/api/recoverOptions', {
+	
+	replaceOptions = (configId, optionIds) =>
+		axios.get('/api/replaceOptions', {
 			params : {
 				configId,
-				recoverOptions
+				optionIds,
+			}
+		})
+
+
+	recoverOptions = configId =>
+		axios.get('/api/recoverOptions', {
+			params : {
+				configId
+			}
+		})
+	
+	getWltp = configId =>
+		axios.get('/api/wltp', {
+			params : {
+				configId
+			}
+		})
+
+	getImages = configId =>
+		axios.get('/api/images', {
+			params : {
+				configId
 			}
 		})
 
 	async componentDidMount() {
 		
-		const { currentConfig } = this.props
+		try {
 
-		const configChoicesRes = await this.configChoices(currentConfig.configId)
-		const choices = configChoicesRes.data.choices
-		const flatChoices = this.flattenChoices(choices)
+			const { currentConfig } = this.state
 
-		this.setState({ allChoices : choices, flatChoices, selectedOptions : currentConfig.selectedOptions.map(option => option.id ) })
+			const configChoicesRes = await this.configChoices(currentConfig.configId)
+			const choices = configChoicesRes.data.choices
+			const flatChoices = this.flattenChoices(choices)
+
+			this.setState({ allChoices : choices, flatChoices, selectedOptions : currentConfig.selectedOptions.map(option => option.id ) })
+
+		} catch(e) {
+
+			this.setState({ loading : null, error : { err : e, message : 'Could not load choices.' } })
+		}
 	}
+
+	async refreshConfig(currentConfig) {
+
+		try {
+
+			const { ls } = this.props
+
+			const buildRes = await this.checkBuild(currentConfig.configId)
+			const build = buildRes.data.build
+
+			currentConfig.build = build
+
+			//if valid build
+			if (build.buildable && build.distinct) {
+				
+				//get images
+				const imagesRes = await this.getImages(currentConfig.configId)
+				currentConfig.images = imagesRes.data.images
+
+				//get wltp
+				const wltpRes = await this.getWltp(currentConfig.configId)
+				currentConfig.wltp = wltpRes.data.wltp	
+
+			} else {
+
+				currentConfig.images = []
+				currentConfig.wltp = []
+			}
+
+			currentConfig.id = currentConfig.model.type.id
+			currentConfig._id = currentConfig.model.type.id
+
+			//save to local storage
+			const rev = await ls.insert(currentConfig)
+
+			currentConfig.rev = rev
+			currentConfig._rev = rev
+
+			this.setState({ loading : null, currentConfig })
+
+		} catch (e) {
+
+			this.setState({ loading : null,  error : { err : e, message : 'Coult not refresh configuration' }})
+		}
+}
+
 
 	flattenChoices (choices) {
 
@@ -99,20 +183,47 @@ class OptionsContainer extends Component {
 
 	async tryBuilding(selectedOptions) {
 
-		const { configId } = this.props
-		const recoverRes = await this.recoverOptions(configId, selectedOptions)
-		const invalidOptions = recoverRes.data.options
+		let {
+			currentConfig,
+		} = this.state
 
-		if (invalidOptions.length) {
-			this.setState({
-				mode : this.modes.RECOVER_CONFIG, 
-				invalidOptions
-			})
-		} else {
+		const {
+			ls
+		} = this.props
 
-			this.props.refreshConfig()
-		}
+		this.setState({
+			loading : 'Checking build...'
+		}, async () => {
+		
+			await this.replaceOptions(currentConfig.configId, selectedOptions.map(optionId => ({ id : optionId })))
 
+			const recoverRes = await this.recoverOptions(currentConfig.configId)
+			const invalidOptions = recoverRes.data.options
+
+			const buildRes = await this.checkBuild(currentConfig.configId)
+			const build = buildRes.data.build
+
+			currentConfig.build = build
+
+			const rev = await ls.insert(currentConfig)
+
+			currentConfig.rev = rev
+			currentConfig._rev = rev
+
+			if (invalidOptions.length) {
+				this.setState({
+					currentConfig,
+					loading : null,
+					mode : this.modes.RECOVER_CONFIG, 
+					invalidOptions : invalidOptions.map(option => option.id)
+				})
+
+			} else {
+
+				this.refreshConfig(currentConfig)
+			}
+
+		})
 	}
 
 	render() {
@@ -124,12 +235,9 @@ class OptionsContainer extends Component {
 			loading,
 			invalidOptions,
 			selectedOptions,
-			mode
+			mode,
+			currentConfig
 		} = this.state
-
-		const {
-			currentConfig	
-		} = this.props
 
 		return (
 			<Options
@@ -137,7 +245,7 @@ class OptionsContainer extends Component {
 				invalidOptions={invalidOptions}
 				mode={mode}
 				error={error}
-				loading={loading}
+				loading={error ? false : loading}
 				closeModal={this.props.closeModal}
 				isOpen={this.props.isOpen}
 				toggleOption={this.toggleOption}

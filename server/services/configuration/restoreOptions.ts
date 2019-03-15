@@ -20,7 +20,6 @@ app.get('/api/restoreOptions', async(req, res, next) => {
 
 	} catch (e) {
 
-		console.log(e)
 		next(new Error(e))
 		
 	}

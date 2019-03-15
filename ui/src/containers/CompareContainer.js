@@ -41,7 +41,7 @@ class CompareContainer extends Component {
 		this.preHandleAddOption = this.preHandleAddOption.bind(this)
 		this.preHandleRemoveOption = this.preHandleRemoveOption.bind(this)
 	
-		this.refreshConfig = this.refreshConfig.bind(this)
+		this.closeModal = this.closeModal.bind(this)
 
 		this.phases = [
 			{ key : 'LOW', color : '#4caf50', label : 'Low' },
@@ -73,13 +73,6 @@ class CompareContainer extends Component {
 			params : {
 				configId,
 				optionIds : JSON.stringify(optionIds)
-			}
-		})
-
-	configChoices = (configId) =>
-		axios.get('/api/configChoices', {
-			params : {
-				configId
 			}
 		})
 
@@ -117,41 +110,47 @@ class CompareContainer extends Component {
 	//After every option change, 
 	async refreshConfig(currentConfig) {
 
-		const { ls } = this.state
+				try {
 
-		//check build status
-		const buildRes = await this.checkBuild(currentConfig.configId)
-		const build = buildRes.data.build
+						const { ls } = this.state
 
-		currentConfig.build = build
+						//check build status
+						const buildRes = await this.checkBuild(currentConfig.configId)
+						const build = buildRes.data.build
 
-		//if valid build
-		if (build.buildable && build.distinct) {
-			
-			//get images
-			const imagesRes = await this.getImages(currentConfig.configId)
-			currentConfig.images = imagesRes.data.images
+						currentConfig.build = build
 
-			//get wltp
-			const wltpRes = await this.getWltp(currentConfig.configId)
-			currentConfig.wltp = wltpRes.data.wltp	
+						//if valid build
+						if (build.buildable && build.distinct) {
+							
+							//get images
+							const imagesRes = await this.getImages(currentConfig.configId)
+							currentConfig.images = imagesRes.data.images
 
-		} else {
+							//get wltp
+							const wltpRes = await this.getWltp(currentConfig.configId)
+							currentConfig.wltp = wltpRes.data.wltp	
 
-			currentConfig.images = []
-			currentConfig.wltp = []
-		}
+						} else {
 
-		//save to local storage
-		const rev = await ls.insert(currentConfig)
+							currentConfig.images = []
+							currentConfig.wltp = []
+						}
 
-		currentConfig.rev = rev
-		currentConfig._rev = rev
+						//save to local storage
+						const rev = await ls.insert(currentConfig)
 
-		this.setState({
-			loading : false,
-			currentConfig,
-		})
+						currentConfig.rev = rev
+						currentConfig._rev = rev
+
+						this.setState({
+							loading : false,
+							currentConfig,
+						})
+				} catch (e) {
+					
+						this.setState({ error : { err : e, message : 'Coult not refresh configuration' }})
+				}
 	}
 
 	async preHandleAddOption(optionId) {
@@ -262,9 +261,12 @@ class CompareContainer extends Component {
 					const remoteConfigsRes = await axios.post('/api/makeConfigurations', remoteConfigs)
 					const remoteConfigsData = remoteConfigsRes.data
 
+					// console.log(remoteConfigs[0].model.type.id)
+
 					// - Save them to local storage
 					remoteConfigs = remoteConfigsData.newConfigurations.map(remoteConfig => ({
 						_id : remoteConfig.model.type.id,
+						id : remoteConfig.model.type.id,
 						...remoteConfig
 					}))
 				
@@ -279,6 +281,10 @@ class CompareContainer extends Component {
 			} catch (e) {
 				return (e)
 			}
+	}
+
+	reloadConfigs = () => {
+
 	}
 
 	async componentDidMount() {
@@ -308,7 +314,7 @@ class CompareContainer extends Component {
 				}
 			})
 
-			this.setState({ ls, urlData, configurations, loading: false })
+			this.setState({ ls, selectedModels, urlData, configurations, loading: false })
 
 		} catch (e) {
 
@@ -317,9 +323,38 @@ class CompareContainer extends Component {
 		}
 	}
 
+	getConfigurationsFromLS() {
+	
+		const { ls } = this.props
+
+		return (ls.find({ selector : { type : 'configuration' } }) )
+	}
+
 	setCompareMode = compareMode => this.setState({ compareMode })
 
-	closeModal = () => this.setState({ modalIsOpen: false })
+	async closeModal() {
+
+		const { ls, selectedModels } = this.state
+		
+			const configurationsArr = await this.loadConfigs(ls, selectedModels)
+			let configurations = {}
+
+			configurationsArr.forEach(config => {
+				
+				configurations[config.model.id] = {
+					model : config.model,
+					configId : config.configId,
+					type : selectedModels[config.model.id].type,
+					selectedOptions : config.selectedOptions,
+					defaultOptions : config.defaultOptions,
+					build : config.build,
+					wltp : config.wltp,
+					images : config.images,
+				}
+			})
+
+		this.setState({ modalIsOpen: false, configurations })
+	}
 	
 	openConfiguration = nextConfig =>
 		this.setState ({
@@ -340,7 +375,7 @@ class CompareContainer extends Component {
 			urlData
 		} = this.state
 
-		if (loading)
+		if (loading && !modalIsOpen)
 			return (
 				<div className='loaders'>
 					<Loader
@@ -430,6 +465,7 @@ class CompareContainer extends Component {
 								addOption={this.preHandleAddOption}
 								removeOption={this.preHandleRemoveOption}
 								restoreOptions={this.preHandleRestoreOptions}
+								refreshConfig={this.refreshConfig}
 								currentConfig={currentConfig}
 								isOpen={modalIsOpen}
 								closeModal={ this.closeModal }

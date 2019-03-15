@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Button, Heading, Columns } from 'react-bulma-components/full'
 import Modal from 'react-modal'
 import { Loader } from 'react-bulma-components/full'
+import classnames from 'classnames'
 import Tags from './Tags'
 
 import '../style/options.css'
@@ -49,7 +50,12 @@ class Options extends Component {
 	getCategories = allCategories => {
 		
 		const { openedCategories } = this.state
-		const { allChoices, currentConfig, selectedOptions } = this.props
+		const {
+			allChoices,
+			currentConfig,
+			selectedOptions,
+			invalidOptions
+		} = this.props
 
 		if (!allCategories || allCategories.length === 0 ) {
 			return (
@@ -73,18 +79,29 @@ class Options extends Component {
 			const categoryChoices = allChoices.filter( choice => choice.id === category.id)
 			
 			let hasSelectedOptions = false
+			let hasInvalidOptions = false
 			categoryChoices.forEach( category => {
 
 				const allChoicesInCat = category.invalid.concat(category.valid)
 
 				if (allChoicesInCat.filter( choice => selectedOptions.indexOf(choice.id) != -1).length)
 					hasSelectedOptions = true
+
+				if (allChoicesInCat.filter(choice => invalidOptions.indexOf(choice.id) != -1 ).length) {
+					hasInvalidOptions = true
+				}
+			})
+
+			const categoryClassName = classnames({
+				'tree-category' : true,
+				'selected' : hasSelectedOptions,
+				'invalid'  : hasInvalidOptions,
 			})
 
 			return (
 				<div className='category-wrapper' key={`category_wrapper${i}`}>
 					<div
-						className={ hasSelectedOptions ? 'tree-category selected' : 'tree-category' }
+						className={ categoryClassName }
 						key={`category_${i}`}
 						onClick={() => this.onCategoryClick({ categoryId: category.id })}
 						><h1><i className={isSelected ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}></i> { label }</h1>
@@ -98,7 +115,13 @@ class Options extends Component {
 
 	getChoicesOfCategory = categoryId => {
 
-		const { currentConfig, allChoices, toggleOption, selectedOptions } = this.props
+		const {
+			currentConfig,
+			allChoices,
+			toggleOption,
+			selectedOptions,
+			invalidOptions
+		} = this.props
 
 		return (
 
@@ -109,9 +132,18 @@ class Options extends Component {
 				return (allChoicesInCat.map(choice => {
 
 					const isSelected = selectedOptions.indexOf(choice.id) !== -1
+					const isInvalid = invalidOptions.indexOf(choice.id) !== -1
+
+					const choiceClassName = classnames({
+						'choice' : true,
+						'valid' : true,
+						'selected' : isSelected,
+						'invalid' : isInvalid,
+						'unselected' : !isSelected
+					})
 
 					return (
-						<div className={`choice valid ${isSelected ? 'selected' : ''}`}
+						<div className={choiceClassName}
 							key={ choice.id }
 							onClick={ () => toggleOption(choice.id) }>
 							&bull; {choice.description ? choice.description : <i>(No Description)</i>}
@@ -125,7 +157,8 @@ class Options extends Component {
 	renderStatusBar = () => {
 
 		const { 
-			currentConfig
+			currentConfig,
+			mode
 		} = this.props
 
 		const { build } = currentConfig
@@ -133,7 +166,7 @@ class Options extends Component {
 		return (
 			<div className='config-status-bar'>
 				Check Status: &nbsp;
-				<span className={`config-status ${build.buildable ? 'valid' : 'invalid'}`}>{build.buildable ? 'Buildable' : 'Not buildable'}</span>&nbsp;/&nbsp;
+				<span className={`config-status ${build.buildable ? 'valid' : 'invalid'}`}>{build.buildable ? 'Buildable' : 'Not buildable'}</span>&nbsp;&nbsp;
 				<span className={`config-status ${build.distinct ? 'valid' : 'invalid'}`}>{build.distinct ? 'Distinct ' : 'Not distinct'}</span>
 			</div>
 		)
@@ -150,7 +183,9 @@ class Options extends Component {
 			flatChoices,
 			loading,
 			restoreOptions,
-			selectedOptions
+			selectedOptions,
+			invalidOptions,
+			error
 		} = this.props
 
 		const {
@@ -159,13 +194,16 @@ class Options extends Component {
 
 		const model = currentConfig.model
 
-		console.log('current congig', currentConfig)
-
 		return (
 			<Modal
 				isOpen={isOpen}
 				onRequestClose={closeModal}
 			>
+			{ error &&
+				<div className='error-message'>
+					Sorry, we can't show you options for this configuration at the moment.
+				</div>
+			}
 			{loading && 
 				<Modal className='loading-modal'
 					overlayClassName='loading-modal-overlay'
@@ -179,12 +217,11 @@ class Options extends Component {
 					}}
 					isOpen={true}>
 					<div className='loader-message-wrapper'>
-						<div class='loading-msg-wrapper'>{loading}</div>
+						<div className='loading-msg-wrapper'>{loading}</div>
 						<Loader
 						style={{
 							borderTopColor: 'transparent',
 							boderRightColor: 'transparent',
-							//position:'relative'
 						}} 
 						message='Loading options for your configuration' />
 					</div>
@@ -194,30 +231,29 @@ class Options extends Component {
 				<Heading size={4} className='has-text-centered'>
 					Configure Your {model.name}
 				</Heading>
-				<Heading size={6} className='has-text-centered'>
-					{model.type.name}
-				</Heading>
-				{/* { currentConfig.images && currentConfig.images.length 
-					? <SlideShow
-						images={currentConfig.images.map( imageObj => imageObj.url)}
-						indicators fixedImagesHeight infinite
-					/> 
-					: null
-				} */}
-				<input
-					type='text'
-					className='input-category-search'
-					onChange={ event => this.handleSearchChange(event) }
-					placeholder='Search for a category'
-				/>
+				{ invalidOptions.length > 0 &&
+					<div className='invalid-options-warning'>
+						<p><strong>Configuration could not be built as is.</strong> Some of your selected options are in conflict. Please refine your choices to get a buildable and distinct vehicle.
+							Please note that some options may conflict with other, often since only one in a category (like Type) can be selected at a time.
+						</p>
+					</div>
+				}
 				{ this.renderStatusBar() }
-				<p className='category-title' size={6}> Categories </p>
 				<Tags
 					flatChoices={ flatChoices }
 					removeOption={ this.props.toggleOption }
 					selectedOptions={ selectedOptions }
 				/>
 				
+			</div>
+			<div className='header choices-selection' style={{ display : 'flex', justifyContent : 'center', alignItems : 'center' }}>
+			<p className='category-title'>Categories / Options</p>
+			<input
+					type='text'
+					className='input-category-search'
+					onChange={ event => this.handleSearchChange(event) }
+					placeholder='Search for a category'
+				/>
 			</div>
 			<div className='options-wrapper'>
 			
@@ -230,8 +266,7 @@ class Options extends Component {
 			}
 			</div>
 			<div className='button-panel'>
-				<Button onClick={ restoreOptions } className='configure-button'>Restore</Button>
-				<Button onClick={ this.props.onDone } className='configure-button'>Done</Button>
+				<Button onClick={ () => this.props.onDone(selectedOptions) } className='configure-button'>Done</Button>
 			</div>
 			</Modal>
 		)
@@ -241,11 +276,14 @@ class Options extends Component {
 
 		const {
 			currentConfig,
-			allChoices
+			allChoices,
+			error
 		} = this.props
 
 		return (
-			currentConfig && allChoices
+			error
+				? <p>{error.message}</p>
+				: currentConfig && allChoices
 				? this.modalContent()
 				: <Loader message='Loading options for your configuration' />
 		)
@@ -263,7 +301,6 @@ class Options extends Component {
 			<Modal
 				isOpen={isOpen}
 				onRequestClose={closeModal}>
-				{error && error.message}
 				{this.getModalContent()}
 			</Modal>
 		)
