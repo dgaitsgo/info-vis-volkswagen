@@ -131,6 +131,19 @@ display: block;
 	width:800px;
 }
 
+.info-wrapper{
+	/* text-align: center; */
+}
+.infosubtitle-emission{
+	margin-left: 20px;
+}
+.infosubtitle-consumption{
+	margin-left: 5px;
+}
+.infosubtitle-tire{
+	margin-left: 20px;
+}
+
 @media only screen and (max-width : 760px) {
 	.typeName{
 		padding-left: 30px;

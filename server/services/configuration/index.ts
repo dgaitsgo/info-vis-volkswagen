@@ -6,5 +6,6 @@ module.exports = {
     images : require('./images'),
     wltp : require('./wltp'),
     addOption : require('./addOption'),
-    removeOption : require('./removeOption')
+    removeOption : require('./removeOption'),
+    restoreOptions : require('./restoreOptions')
 }

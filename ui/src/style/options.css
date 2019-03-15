@@ -19,6 +19,9 @@
 .button-panel {
 	display: flex;
 	justify-content: space-between;
+	position: inherit;
+	top: 100%;
+	margin: 1rem 2rem;
 }
 
 .choice.valid.selected {

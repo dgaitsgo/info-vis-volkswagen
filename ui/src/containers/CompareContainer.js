@@ -27,7 +27,7 @@ class CompareContainer extends Component {
 
 			this.phases = [
 				{ key : 'LOW', color : '#4caf50', label : 'Low' },
-				{ key : 'MEDIUM', color : '#ffeb3b', label : 'Medium' },
+				{ key : 'MEDIUM', color : '#fdd835', label : 'Medium' },
 				{ key : 'HIGH', color : '#ff9800', label : 'High' },
 				{ key : 'EXTRA_HIGH', color : '#f44336', label : 'Extra High' },
 				{ key : 'COMBINED', color : '#1565c0', label : 'Combined' }

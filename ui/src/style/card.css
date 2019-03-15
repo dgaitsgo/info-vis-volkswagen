@@ -1,7 +1,8 @@
 	
 .detailed-interpolation-wrapper{
         overflow-y: hidden;
-        max-height: 0%; /* approximate max height */
+		/* max-height: 0%;  */
+		/* approximate max height */
 }
     
 .detailed-interpolation-wrapper.open{
@@ -35,23 +36,14 @@
 }
 
 .more-interpolation {
-	/* animation: slideDown .2 ease-in; */
-	margin-left: 25px;
+	margin-left: 20px;
 }
 .tire-wrapper{
-	margin-left: 25px;
+	margin-left: 20px;
 }
 .image-wrapper{
 	text-align: center;
 }
-/* @keyframes slideDown {
-	0%{
-		transform: translateY(-100px)
-	}
-	100%{
-		transform: translateY(0px)
-	}
-} */
 @media only screen and (max-width : 760px) {
 	.header-card{
 		width: 100%;
@@ -62,46 +54,10 @@
 	}
 }
 
-/* .car-info{
-	padding: 50px;
+.data-wrapper{
+	margin: 20px;
+
 }
-
-.infosubtitle-tire{
-	margin-left: 20px;
-	cursor: pointer;
-}
-
-.infosubtitle-consumption{
-	margin-left: 9px;
-	cursor: pointer;
-}
-
-.infosubtitle-emission{
-	cursor: pointer;
-	margin-left: 20px;
-}
-
-.data-wrapper {
-	margin: 50px
-}
-
-
-
-.dynamic-info-wrapper {
-	margin-bottom: 10px;
-}
-
-.more-information-wrapper {
-	display: flex;
-}
-
-.satic-info-wrapper {
-	width: 40%;
-	margin: 0 auto;
-	margin-bottom: 10px;
-	display: flex;
-	justify-content: space-between;
-} */
 
 .configure-button {
 	width: 50%;
@@ -112,4 +68,6 @@
 .configure-panel {
 	width: 100%;
 	text-align: center;
+	margin: 20px;
+
 }
