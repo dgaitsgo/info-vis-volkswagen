@@ -6,30 +6,10 @@ import { debounce } from 'lodash'
 import SlideShow from 'react-image-show'
 import noImage from '../res/carIcon.png'
 import DEBOUNCE_TIME from '../constants/debounceTime'
+import Tags from './Tags'
 
 import '../style/options.css'
 
-const Tags = ({ selectedOptions, flatChoices, removeOption }) => {
-
-	if(!selectedOptions)
-		return null
-
-	return (
-		<div className='tags-wrapper'>
-			{selectedOptions.map( (option, i) => {
-					if (!flatChoices[option.id])
-						console.log('missing option is', option.id)
-					return (
-						<div className='tag description-tag' key={`tag_${i}`}>
-							{flatChoices[option.id] && flatChoices[option.id].choiceDescription}
-							<span onClick={ debounce(() => removeOption(option.id), DEBOUNCE_TIME) } className='tag-close'><i className='fas fa-times'></i></span>
-						</div>
-					)
-				})
-			}
-		</div>
-	)
-}
 
 class Options extends Component {
 
@@ -72,6 +52,12 @@ class Options extends Component {
 	getCategories = allCategories => {
 		
 		const { selectedCategories } = this.state
+
+		if (!allCategories || allCategories.length === 0 ) {
+			return (
+				<Loader message='Loading options for your configuration' />
+			)
+		}
 
 		return allCategories.map( (category, i) => {
 
@@ -132,6 +118,22 @@ class Options extends Component {
 		)
 	}
 
+	renderStatusBar = () => {
+
+		const { 
+			currentConfig
+		} = this.props
+
+		const { build, wltp } = currentConfig
+
+		return (
+			<div className='config-status-bar'>
+				<div className={`config-status ${build.buildable ? 'valid' : 'invalid'}`}>{build.buildable ? 'Buildable' : 'Not buildable'}</div>
+				<div className={`config-status ${build.distinct ? 'valid' : 'invalid'}`}>{build.distinct ? 'Distinct ' : 'Not distinct'}</div>
+			</div>
+		)
+	}
+
 	modalContent = () => {
 
 		const {
@@ -141,7 +143,9 @@ class Options extends Component {
 			removeOption,
 			allChoices,
 			flatChoices,
-			loading
+			loading,
+
+			restoreOptions
 		} = this.props
 
 		const {
@@ -185,6 +189,7 @@ class Options extends Component {
 					onChange={ event => this.handleSearchChange(event) }
 					placeholder='Search for a category'
 				/>
+				{ this.renderStatusBar() }
 				<Tags
 					
 					flatChoices={ flatChoices }
@@ -203,8 +208,8 @@ class Options extends Component {
 			}
 			</div>
 			<div className='button-panel'>
-				<Button onClick={ this.restoreConfiguration } className='configure-button'>Restore</Button>
-				<Button onClick={ this.applyConfiguration } className='configure-button'>Done</Button>
+				<Button onClick={ restoreOptions } className='configure-button'>Restore</Button>
+				<Button onClick={ closeModal } className='configure-button'>Done</Button>
 			</div>
 			</Modal>
 		)

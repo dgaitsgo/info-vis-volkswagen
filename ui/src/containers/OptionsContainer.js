@@ -15,7 +15,7 @@ class OptionsContainer extends Component {
 			ADD : 'Adding option',
 			REMOVE : 'Removing option',
 			BUILD : 'Checking build',
-			REBUILD : 'Rebuilding configuration',
+			RESTORE : 'Restoring configuration',
 		}
 
 		this.state = {
@@ -27,10 +27,14 @@ class OptionsContainer extends Component {
 		}
 
 		this.handleAddOption = this.handleAddOption.bind(this)
-		this.handleRebuildConfig = this.handleRebuildConfig.bind(this)
 		this.handleRemoveOption = this.handleRemoveOption.bind(this)
+		this.handleRestoreOptions = this.handleRestoreOptions.bind(this)
+
+		this.preHandleRestoreOptions = this.preHandleRestoreOptions.bind(this)
 		this.preHandleAddOption = this.preHandleAddOption.bind(this)
 		this.preHandleRemoveOption = this.preHandleRemoveOption.bind(this)
+
+	
 		this.refreshConfig = this.refreshConfig.bind(this)
 	}
 
@@ -48,11 +52,11 @@ class OptionsContainer extends Component {
 			}
 		})
 
-	replaceOptions = (configId, options) =>
-		axios.get('/api/replaceOptions', {
+	restoreOptions = (configId, optionIds) =>
+		axios.get('/api/restoreOptions', {
 			params : {
 				configId,
-				options
+				optionIds : JSON.stringify(optionIds)
 			}
 		})
 
@@ -134,6 +138,7 @@ class OptionsContainer extends Component {
 		const flatChoices = this.flattenChoices(choices)
 
 		this.setState({
+			loading : false,
 			currentConfig,
 			choices,
 			flatChoices
@@ -190,28 +195,29 @@ class OptionsContainer extends Component {
 		}
 	}
 
-	async preHanelReplaceOptions() {
-		this.setState({ loading : this.loadingEnum.REBUILD }, () => this.handleRebuildConfig())
+	async preHandleRestoreOptions() {
+		this.setState({ loading : this.loadingEnum.RESTORE }, () => this.handleRestoreOptions())
 	}
 
-	async handleRebuildConfig() {
+	async handleRestoreOptions() {
 
 		let { currentConfig } = this.state
 
 		try {
 
 			//replace options
-			const nextOptionsRes = await this.replaceOptions(currentConfig.configId, currentConfig.defaultOptions)
-			const nextOptions = nextOptionsRes.data
+			const nextOptionsRes = await this.restoreOptions(currentConfig.configId, currentConfig.defaultOptions)
+			const nextOptions = nextOptionsRes.data.options
 
 			// update current config
 			currentConfig.selectedOptions = nextOptions
+			currentConfig.defaultOptions = nextOptions
 
 			this.refreshConfig(currentConfig)
 
 		} catch (e) {
 
-			this.setState({ error : { e, message : 'Could not rebuild configuration.' } })	
+			this.setState({ loading: false, error : { e, message : 'Could not restore configuration.' } })	
 		}
 	}
 
@@ -223,6 +229,8 @@ class OptionsContainer extends Component {
 		const configChoicesRes = await this.configChoices(currentConfig.configId)
 		const choices = configChoicesRes.data.choices
 		const flatChoices = this.flattenChoices(choices)
+
+		console.log('flatten choices', flatChoices)
 
 		this.setState({ allChoices : choices, flatChoices })
 	}
@@ -277,7 +285,7 @@ class OptionsContainer extends Component {
 				isOpen={this.props.isOpen}
 				addOption={this.preHandleAddOption}
 				removeOption={this.preHandleRemoveOption}
-				onClickRebuild={this.handleRebuildConfig}
+				restoreOptions={this.preHandleRestoreOptions}
 				flatChoices={flatChoices}
 				allChoices={allChoices}
 				currentConfig={currentConfig}
